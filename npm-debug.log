@@ -1,0 +1,241 @@
+0 info it worked if it ends with ok
+1 verbose cli [ '/usr/bin/nodejs',
+1 verbose cli   '/usr/bin/npm',
+1 verbose cli   'install',
+1 verbose cli   'vue-echarts',
+1 verbose cli   'npm',
+1 verbose cli   'install',
+1 verbose cli   '--save',
+1 verbose cli   'vue-echarts/components/ECharts',
+1 verbose cli   'echarts/lib/chart/bar',
+1 verbose cli   'echarts/lib/component/tooltip' ]
+2 info using npm@3.10.10
+3 info using node@v6.10.1
+4 silly loadCurrentTree Starting
+5 silly install loadCurrentTree
+6 silly install readLocalPackageData
+7 silly fetchPackageMetaData vue-echarts@^3.0.7
+8 silly fetchPackageMetaData npm
+9 silly fetchPackageMetaData install
+10 silly fetchPackageMetaData vue-echarts/components/ECharts
+11 silly fetchPackageMetaData echarts/lib/chart/bar
+12 silly fetchPackageMetaData echarts/lib/component/tooltip
+13 silly fetchNamedPackageData vue-echarts
+14 silly mapToRegistry name vue-echarts
+15 silly mapToRegistry using default registry
+16 silly mapToRegistry registry https://registry.npmjs.org/
+17 silly mapToRegistry data Result {
+17 silly mapToRegistry   raw: 'vue-echarts',
+17 silly mapToRegistry   scope: null,
+17 silly mapToRegistry   escapedName: 'vue-echarts',
+17 silly mapToRegistry   name: 'vue-echarts',
+17 silly mapToRegistry   rawSpec: '',
+17 silly mapToRegistry   spec: 'latest',
+17 silly mapToRegistry   type: 'tag' }
+18 silly mapToRegistry uri https://registry.npmjs.org/vue-echarts
+19 silly fetchNamedPackageData npm
+20 silly mapToRegistry name npm
+21 silly mapToRegistry using default registry
+22 silly mapToRegistry registry https://registry.npmjs.org/
+23 silly mapToRegistry data Result {
+23 silly mapToRegistry   raw: 'npm',
+23 silly mapToRegistry   scope: null,
+23 silly mapToRegistry   escapedName: 'npm',
+23 silly mapToRegistry   name: 'npm',
+23 silly mapToRegistry   rawSpec: '',
+23 silly mapToRegistry   spec: 'latest',
+23 silly mapToRegistry   type: 'tag' }
+24 silly mapToRegistry uri https://registry.npmjs.org/npm
+25 silly fetchNamedPackageData install
+26 silly mapToRegistry name install
+27 silly mapToRegistry using default registry
+28 silly mapToRegistry registry https://registry.npmjs.org/
+29 silly mapToRegistry data Result {
+29 silly mapToRegistry   raw: 'install',
+29 silly mapToRegistry   scope: null,
+29 silly mapToRegistry   escapedName: 'install',
+29 silly mapToRegistry   name: 'install',
+29 silly mapToRegistry   rawSpec: '',
+29 silly mapToRegistry   spec: 'latest',
+29 silly mapToRegistry   type: 'tag' }
+30 silly mapToRegistry uri https://registry.npmjs.org/install
+31 silly fetchOtherPackageData vue-echarts/components/ECharts
+32 silly cache add args [ 'vue-echarts/components/ECharts', null ]
+33 verbose cache add spec vue-echarts/components/ECharts
+34 silly fetchOtherPackageData echarts/lib/chart/bar
+35 silly cache add args [ 'echarts/lib/chart/bar', null ]
+36 verbose cache add spec echarts/lib/chart/bar
+37 silly fetchOtherPackageData echarts/lib/component/tooltip
+38 silly cache add args [ 'echarts/lib/component/tooltip', null ]
+39 verbose cache add spec echarts/lib/component/tooltip
+40 silly cache add parsed spec Result {
+40 silly cache add   raw: 'vue-echarts/components/ECharts',
+40 silly cache add   scope: null,
+40 silly cache add   escapedName: null,
+40 silly cache add   name: null,
+40 silly cache add   rawSpec: 'vue-echarts/components/ECharts',
+40 silly cache add   spec: '/var/www/html/pos/vue-echarts/components/ECharts',
+40 silly cache add   type: 'local' }
+41 silly cache add parsed spec Result {
+41 silly cache add   raw: 'echarts/lib/chart/bar',
+41 silly cache add   scope: null,
+41 silly cache add   escapedName: null,
+41 silly cache add   name: null,
+41 silly cache add   rawSpec: 'echarts/lib/chart/bar',
+41 silly cache add   spec: '/var/www/html/pos/echarts/lib/chart/bar',
+41 silly cache add   type: 'local' }
+42 silly cache add parsed spec Result {
+42 silly cache add   raw: 'echarts/lib/component/tooltip',
+42 silly cache add   scope: null,
+42 silly cache add   escapedName: null,
+42 silly cache add   name: null,
+42 silly cache add   rawSpec: 'echarts/lib/component/tooltip',
+42 silly cache add   spec: '/var/www/html/pos/echarts/lib/component/tooltip',
+42 silly cache add   type: 'local' }
+43 error addLocal Could not install /var/www/html/pos/vue-echarts/components/ECharts
+44 silly fetchPackageMetaData Error: ENOENT: no such file or directory, open '/var/www/html/pos/vue-echarts/components/ECharts'
+44 silly fetchPackageMetaData     at Error (native)
+44 silly fetchPackageMetaData  error for vue-echarts/components/ECharts { Error: ENOENT: no such file or directory, open '/var/www/html/pos/vue-echarts/components/ECharts'
+44 silly fetchPackageMetaData     at Error (native)
+44 silly fetchPackageMetaData   errno: -2,
+44 silly fetchPackageMetaData   code: 'ENOENT',
+44 silly fetchPackageMetaData   syscall: 'open',
+44 silly fetchPackageMetaData   path: '/var/www/html/pos/vue-echarts/components/ECharts' }
+45 error addLocal Could not install /var/www/html/pos/echarts/lib/chart/bar
+46 silly fetchPackageMetaData Error: ENOENT: no such file or directory, open '/var/www/html/pos/echarts/lib/chart/bar'
+46 silly fetchPackageMetaData     at Error (native)
+46 silly fetchPackageMetaData  error for echarts/lib/chart/bar { Error: ENOENT: no such file or directory, open '/var/www/html/pos/echarts/lib/chart/bar'
+46 silly fetchPackageMetaData     at Error (native)
+46 silly fetchPackageMetaData   errno: -2,
+46 silly fetchPackageMetaData   code: 'ENOENT',
+46 silly fetchPackageMetaData   syscall: 'open',
+46 silly fetchPackageMetaData   path: '/var/www/html/pos/echarts/lib/chart/bar' }
+47 error addLocal Could not install /var/www/html/pos/echarts/lib/component/tooltip
+48 silly fetchPackageMetaData Error: ENOENT: no such file or directory, open '/var/www/html/pos/echarts/lib/component/tooltip'
+48 silly fetchPackageMetaData     at Error (native)
+48 silly fetchPackageMetaData  error for echarts/lib/component/tooltip { Error: ENOENT: no such file or directory, open '/var/www/html/pos/echarts/lib/component/tooltip'
+48 silly fetchPackageMetaData     at Error (native)
+48 silly fetchPackageMetaData   errno: -2,
+48 silly fetchPackageMetaData   code: 'ENOENT',
+48 silly fetchPackageMetaData   syscall: 'open',
+48 silly fetchPackageMetaData   path: '/var/www/html/pos/echarts/lib/component/tooltip' }
+49 verbose request uri https://registry.npmjs.org/vue-echarts
+50 verbose request no auth needed
+51 info attempt registry request try #1 at 1:27:35 PM
+52 verbose request id 6f4e37fa553bbed2
+53 verbose etag "5ad9afc6-126da"
+54 verbose lastModified Fri, 20 Apr 2018 9:15:50 GMT
+55 http request GET https://registry.npmjs.org/vue-echarts
+56 verbose request uri https://registry.npmjs.org/install
+57 verbose request no auth needed
+58 info attempt registry request try #1 at 1:27:35 PM
+59 verbose etag "5ab4630b-13020"
+60 verbose lastModified Fri, 23 Mar 2018 2:14:35 GMT
+61 http request GET https://registry.npmjs.org/install
+62 verbose request uri https://registry.npmjs.org/npm
+63 verbose request no auth needed
+64 info attempt registry request try #1 at 1:27:35 PM
+65 verbose etag "5adac415-6fae20"
+66 verbose lastModified Sat, 21 Apr 2018 4:54:45 GMT
+67 http request GET https://registry.npmjs.org/npm
+68 http 304 https://registry.npmjs.org/vue-echarts
+69 verbose headers { date: 'Mon, 23 Apr 2018 05:27:35 GMT',
+69 verbose headers   via: '1.1 varnish',
+69 verbose headers   'cache-control': 'max-age=300',
+69 verbose headers   etag: '"5ad9afc6-126da"',
+69 verbose headers   age: '9773',
+69 verbose headers   connection: 'keep-alive',
+69 verbose headers   'x-served-by': 'cache-hkg17923-HKG',
+69 verbose headers   'x-cache': 'HIT',
+69 verbose headers   'x-cache-hits': '1',
+69 verbose headers   'x-timer': 'S1524461256.505901,VS0,VE0',
+69 verbose headers   vary: 'Accept-Encoding, Accept' }
+70 silly get cb [ 304,
+70 silly get   { date: 'Mon, 23 Apr 2018 05:27:35 GMT',
+70 silly get     via: '1.1 varnish',
+70 silly get     'cache-control': 'max-age=300',
+70 silly get     etag: '"5ad9afc6-126da"',
+70 silly get     age: '9773',
+70 silly get     connection: 'keep-alive',
+70 silly get     'x-served-by': 'cache-hkg17923-HKG',
+70 silly get     'x-cache': 'HIT',
+70 silly get     'x-cache-hits': '1',
+70 silly get     'x-timer': 'S1524461256.505901,VS0,VE0',
+70 silly get     vary: 'Accept-Encoding, Accept' } ]
+71 verbose etag https://registry.npmjs.org/vue-echarts from cache
+72 verbose get saving vue-echarts to /home/john_enrick/.npm/registry.npmjs.org/vue-echarts/.cache.json
+73 verbose correctMkdir /home/john_enrick/.npm correctMkdir not in flight; initializing
+74 http 304 https://registry.npmjs.org/install
+75 verbose headers { date: 'Mon, 23 Apr 2018 05:27:35 GMT',
+75 verbose headers   via: '1.1 varnish',
+75 verbose headers   'cache-control': 'max-age=300',
+75 verbose headers   etag: '"5ab4630b-13020"',
+75 verbose headers   age: '8470',
+75 verbose headers   connection: 'keep-alive',
+75 verbose headers   'x-served-by': 'cache-hkg17928-HKG',
+75 verbose headers   'x-cache': 'HIT',
+75 verbose headers   'x-cache-hits': '2',
+75 verbose headers   'x-timer': 'S1524461256.536677,VS0,VE0',
+75 verbose headers   vary: 'Accept-Encoding, Accept' }
+76 silly get cb [ 304,
+76 silly get   { date: 'Mon, 23 Apr 2018 05:27:35 GMT',
+76 silly get     via: '1.1 varnish',
+76 silly get     'cache-control': 'max-age=300',
+76 silly get     etag: '"5ab4630b-13020"',
+76 silly get     age: '8470',
+76 silly get     connection: 'keep-alive',
+76 silly get     'x-served-by': 'cache-hkg17928-HKG',
+76 silly get     'x-cache': 'HIT',
+76 silly get     'x-cache-hits': '2',
+76 silly get     'x-timer': 'S1524461256.536677,VS0,VE0',
+76 silly get     vary: 'Accept-Encoding, Accept' } ]
+77 verbose etag https://registry.npmjs.org/install from cache
+78 verbose get saving install to /home/john_enrick/.npm/registry.npmjs.org/install/.cache.json
+79 verbose correctMkdir /home/john_enrick/.npm correctMkdir not in flight; initializing
+80 http 304 https://registry.npmjs.org/npm
+81 verbose headers { date: 'Mon, 23 Apr 2018 05:27:35 GMT',
+81 verbose headers   via: '1.1 varnish',
+81 verbose headers   'cache-control': 'max-age=300',
+81 verbose headers   etag: '"5adac415-6fae20"',
+81 verbose headers   age: '13527',
+81 verbose headers   connection: 'keep-alive',
+81 verbose headers   'x-served-by': 'cache-hkg17925-HKG',
+81 verbose headers   'x-cache': 'HIT',
+81 verbose headers   'x-cache-hits': '28',
+81 verbose headers   'x-timer': 'S1524461256.540388,VS0,VE0',
+81 verbose headers   vary: 'Accept-Encoding, Accept' }
+82 silly get cb [ 304,
+82 silly get   { date: 'Mon, 23 Apr 2018 05:27:35 GMT',
+82 silly get     via: '1.1 varnish',
+82 silly get     'cache-control': 'max-age=300',
+82 silly get     etag: '"5adac415-6fae20"',
+82 silly get     age: '13527',
+82 silly get     connection: 'keep-alive',
+82 silly get     'x-served-by': 'cache-hkg17925-HKG',
+82 silly get     'x-cache': 'HIT',
+82 silly get     'x-cache-hits': '28',
+82 silly get     'x-timer': 'S1524461256.540388,VS0,VE0',
+82 silly get     vary: 'Accept-Encoding, Accept' } ]
+83 verbose etag https://registry.npmjs.org/npm from cache
+84 verbose get saving npm to /home/john_enrick/.npm/registry.npmjs.org/npm/.cache.json
+85 verbose correctMkdir /home/john_enrick/.npm correctMkdir not in flight; initializing
+86 silly rollbackFailedOptional Starting
+87 silly rollbackFailedOptional Finishing
+88 silly runTopLevelLifecycles Finishing
+89 silly install printInstalled
+90 verbose stack Error: ENOENT: no such file or directory, open '/var/www/html/pos/vue-echarts/components/ECharts'
+90 verbose stack     at Error (native)
+91 verbose cwd /var/www/html/pos
+92 error Linux 4.4.0-119-generic
+93 error argv "/usr/bin/nodejs" "/usr/bin/npm" "install" "vue-echarts" "npm" "install" "--save" "vue-echarts/components/ECharts" "echarts/lib/chart/bar" "echarts/lib/component/tooltip"
+94 error node v6.10.1
+95 error npm  v3.10.10
+96 error path /var/www/html/pos/vue-echarts/components/ECharts
+97 error code ENOENT
+98 error errno -2
+99 error syscall open
+100 error enoent ENOENT: no such file or directory, open '/var/www/html/pos/vue-echarts/components/ECharts'
+101 error enoent ENOENT: no such file or directory, open '/var/www/html/pos/vue-echarts/components/ECharts'
+101 error enoent This is most likely not a problem with npm itself
+101 error enoent and is related to npm not being able to find a file.
+102 verbose exit [ -2, true ]
