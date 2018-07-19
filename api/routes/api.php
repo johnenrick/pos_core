@@ -25,9 +25,9 @@ Route::get('/', function () {
 Route::resource('authenticate', 'AuthenticateController', ['only' => ['index']]);
 Route::post('authentication/create', 'AuthenticateController@authenticate');
 Route::post('authentication/user', 'AuthenticateController@getAuthenticatedUser');
-Route::group(['middleware' => 'jwt.refresh'], function(){
+// Route::group(['middleware' => 'jwt.refresh'], function(){
   Route::post('authentication/refresh', 'AuthenticateController@refresh');
-});
+// });
 Route::post('authentication/destroy', 'AuthenticateController@deauthenticate');
 /*Queue Card*/
 Route::get("getAverageQueueTime", "QueueCardController@getAverageQueueTime");

@@ -14,6 +14,9 @@ class AccountController extends APIController
         $this->validation = array(
           "email" => "unique:accounts|email",
           "username"  => "unique:accounts",
+          'account_information.first_name' => 'max:30|String',
+          'account_information.middle_name' => 'max:30|String',
+          'account_information.last_name' => 'max:30|String'
         );
         $this->editableForeignTable = array(
           'account_information', 'account_type'
@@ -47,13 +50,11 @@ class AccountController extends APIController
 
     public function update(Request $request){
       $requestArray = $request->all();
-      $this->response['debug'][] = $requestArray;
       if(array_key_exists('password', $requestArray) && strlen($requestArray['password']) === 0){
         unset($requestArray['password']);
       }else if(array_key_exists('password', $requestArray)){
         $requestArray['password'] = Hash::make($requestArray['password']);
       }
-      $this->response['debug'][] = $requestArray;
       return $this->updateEntry($requestArray);
     }
 

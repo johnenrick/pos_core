@@ -18,6 +18,7 @@ class BusTrip extends Migration
         $table->unsignedInteger('bus_id');
         $table->unsignedInteger('route_id');
         $table->unsignedInteger('driver_account_id');
+        $table->unsignedInteger('conductor_account_id')->nullable();
         $table->timestamp('arrival_datetime')->nullable();
         $table->string('remarks')->nullable();
         $table->timestamps();

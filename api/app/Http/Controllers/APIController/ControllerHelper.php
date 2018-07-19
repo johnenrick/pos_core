@@ -143,8 +143,6 @@ class ControllerHelper extends Controller
         $modelTemp->$dbColumn = str_replace($path.'/', '', $imagePath);
         // echo 'idddd'.$id;
         // $this->printR($modelTemp->find($id)->get()->toArray());
-        $this->response['debug'][] = $imagePath;
-        $this->response['debug'][] = $modelTemp->save();
         // $modelTemp->updateEntry(array(
         //   'id' => $id,
         //   $dbColumn => str_replace($path.'/', '', $imagePath)
@@ -172,7 +170,6 @@ class ControllerHelper extends Controller
     } catch (Tymon\JWTAuth\Exceptions\JWTException $e) {
       return response()->json(['token_absent'], $e->getStatusCode());
     } catch(\Tymon\JWTAuth\Exceptions\JWTException $e){//general JWT exception
-      // $this->response['debug'][] = 'No token parsed';
       return false;
     }
     // the token is valid and we have found the user via the sub claim

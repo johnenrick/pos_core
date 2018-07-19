@@ -13,14 +13,11 @@ class AccountType extends Migration
      */
     public function up()
     {
-      // Schema::create('account_type', function(Blueprint $table){
-      //   $table->increments('id');
-      //   $table->string('description', 50);
-      //   $table->timestamps();
-      //   $table->softDeletes();
-      // });
-      Schema::table('accounts', function(Blueprint $table){
-        $table->integer('account_type_id')->after('password');
+      Schema::create('account_types', function(Blueprint $table){
+        $table->increments('id');
+        $table->string('description', 50);
+        $table->timestamps();
+        $table->softDeletes();
       });
     }
 

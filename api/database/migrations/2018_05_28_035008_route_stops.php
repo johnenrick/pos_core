@@ -15,6 +15,7 @@ class RouteStops extends Migration
     {
       Schema::create('route_stops', function(Blueprint $table){
         $table->increments('id');
+        $table->integer('order_number');
         $table->unsignedInteger('route_id');
         $table->string('name');
         $table->double('distance')->comment('distance from previous route');

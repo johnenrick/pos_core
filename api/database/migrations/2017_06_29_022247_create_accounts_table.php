@@ -13,16 +13,17 @@ class CreateAccountsTable extends Migration
      */
     public function up()
     {
-        Schema::dropIfExists('accounts');
         Schema::create('accounts', function (Blueprint $table) {
             $table->increments('id');
             $table->string('username',100);
             $table->string('email',100);
             $table->string('password');
+            $table->integer('account_type_id');
+            $table->tinyInteger('status')->default(1);
             $table->timestamps();
             $table->softDeletes();
         });
-        Artisan::call('db:seed', array('--class' => 'AccountsTableSeeder'));
+        // Artisan::call('db:seed', array('--class' => 'AccountsTableSeeder'));
     }
 
     /**

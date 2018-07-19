@@ -119,7 +119,6 @@ class APIController extends ControllerHelper
 
     public function create(Request $request){
       $this->rawRequest = $request;
-      $this->response['debug'][] = $this->ownerColumn;
 
       return $this->createEntry($request->all());
     }

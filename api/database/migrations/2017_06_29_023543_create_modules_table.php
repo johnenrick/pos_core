@@ -24,7 +24,7 @@ class CreateModulesTable extends Migration
             $table->timestamps();
             $table->softDeletes();
         });
-        Artisan::call('db:seed', array('--class' => 'ModulesTableSeeder'));
+        // Artisan::call('db:seed', array('--class' => 'ModulesTableSeeder'));
     }
 
     /**

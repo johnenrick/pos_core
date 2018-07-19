@@ -81,14 +81,12 @@ class UpdateEntry extends ControllerHelper
         if(isset($request[$childTable]) && $request[$childTable]){
           $child = $request[$childTable];
           if(count(array_filter(array_keys($child), 'is_string')) > 0){//associative
-            $this->response['debug'][] = 'test1';
             if(!isset($childID[$childTable])){
               $childID[$childTable] = array();
             }
             $this->response['debug'][] = $child["id"];
             $result = false;
             if(isset($child["id"]) && $child["id"]*1) { // update
-              $this->response['debug'][] = 'test2';
               $pk = $child["id"];
               unset($child["id"]);
               $result = $this->model->find($this->model->id)->$childTable()->where('id', $pk)->where(str_singular($this->model->getTable()).'_id', $request["id"])->update($child);
