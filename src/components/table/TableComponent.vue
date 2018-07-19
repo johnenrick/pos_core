@@ -13,13 +13,13 @@
     <table class="table table-bordered table-condensed table-hover table-responsive-sm" >
       <thead>
         <tr>
-          <th v-for="(column, index) in columnSetting[0]"
+          <th v-for="(column, index) in columnSetting[0]" style="position:relative"
             v-bind:rowspan="(column['sub_columns']) ? 1:2"
             v-bind:colspan="column['sub_columns'] ? column['sub_column_count']  : 1"
             v-on:click="changeSort(0, index)"
           >
             {{column['name']}}
-            <span class="pull-right">
+            <span class="pull-right" style="position:absolute; right: 5px;">
               <i v-if="column['sort'] === 0" class="fas fa-sort" aria-hidden="true"></i>
               <i v-else-if="column['sort'] === 1" class="fas fa-sort-up" aria-hidden="true"></i>
               <i v-else-if="column['sort'] === 2" class="fas fa-sort-down" aria-hidden="true"></i>
@@ -32,7 +32,7 @@
             v-bind:colspan="column['sub_columns'] ? column['sub_column_count']  : 1"
             v-on:click="changeSort(1, index)"
           >
-            {{column['name']}}
+            {{(column['name']).toUppercase()}}
             <span v-if="column['sort'] !== false" class="pull-right">
               <i v-if="column['sort'] === 0" class="fa fa-sort" aria-hidden="true"></i>
               <i v-else-if="column['sort'] === 1" class="fa fa-sort-asc" aria-hidden="true"></i>
@@ -80,7 +80,7 @@
       </div>
       <div class="col-sm-6">
         <nav >
-          <ul class="pagination justify-content-end ">
+          <ul v-if="entry_per_page > 0" class="pagination justify-content-end ">
 
             <li v-if="isLoadingData" class="page-item" v-bind:class="currentPage === 1 ? 'disabled' : ''">
               <i class="fa fa-hourglass-2" aria-hidden="true"></i> Loading Table...
@@ -249,8 +249,10 @@
           typeof requestOption.condition === 'undefined' ? requestOption.condition = [] : null
           $.merge(requestOption.condition, this.$refs.tableFilter.getFilter())
         }
-        requestOption['limit'] = this.entry_per_page
-        requestOption['offset'] = this.entry_per_page * (this.currentPage - 1)
+        if(this.entry_per_page){
+          requestOption['limit'] = this.entry_per_page
+          requestOption['offset'] = this.entry_per_page * (this.currentPage - 1)
+        }
         this.prevRetrieveType = retrieveType
         let apiLink = (typeof this.api_setting === 'undefined' || typeof this.api_setting.retrieve === 'undefined') ? this.api + '/retrieve' : this.api_setting.retrieve
         this.$emit('table_filter', requestOption)
@@ -261,8 +263,13 @@
           }else if(!response['data'] && response['total_entries'] > 0){
             this.currentPage--
           }
-          this.totalResult = response['total_entries']
-          this.totalPage = Math.ceil(response['total_entries'] / this.entry_per_page)
+
+          if(this.entry_per_page){
+            this.totalResult = response['total_entries']
+            this.totalPage = Math.ceil(response['total_entries'] / this.entry_per_page)
+          }else{
+            this.totalResult = this.tableEntries.length
+          }
           this.isLoadingData = false
           if(this.isset(response, 'calculated_column')){
             this.footerData = response['calculated_column']

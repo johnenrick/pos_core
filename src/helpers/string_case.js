@@ -5,9 +5,12 @@ Vue.mixin({
     StringToCamelCase(){
     },
     StringPhraseToUnderscoreCase(string){
-      return string.toLowerCase().replace(/ /g, '_')
+      return string !== null ? string.toLowerCase().replace(/ /g, '_') : ''
     },
     StringUnderscoreToPhrase(str){
+      if(!str){
+        return ''
+      }
       str = str.replace(/_/g, ' ')
       return str.replace(/\w\S*/g, function(txt){
         return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase()

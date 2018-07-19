@@ -18,6 +18,7 @@ class Orders extends Migration
         $table->double('total_price');
         $table->double('value_added_tax');
         $table->double('cash_tendered');
+        $table->tinyInteger('status')->comment('0 - draft, 1 - Finish, 2 - Payment Pending');
         $table->timestamps();
         $table->softDeletes();
       });

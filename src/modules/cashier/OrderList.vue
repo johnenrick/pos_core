@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <div class="pb-2 bg-white">
+  <div class="shadow">
+    <div class="pb-2 bg-white ">
       <div class="row bg-primary no-gutters py-1 text-white">
         <div class="col-6 pl-2 text-center font-weight-bold">Description</div>
         <div class="col-2 pl-2 text-center font-weight-bold">QTY</div>

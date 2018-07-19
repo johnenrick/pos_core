@@ -12,7 +12,7 @@
 */
 
 Route::get('/', function () {
-    return "heel";//view('welcome');
+    return "Ola Mundo! You are not allowed here";//view('welcome');
 });
 /*
   Accessing uploaded files
@@ -20,6 +20,18 @@ Route::get('/', function () {
 Route::get('file/icon/{filename}', function ($filename)
 {
   $path = storage_path('/icons/' . $filename);
+  if (!File::exists($path)) {
+      abort(404);
+  }
+  $file = File::get($path);
+  $type = File::mimeType($path);
+  $response = Response::make($file, 200);
+  $response->header("Content-Type", $type);
+  return $response;
+});
+Route::get('image/discount_image_proof/{filename}', function ($filename)
+{
+  $path = storage_path('app/discount_image_proof/' . $filename);
   if (!File::exists($path)) {
       abort(404);
   }

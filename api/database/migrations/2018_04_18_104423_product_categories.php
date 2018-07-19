@@ -19,9 +19,6 @@ class ProductCategories extends Migration
         $table->timestamps();
         $table->softDeletes();
       });
-      Schema::table('products', function(Blueprint $table){
-        $table->unsignedInteger('product_category_id')->after('description');
-      });
     }
 
     /**

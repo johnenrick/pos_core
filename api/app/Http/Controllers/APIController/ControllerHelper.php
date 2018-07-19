@@ -10,6 +10,7 @@ use Illuminate\Validation\Rule;
 use Illuminate\Support\Pluralizer;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use Tymon\JWTAuthExceptions\JWTException;
 use App\CompanyBranchEmployee;
@@ -19,7 +20,15 @@ use App\Http\Controllers\Controller;
 class ControllerHelper extends Controller
 {
   protected $validation;
-  protected $response;
+  protected $response = array(
+    "data" => null,
+    "error" => array(),// {status, message}
+    "debug" => null,
+    "response_type" => 'json',
+    "request_timestamp" => 0
+  );
+  protected $rawRequest = null;
+  protected $model = null;
   function __construct($response, $validation){
     $this->response = $response;
     $this->validation = $validation;
@@ -78,13 +87,15 @@ class ControllerHelper extends Controller
             $this->validation[$validationKey] = $rules;
           }
         }
-        if(strpos( $validationKey, "_id" ) !== false){
+        if(strpos( $validationKey, "_id" ) !== false && (isset($request[$validationKey]) && $request[$validationKey] !== null)){ // 2nd condition: make nullable not requred
           $table = explode(".", str_plural(str_replace("_id", "", $validationKey)));
           $table = (count($table) > 1) ? $table[1] : $table[0];
           if(strpos( $validationKey, "parent" ) !== false){
             $table = $this->model->getTable();
           }
-          $this->validation[$validationKey] = $this->validation[$validationKey]."|exists:".$table.",id";
+          if(Schema::hasTable($table)){
+            $this->validation[$validationKey] = $this->validation[$validationKey]."|exists:".$table.",id";
+          }
         }
       }
       $validator = Validator::make($request, $this->validation);
@@ -113,25 +124,32 @@ class ControllerHelper extends Controller
   }
   public function uploadSingleImageFile($id, $inputName, $path, $dbColumn, $replace = false){
     if($id){
+      // $this->printR($this->rawRequest);
       if ($this->rawRequest->hasFile($inputName) && $this->rawRequest->file($inputName)->isValid()){
+        /***
+          The file being sent is saved in app
+        **/
         $imagePath = $this->rawRequest[$inputName]->store($path);
         if($replace){
           $modelTemp = clone $this->model;
-          $this->model->where('id', '=',$id);
-          $entry = $this->retrieveEntry(array(
-            "id" => $id
-          ));
+          $entry = $this->model->where('id', $id)->get()->toArray();
           if(count($entry) && $entry[0][$dbColumn] != '' && $entry[0][$dbColumn] != null){
             Storage::delete($path.'/'.$entry[0][$dbColumn]);
           }
           $this->model = $modelTemp;
         }
-        $responseTemp = $this->response;
-        $this->updateEntry(array(
-          'id' => $id,
-          $dbColumn => str_replace($path.'/', '', $imagePath)
-        ), true);
-        $this->response = $responseTemp;
+        // $responseTemp = $this->response;
+        $modelTemp = (new $this->model)->find($id);
+        $modelTemp->$dbColumn = str_replace($path.'/', '', $imagePath);
+        // echo 'idddd'.$id;
+        // $this->printR($modelTemp->find($id)->get()->toArray());
+        $this->response['debug'][] = $imagePath;
+        $this->response['debug'][] = $modelTemp->save();
+        // $modelTemp->updateEntry(array(
+        //   'id' => $id,
+        //   $dbColumn => str_replace($path.'/', '', $imagePath)
+        // ), true);
+        // $this->response = $responseTemp;
         return true;
       }
     }
@@ -154,7 +172,7 @@ class ControllerHelper extends Controller
     } catch (Tymon\JWTAuth\Exceptions\JWTException $e) {
       return response()->json(['token_absent'], $e->getStatusCode());
     } catch(\Tymon\JWTAuth\Exceptions\JWTException $e){//general JWT exception
-      $this->response['debug'][] = 'No token parsed';
+      // $this->response['debug'][] = 'No token parsed';
       return false;
     }
     // the token is valid and we have found the user via the sub claim
@@ -162,16 +180,6 @@ class ControllerHelper extends Controller
     $this->userSession = $user;
     $this->userSession['company_id'] = NULL;
     $this->userSession['company_branch_id'] = NULL;
-  }
-  public function getUserCompanyDetail(){
-    if(!$this->userSession){
-      $this->getAuthenticatedUser();
-    }
-    if(!$this->userSession['company_id'] && $this->userSession){
-      $company = (new CompanyBranchEmployee())->with(['company_branch'])->where('account_id', $this->userSession['id'])->get()->toArray();
-      $this->userSession['company_id'] = $company ? $company[0]['company_branch']['company_id'] : 0;
-      $this->userSession['company_branch_id'] = $company ? $company[0]['company_branch']['id'] : 0;
-    }
   }
   public function getUserCompanyID(){
     $this->getUserCompanyDetail();
@@ -187,5 +195,12 @@ class ControllerHelper extends Controller
     }
     return $this->userSession['id'];
   }
+  public function getUserAccountType(){
+    if(!$this->userSession){
+      $this->getAuthenticatedUser();
+    }
+    return $this->userSession['account_type_id'] * 1;
+  }
+
 
 }

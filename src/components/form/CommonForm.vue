@@ -9,6 +9,7 @@
     <form ref="form" slot="body" enctype="multipart/form-data" role="form" method="POST">
       <input type='hidden' name="id" v-bind:value='entryID' >
       <input-group
+        ref="inputGroup"
         :inputs="inputs"
         :form_data="formData"
         :form_data_updated="formDataUpdated"
@@ -34,7 +35,7 @@
             <button @click="$emit('form_close')" type="button"  v-bind:disabled="formStatus === 'loading'? true : false" class="btn btn-secondary">Close</button>
           </template>
           <template v-else-if="formStatus === 'editing'">
-            <button @click="formStatus = 'delete_confirmation'" v-bind:disabled="formStatus === 'loading'? true : false" type="button" class="btn btn-outline-danger pull-left"><i class="fa fa-trash-o" aria-hidden="true"></i> Delete</button>
+            <button v-if="!no_delete" @click="formStatus = 'delete_confirmation'" v-bind:disabled="formStatus === 'loading'? true : false" type="button" class="btn btn-outline-danger pull-left"><i class="fa fa-trash-o" aria-hidden="true"></i> Delete</button>
             <button @click="submitForm" v-bind:disabled="formStatus === 'loading'? true : false" type="button" class="btn btn-outline-success"><i class="fa fa-save" aria-hidden="true"></i> Save</button>
             <button @click="viewForm(formData['id'])" type="button"  v-bind:disabled="formStatus === 'loading'? true : false" class="btn btn-secondary">Cancel</button>
           </template>
@@ -79,7 +80,7 @@
           failed
           closed
         */
-        formStatus: 'view',
+        formStatus: '',
         formRequestStatus: '',
         links: {
           create: '',
@@ -95,12 +96,18 @@
       }
     },
     props: {
-      api: String,
+      api: {
+        type: String,
+        required: true
+      },
       no_create: Boolean,
       no_delete: Boolean,
       read_only: Boolean,
-      inputs: Object,
-      entry_id: Number,
+      inputs: {
+        type: Object,
+        required: true
+      },
+      // entry_id: Number,
       retrieve_parameter: {
         type: Object,
         default: function(){
@@ -160,14 +167,29 @@
           this.APIRequest(this.links.retrieve, requestOption, (response) => {
             if(response['data']){
               this.formData = response['data']
-              for(let x in this.valueFunctionList){
-                this.valueFunctionList[x]['value_function'](this.formData)
+              for(let x in response['data']){
+                this.setFormData(this.formData, x, response['data'][x])
               }
+              // for(let x in this.valueFunctionList){
+              //   this.valueFunctionList[x]['value_function'](this.formData)
+              // }
               this.formDataUpdated = !this.formDataUpdated
             }
             this.formStatus = 'view'
-            this.formRequestStatus = ''
           })
+        }
+        this.errorList = {}
+        this.formRequestStatus = ''
+        this.messageList = []
+      },
+      setFormData(formData, key, response){
+        if(response !== null && ((response).constructor === Object || (response).constructor === Array)){
+          for(let x in response){
+            this.setFormData(formData[key], x, response[x])
+          }
+        } else{
+          // Vue.set(formData, key, response)
+          this.refNotifyChildDataChange(this.$refs.inputGroup, key, response)
         }
       },
       deleteForm(){
@@ -202,11 +224,15 @@
           data_format: 'number'
         })
       },
+      notifyErrorListUpdate(){
+
+      },
       valueChanged(fieldName, value){
         if(typeof this.formData[fieldName] === 'undefined'){
           Vue.set(this.formData, fieldName, null)
         }
         Vue.set(this.formData, fieldName, value)
+        this.refNotifyChildDataChange(this.$refs.inputGroup, fieldName, value) // notify child components that the form data has changed. The refNotifyChildDataChange function is in the helper
       }
     }
   }

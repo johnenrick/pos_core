@@ -13,12 +13,17 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        $this->call(CompaniesTableSeeder::class);
-        $this->call(CompanyBranchesTableSeeder::class);
-        $this->call(CompanyBranchEmployeesTableSeeder::class);
-        $this->call(QueueFormsTableSeeder::class);
+        // $this->call(ModulesTableSeeder::class);
+        // $this->call(AccountModuleTableSeeder::class);
+        $this->call(AccountTypesTableSeeder::class);
+        $this->call(ModulesTableSeeder::class);
+        $this->call(AccountTypeModulesTableSeeder::class);
+
+        // $this->call(CompanyBranchesTableSeeder::class);
+        // $this->call(CompanyBranchEmployeesTableSeeder::class);
+        // $this->call(QueueFormsTableSeeder::class);
         //$this->call(QueueFormFieldsTableSeeder::class);
-        //$this->call(UserTypesSeeder::class);
+        // $this->call(UserTypesSeeder::class);
         Model::unguard();
 
 

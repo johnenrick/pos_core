@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="mb-3">
     <form v-if="filterInitialized" ref="form" enctype="multipart/form-data" role="form" method="POST">
       <div class="row">
         <div class="col-sm-10 float-right">
@@ -11,7 +11,7 @@
           >
           </input-group>
         </div>
-        <div class="col-sm-2">
+        <div class="col-sm-2 text-right">
           <button @click="filterForm" type="button" class="btn btn-outline-success" ><i class="fa fa-filter" aria-hidden="true"></i> Filter</button>
         </div>
       </div>

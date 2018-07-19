@@ -1,21 +1,23 @@
 <template>
-  <div>
-    <h2>{{capitalizeFirstLetter(StringUnderscoreToPhrase(module_name || api))}} </h2>
-    <slot name="beforeTable"></slot>
-    <div class="row mb-2">
-      <div class="col-sm-12 text-right">
-        <button v-if="!no_create" @click="createEntry" class="btn btn-primary font-weight-bold"><i class="fa fa-plus" aria-hidden="true"></i> Create New</button>
+  <div class="content-padding  h-100">
+    <div class="content-padding bg-white">
+      <h2>{{(StringUnderscoreToPhrase(module_name || api)).toUpperCase()}}</h2>
+      <slot name="beforeTable"></slot>
+      <div class="row mb-2">
+        <div class="col-sm-12 text-right">
+          <button v-if="!no_create" @click="createEntry" class="btn btn-primary font-weight-bold"><i class="fa fa-plus" aria-hidden="true"></i> Create New</button>
+        </div>
       </div>
+      <api-table ref="apiTable" v-on:table_filter="tableFilter" v-on:row_clicked="rowClicked" :api="api" :api_setting="api_setting" :filter_setting="table_setting.filterSetting" :column_setting="table_setting.columnSetting" :retrieve_parameter="table_setting.retrieveParameter" :entry_per_page="table_setting.entryPerPage"></api-table>
+      <modal :modal_size="modalSize" ref="modal" >
+        <div slot="header">
+          {{modalTitle}}
+        </div>
+        <div slot="body">
+          <common-form ref="commonForm" :api="api" :inputs="form_setting.inputs" v-on:form_close="formClose" v-on:form_deleted="formDeleted" v-on:form_updated="formUpdated" :retrieve_parameter="form_setting.retrieveParameter"></common-form>
+        </div>
+      </modal>
     </div>
-    <api-table ref="apiTable" v-on:table_filter="tableFilter" v-on:row_clicked="rowClicked" :api="api" :api_setting="api_setting" :filter_setting="table_setting.filterSetting" :column_setting="table_setting.columnSetting" :retrieve_parameter="table_setting.retrieveParameter"></api-table>
-    <modal :modal_size="modalSize" ref="modal" >
-      <div slot="header">
-        {{modalTitle}}
-      </div>
-      <div slot="body">
-        <common-form ref="commonForm" :api="api" :inputs="form_setting.inputs" v-on:form_close="formClose" v-on:form_deleted="formDeleted" v-on:form_updated="formUpdated" :retrieve_parameter="form_setting.retrieveParameter"></common-form>
-      </div>
-    </modal>
   </div>
 </template>
 <script>

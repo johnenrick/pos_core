@@ -13,20 +13,22 @@ use Illuminate\Http\Request;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-
+// sleep(2);
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
 Route::get('/', function () {
-    return view('index');
+    echo 'This is the api';
 });
 /* Authentication Router */
 Route::resource('authenticate', 'AuthenticateController', ['only' => ['index']]);
-Route::post('authenticate', 'AuthenticateController@authenticate');
-Route::post('authenticate/user', 'AuthenticateController@getAuthenticatedUser');
-Route::post('authenticate/refresh', 'AuthenticateController@refreshToken');
-Route::post('authenticate/invalidate', 'AuthenticateController@deauthenticate');
+Route::post('authentication/create', 'AuthenticateController@authenticate');
+Route::post('authentication/user', 'AuthenticateController@getAuthenticatedUser');
+Route::group(['middleware' => 'jwt.refresh'], function(){
+  Route::post('authentication/refresh', 'AuthenticateController@refresh');
+});
+Route::post('authentication/destroy', 'AuthenticateController@deauthenticate');
 /*Queue Card*/
 Route::get("getAverageQueueTime", "QueueCardController@getAverageQueueTime");
 /*API Router*/

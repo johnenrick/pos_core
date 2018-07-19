@@ -1,4 +1,4 @@
-var path = require('path')
+ var path = require('path')
 var utils = require('./utils')
 var config = require('../config')
 var vueLoaderConfig = require('./vue-loader.conf')
@@ -19,7 +19,7 @@ module.exports = {
       : config.dev.assetsPublicPath
   },
   resolve: {
-    extensions: ['.js', '.vue', '.json'],
+    extensions: ['.js', '.vue', '.json', '.scss', '.sass', '.css'],
     modules: [
       resolve('src'),
       resolve('node_modules')
@@ -28,7 +28,8 @@ module.exports = {
       'vue$': 'vue/dist/vue.common.js',
       'src': resolve('src'),
       'assets': resolve('src/assets'),
-      'components': resolve('src/components')
+      'components': resolve('src/components'),
+      'node_modules': resolve('node_modules')
     }
   },
   module: {
@@ -74,26 +75,27 @@ module.exports = {
           name: utils.assetsPath('fonts/[name].[hash:7].[ext]')
         }
       },
-      {
-        test: /\.(scss)$/,
-        use: [{
-          loader: 'style-loader', // inject CSS to page
-        }, {
-          loader: 'css-loader', // translates CSS into CommonJS modules
-        }, {
-          loader: 'postcss-loader', // Run post css actions
-          options: {
-            plugins: function () { // post css plugins, can be exported to postcss.config.js
-              return [
-                require('precss'),
-                require('autoprefixer')
-              ];
-            }
-          }
-        }, {
-          loader: 'sass-loader' // compiles Sass to CSS
-        }]
-      }
+      // {
+      //   test: /\.(scss)$/,
+      //   include: [resolve('node_modules/bootstrap/scss/bootstrap')],
+      //   use: [{
+      //     loader: 'style-loader', // inject CSS to page
+      //   }, {
+      //     loader: 'css-loader', // translates CSS into CommonJS modules
+      //   }, {
+      //     loader: 'sass-loader', // compiles Sass to CSS
+      //   }, {
+      //     loader: 'postcss-loader', // Run post css actions
+      //     options: {
+      //       plugins: function () { // post css plugins, can be exported to postcss.config.js
+      //         return [
+      //           require('precss'),
+      //           require('autoprefixer')
+      //         ];
+      //       }
+      //     }
+      //   }]
+      // }
     ]
   }
 }

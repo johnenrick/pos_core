@@ -3,7 +3,6 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Account extends APIModel
 {
@@ -14,8 +13,8 @@ class Account extends APIModel
       return $this->hasOne('App\AccountInformation');
     }
 
-    public function account_profile_picture(){
-      return $this->hasOne('App\AccountProfilePicture');
+    public function account_type(){
+      return $this->belongsTo('App\AccountType');
     }
 
     public function account_position(){

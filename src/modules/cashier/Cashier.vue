@@ -1,5 +1,5 @@
-n<template>
-  <div>
+<template>
+  <div class="content-padding background-pattern">
     <div class="row pb-3 d-none" >
       <div class="col-md-4">
         <h4>ABACUS</h4>
@@ -9,7 +9,7 @@ n<template>
       <div class="col-md-4">
         <div class="btn-group float-right">
           <button type="button" class="btn btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            <i class="fas fa-user"></i> {{user.username}}
+            <i class="fas fa-user"></i> {{$auth.user().username}}
           </button>
           <div class="dropdown-menu dropdown-menu-right">
             <a @click="profileSetting" class="dropdown-item" href="#">
@@ -28,7 +28,7 @@ n<template>
         <button @click="isOrderListShown = !isOrderListShown" v-if="!isOrderListShown" class="btn btn-primary mb-2 btn-block"><i class="fas fa-arrow-left"></i> ORDER LIST</button>
         <button @click="isOrderListShown = !isOrderListShown" v-if="isOrderListShown" class="btn btn-primary mb-2 btn-block">PRODUCT MENU <i class="fas fa-arrow-right"></i></button>
       </div>
-      <div class=" col-md-6 d-md-block" v-bind:class="!isOrderListShown ? 'd-none' : ''">
+      <div class=" col-md-6 d-md-block " v-bind:class="!isOrderListShown ? 'd-none' : ''">
         <order-list ref="productOrdered" @order_removed="$refs.productOrdered.orderListUpdated()" :order_list="orderList" :order_height="orderListHeight"></order-list>
         <div class="row pt-2 no-gutters">
           <!--Show on XS hide on SM-->
@@ -103,7 +103,6 @@ n<template>
 <script>
 import Vue from 'vue'
 import Vuex from 'vuex'
-import AUTH from '../../services/auth'
 export default{
   name: 'cashiering',
   components: {
@@ -121,7 +120,6 @@ export default{
   },
   data(){
     return {
-      user: AUTH.user,
       orderList: [
       ],
       isOrderListShown: true,
@@ -164,16 +162,21 @@ export default{
     calculateHeight(){
       let windowHeight = $(window).height()
       let windowWidth = $(window).width()
-      let navbar = 65
-      let productMenu = 34 + 54
+      let containerTopPadding = 15
+      let navbar = 58
+      let productMenu = 34
       let orderMenuSwitch = 46
-      this.productMenuHeight = windowHeight - navbar - productMenu - 12 - (windowWidth < 768 ? 46 : 0)
+      this.productMenuHeight = windowHeight - navbar - containerTopPadding - productMenu - (windowWidth < 768 ? 46 : 0)
       let columnHeaderFooter = 72
       let optionsHeight = 46
-      this.orderListHeight = windowHeight - navbar - columnHeaderFooter - (windowWidth < 768 ? 46 + 81 : 46) - 12
+      this.orderListHeight = windowHeight - navbar - containerTopPadding - columnHeaderFooter - (windowWidth < 768 ? 46 + 81 : 46) - 12
     }
   }
 }
 </script>
 <style>
+.background-pattern{
+  /*background-image: url("../../assets/img/grey_wash_wall.png");*/
+  background-color: whitesmoke
+}
 </style>

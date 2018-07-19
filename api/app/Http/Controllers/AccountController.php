@@ -12,21 +12,14 @@ class AccountController extends APIController
      function __construct(){
         $this->model = new Account();
         $this->validation = array(
-          "email" => "unique:accounts",
+          "email" => "unique:accounts|email",
           "username"  => "unique:accounts",
-          "account_information.account_type_id" => "required"
         );
         $this->editableForeignTable = array(
-          'account_information'
+          'account_information', 'account_type'
         );
-        $this->foreignTable = array(
-          'account_information',
-          'account_profile_picture',
-          'company_branch_employee',
-          'company_branch'
-        );
+        $this->APIControllerConstructor();
     }
-
     /*
       1. account
       2. account_information
@@ -35,32 +28,33 @@ class AccountController extends APIController
     public function create(Request $request){
      $request = $request->all();
      $request['password'] = Hash::make($request['password']);
-     $result = $this->createEntry($request);
-     if($this->response['data']){
-        $accountTypeID = isset($request['account_information']['account_type_id']) ? $request['account_information']['account_type_id'] : false;
-        if($accountTypeID){
-          $accountResponseData = $this->response['data'];
-          $this->model = new CompanyBranchEmployee();
-          $companyBranchRequest = array(
-            'company_branch_id' => $this->getUserCompanyBranchID(),
-            'identification_number' => $accountResponseData['id'], // dummy id
-            'account_id' => $accountResponseData['id']
-          );
-          $this->validation = array();
-          $this->createEntry($companyBranchRequest);
-        }
-     }
-     return $this->output();
+     return $this->createEntry($request);
+    //  if($this->response['data']){
+    //     $accountTypeID = isset($request['account_information']['account_type_id']) ? $request['account_information']['account_type_id'] : false;
+    //     if($accountTypeID){
+    //       $accountResponseData = $this->response['data'];
+    //       $this->model = new CompanyBranchEmployee();
+    //       $companyBranchRequest = array(
+    //         'company_branch_id' => $this->getUserCompanyBranchID(),
+    //         'identification_number' => $accountResponseData['id'], // dummy id
+    //         'account_id' => $accountResponseData['id']
+    //       );
+    //       $this->validation = array();
+    //       $this->createEntry($companyBranchRequest);
+    //     }
+    //  }
     }
 
     public function update(Request $request){
-      $this->updateEntry($this->hashPassword($request));
-      return $this->output();
+      $requestArray = $request->all();
+      $this->response['debug'][] = $requestArray;
+      if(array_key_exists('password', $requestArray) && strlen($requestArray['password']) === 0){
+        unset($requestArray['password']);
+      }else if(array_key_exists('password', $requestArray)){
+        $requestArray['password'] = Hash::make($requestArray['password']);
+      }
+      $this->response['debug'][] = $requestArray;
+      return $this->updateEntry($requestArray);
     }
 
-    public function hashPassword(Request $request){
-      $data = $request->all();
-      $data['password'] = Hash::make($data['password']);
-      return $data;
-    }
 }

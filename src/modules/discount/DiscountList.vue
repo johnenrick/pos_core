@@ -26,8 +26,6 @@
         }
       }
       let columnSetting = {
-        parent_id: {
-        },
         description: {},
         type: {
           value_function: (entry) => {

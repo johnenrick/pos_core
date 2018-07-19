@@ -1,11 +1,11 @@
 <template>
-  <div>
+  <div class="content-padding">
     <h1>Admin Dashboard</h1>
     <div class="row">
-      <div class="col-12 col-xl-4">
+      <div class="col-12 ">
         <summary-report></summary-report>
       </div>
-      <div class="col-12 col-xl-8 mb-3">
+      <div v-if="false" class="col-12 col-xl-8 mb-3">
         <div class="card border-primary">
           <div class="card-header bg-primary text-white font-weight-bold">Product and Service Performance</div>
           <div class="card-body">
@@ -15,8 +15,17 @@
         </div>
       </div>
       <div class="col-12 mb-3">
+        <div class="card border-primary">
+          <div class="card-header bg-primary text-white font-weight-bold">ROUTE PERFORMANCE</div>
+          <div class="card-body">
+            <route-performance :is_top='false'></route-performance>
+            <!-- <route-performance :is_top='false'></route-performance> -->
+          </div>
+        </div>
+      </div>
+      <div class="col-12 mb-3">
         <div class="card border-info">
-          <div class="card-header bg-info text-white  font-weight-bold">Yearly Sales</div>
+          <div class="card-header bg-info text-white  font-weight-bold">YEARLY SALES</div>
           <div class="card-body">
             <yearly-sales></yearly-sales>
           </div>
@@ -31,7 +40,8 @@ export default {
     'summary-report': require('./admin_home_component/Summary.vue'),
     'yearly-sales': require('./admin_home_component/YearlySales.vue'),
     'product-performance-quantity': require('./admin_home_component/ProductPerformanceQuantity.vue'),
-    'product-performance-sales': require('./admin_home_component/ProductPerformanceSales.vue')
+    'product-performance-sales': require('./admin_home_component/ProductPerformanceSales.vue'),
+    'route-performance': require('./admin_home_component/RoutePerformance.vue')
   },
   mounted() {
 

@@ -16,7 +16,8 @@ class Product extends Migration
       Schema::create('products', function(Blueprint $table){
         $table->increments('id');
         $table->char('description', 50);
-        $table->char('short_name', 30);
+        $table->unsignedInteger('product_category_id');
+        $table->string('short_name', 30)->default('');
         $table->float('price');
         $table->timestamps();
         $table->softDeletes();

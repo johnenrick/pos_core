@@ -25,7 +25,9 @@
       let columnSetting = {
         id: {
         },
-        description: {}
+        description: {},
+        created_at: {}
+
       }
       let tableSetting = {
         filterSetting: filterSetting,

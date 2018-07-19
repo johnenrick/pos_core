@@ -1,14 +1,6 @@
 
 export default{
   routes: [{
-    path: '/auth',
-    name: 'auth',
-    component: resolve => require(['modules/test/Auth.vue'], resolve),
-    meta: {
-      tokenRequired: false
-    }
-  },
-  {
     path: '/mockup',
     name: 'mockup',
     component: resolve => require(['modules/test/Mockup.vue'], resolve),
@@ -22,7 +14,8 @@ export default{
     component: resolve => require(['modules/home/AdminHome.vue'], resolve),
     meta: {
       tokenRequired: true,
-      module_id: 1
+      module_id: 1,
+      auth: true
     }
   },
   {
@@ -31,7 +24,18 @@ export default{
     component: resolve => require(['modules/product/ProductList.vue'], resolve),
     meta: {
       tokenRequired: true,
-      module_id: 2
+      module_id: 2,
+      auth: true
+    }
+  },
+  {
+    path: '/user_management',
+    name: 'userManagement',
+    component: resolve => require(['modules/user/UserManagement.vue'], resolve),
+    meta: {
+      tokenRequired: true,
+      module_id: 2,
+      auth: true
     }
   },
   {
@@ -40,7 +44,88 @@ export default{
     component: resolve => require(['modules/product/ProductCategory.vue'], resolve),
     meta: {
       tokenRequired: true,
-      module_id: 2
+      module_id: 2,
+      auth: true
+    }
+  },
+  {
+    path: '/bus_list',
+    name: 'busList',
+    component: resolve => require(['modules/bus/Bus.vue'], resolve),
+    meta: {
+      tokenRequired: true,
+      module_id: 2,
+      auth: true
+    }
+  },
+  {
+    path: '/bus_type',
+    name: 'busType',
+    component: resolve => require(['modules/bus/BusType.vue'], resolve),
+    meta: {
+      tokenRequired: true,
+      module_id: 2,
+      auth: true
+    }
+  },
+  {
+    path: '/bus_daily_sales_report',
+    name: 'busDailySalesReport',
+    component: resolve => require(['modules/reports/BusDailySalesReport.vue'], resolve),
+    meta: {
+      tokenRequired: true,
+      module_id: 2,
+      auth: true
+    }
+  },
+  {
+    path: '/route_management',
+    name: 'routeManagement',
+    component: resolve => require(['modules/bus/RouteManagement.vue'], resolve),
+    meta: {
+      tokenRequired: true,
+      module_id: 2,
+      auth: true
+    }
+  },
+  {
+    path: '/bus_collection_summary',
+    name: 'busCollectionSummary',
+    component: resolve => require(['modules/reports/BusCollectionSummary.vue'], resolve),
+    meta: {
+      tokenRequired: true,
+      module_id: 2,
+      auth: true
+    }
+  },
+  {
+    path: '/bus_trip',
+    name: 'BusTrip',
+    component: resolve => require(['modules/bus_trip/BusTrip.vue'], resolve),
+    meta: {
+      tokenRequired: true,
+      module_id: 2,
+      auth: true
+    }
+  },
+  {
+    path: '/bus_trip_ticket',
+    name: 'BusTripTicket',
+    component: resolve => require(['modules/bus_trip/BusTripTicket.vue'], resolve),
+    meta: {
+      tokenRequired: true,
+      module_id: 2,
+      auth: true
+    }
+  },
+  {
+    path: '/route_sales_summary',
+    name: 'RouteSalesSummary',
+    component: resolve => require(['modules/reports/RouteSalesSummary.vue'], resolve),
+    meta: {
+      tokenRequired: true,
+      module_id: 2,
+      auth: true
     }
   },
   {
@@ -49,7 +134,8 @@ export default{
     component: resolve => require(['modules/discount/DiscountList.vue'], resolve),
     meta: {
       tokenRequired: true,
-      module_id: 2
+      module_id: 2,
+      auth: true
     }
   },
   {
@@ -58,7 +144,8 @@ export default{
     component: resolve => require(['modules/manufacturing/IngredientList.vue'], resolve),
     meta: {
       tokenRequired: true,
-      module_id: 2
+      module_id: 2,
+      auth: true
     }
   },
   {
@@ -67,7 +154,8 @@ export default{
     component: resolve => require(['modules/manufacturing/IngredientSupply.vue'], resolve),
     meta: {
       tokenRequired: true,
-      module_id: 2
+      module_id: 2,
+      auth: true
     }
   },
   {
@@ -76,7 +164,8 @@ export default{
     component: resolve => require(['modules/inventory/ProductionCount.vue'], resolve),
     meta: {
       tokenRequired: true,
-      module_id: 2
+      module_id: 2,
+      auth: true
     }
   },
   {
@@ -85,7 +174,8 @@ export default{
     component: resolve => require(['modules/inventory/QuantityAdjustmentType.vue'], resolve),
     meta: {
       tokenRequired: true,
-      module_id: 2
+      module_id: 2,
+      auth: true
     }
   },
   {
@@ -94,7 +184,8 @@ export default{
     component: resolve => require(['modules/inventory/ProductQuantityAdjustment.vue'], resolve),
     meta: {
       tokenRequired: true,
-      module_id: 2
+      module_id: 2,
+      auth: true
     }
   },
   {
@@ -103,7 +194,8 @@ export default{
     component: resolve => require(['modules/manufacturing/Formulation.vue'], resolve),
     meta: {
       tokenRequired: true,
-      module_id: 2
+      module_id: 2,
+      auth: true
     }
   },
   {
@@ -112,7 +204,8 @@ export default{
     component: resolve => require(['modules/basic_report/XReading.vue'], resolve),
     meta: {
       tokenRequired: true,
-      module_id: 2
+      module_id: 2,
+      auth: true
     }
   },
   {
@@ -121,7 +214,8 @@ export default{
     component: resolve => require(['modules/basic_report/ZReading.vue'], resolve),
     meta: {
       tokenRequired: true,
-      module_id: 2
+      module_id: 2,
+      auth: true
     }
   },
   {
@@ -130,7 +224,8 @@ export default{
     component: resolve => require(['modules/cashier/Cashier.vue'], resolve),
     meta: {
       tokenRequired: true,
-      module_id: 3
+      module_id: 3,
+      auth: true
     }
   },
   {
@@ -139,7 +234,8 @@ export default{
     component: resolve => require(['modules/reports/ProductSalesSummary.vue'], resolve),
     meta: {
       tokenRequired: true,
-      module_id: 2
+      module_id: 2,
+      auth: true
     }
   },
   {
@@ -148,7 +244,8 @@ export default{
     component: resolve => require(['modules/reports/DailySalesReport.vue'], resolve),
     meta: {
       tokenRequired: true,
-      module_id: 2
+      module_id: 2,
+      auth: true
     }
   },
   {
@@ -172,6 +269,28 @@ export default{
     path: '/server',
     name: 'server',
     component: resolve => require(['modules/server/Server.vue'], resolve),
+    meta: {
+      module_id: 4
+    }
+  },
+  {
+    path: '/loadingScreen',
+    name: 'loadingScreen',
+    component: resolve => require(['modules/home/LoadingScreen.vue'], resolve),
+    meta: {
+      module_id: 4
+    }
+  },
+  {
+    path: '/void_bus_trip_ticket',
+    component: resolve => require(['modules/bus_trip/VoidBusTripTicket.vue'], resolve),
+    meta: {
+      module_id: 4
+    }
+  },
+  {
+    path: '/profile_setting',
+    component: resolve => require(['modules/profile/ProfileSetting.vue'], resolve),
     meta: {
       module_id: 4
     }

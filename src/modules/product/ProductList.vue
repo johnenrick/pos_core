@@ -27,24 +27,10 @@
           clause: 'like',
           input_type: 'select',
           input_setting: {
-            option_function: (instance) => {
-              this.APIRequest('product_category/retrieve', {}, (response) => {
-                if(response['data']){
-                  let options = []
-                  options.push({
-                    id: null,
-                    text: 'All'
-                  })
-                  for(let x = 0; x < response['data'].length; x++){
-                    options.push({
-                      id: response['data'][x]['id'],
-                      text: response['data'][x]['description']
-                    })
-                  }
-                  instance.setOption(options)
-                }
-              })
-            }
+            api: 'product_category/retrieve',
+            api_option_text_column: 'description',
+            default_text: 'All',
+            default_id: null
           }
         }
       }
@@ -71,24 +57,10 @@
             label: 'Category',
             input_type: 'select',
             input_setting: {
-              option_function: (instance) => {
-                this.APIRequest('product_category/retrieve', {}, (response) => {
-                  if(response['data']){
-                    let options = []
-                    options.push({
-                      id: null,
-                      text: 'Select Category'
-                    })
-                    for(let x = 0; x < response['data'].length; x++){
-                      options.push({
-                        id: response['data'][x]['id'],
-                        text: response['data'][x]['description']
-                      })
-                    }
-                    instance.setOption(options)
-                  }
-                })
-              }
+              api: 'product_category/retrieve',
+              api_option_text_column: 'description',
+              default_text: 'All',
+              default_id: null
             }
           },
           price: {

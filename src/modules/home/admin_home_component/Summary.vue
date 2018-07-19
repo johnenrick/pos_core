@@ -1,63 +1,35 @@
 <template>
-  <div>
-    <div class="card border-success mb-3">
-      <div class="card-header text-white bg-success  font-weight-bold">
-        Summary
+  <div class="row row-eq-heights">
+    <div class="col-sm-6 col-lg-3 mb-3">
+      <div class="card text-white bg-success mb-3 text-center h-100" >
+        <div class="card-body">
+          <i class="fas fa-bus static-left" style="font-size: 48px;"></i>
+          <span class="float-right text-right"><p class="h2 summary-text">900.00M</p> <small >Active Trips</small></span>
+        </div>
       </div>
-      <div class="card-body ">
-
-        <div class="form-group row border border-success">
-          <label class="col-sm-6 col-form-label font-weight-bold">Pending Transaction</label>
-          <div class="col-sm-6">
-            <label class="col-form-label float-right">20 Transactions</label>
-          </div>
+    </div>
+    <div class="col-sm-6 col-lg-3 mb-3">
+      <div class="card text-white bg-warning mb-3 text-center h-100" >
+        <div class="card-body ">
+          <i class="fas fa-clipboard-list static-left" style="font-size: 48px;"></i>
+          <span class="float-right text-right"><p class="h2 summary-text">900.00M</p> <small >Collected</small></span>
         </div>
-        <div class="form-group row border border-success">
-          <label class="col-sm-6 col-form-label font-weight-bold">Total Transactions</label>
-          <div class="col-sm-6">
-            <label class="col-form-label float-right">50 Transactions</label>
-          </div>
+      </div>
+    </div>
+    <div class="col-sm-6 col-lg-3 mb-3">
+      <div class="card text-white bg-danger mb-3 text-center h-100" >
+        <div class="card-body">
+          <i class="fas fa-ban static-left" style="font-size: 48px;"></i>
+          <span class="float-right text-right"><p class="h2 summary-text">900.00M</p> <small >Void Request</small></span>
         </div>
-        <div class="form-group row border border-success">
-          <label class="col-sm-6 col-form-label font-weight-bold">Ave. Transaction Per Day</label>
-          <div class="col-sm-6">
-            <label class="col-form-label float-right">20 Transactions</label>
-          </div>
+      </div>
+    </div>
+    <div class="col-sm-6 col-lg-3 mb-3">
+      <div class="card text-white bg-info mb-3 text-center h-100" >
+        <div class="card-body">
+          <i class="fas fa-male static-left" style="font-size: 48px;"></i>
+          <span class="float-right text-right"><p class="h2 summary-text">900.00M</p> <small >Passengers</small></span>
         </div>
-        <div class="form-group row border border-success">
-          <label class="col-sm-6 col-form-label font-weight-bold">Average Daily Sales</label>
-          <div class="col-sm-6">
-            <label class="col-form-label float-right">20 Transactions</label>
-          </div>
-        </div>
-        <div class="form-group row border border-success">
-          <label class="col-sm-6 col-form-label font-weight-bold">Ave. Transaction Per Day</label>
-          <div class="col-sm-6">
-            <label class="col-form-label float-right">PhP 30,000.00</label>
-          </div>
-        </div>
-        <div class="form-group row border border-success">
-          <label class="col-sm-6 col-form-label font-weight-bold">Current Year Sales</label>
-          <div class="col-sm-6">
-            <label class="col-form-label float-right">PhP 300,000.00</label>
-          </div>
-        </div>
-        <div class="form-group row border border-success">
-          <label class="col-sm-6 col-form-label font-weight-bold">Top Product</label>
-          <div class="col-sm-6">
-            <label class="col-form-label float-right">Vacuum Cleaner</label>
-          </div>
-        </div>
-        <div class="form-group row border border-success">
-          <label class="col-sm-6 col-form-label font-weight-bold">Top Service</label>
-          <div class="col-sm-6">
-            <label class="col-form-label float-right">Deep Clean 36sqm</label>
-          </div>
-        </div>
-
-
-
-
       </div>
     </div>
   </div>
@@ -74,3 +46,13 @@ export default{
 
 }
 </script>
+<style>
+ .static-left{
+   position: absolute;
+   left: 20px;
+   top: 20px;
+ }
+ .summary-text{
+   line-height: 0.7em;
+ }
+</style>

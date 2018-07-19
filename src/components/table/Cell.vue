@@ -8,10 +8,12 @@
     </div>
     <div v-else-if="data_type === 'html'" v-html="value">
     </div>
-    <div v-else-if="data_type === 'boolean'" >
-      {{value*1 ? 'True' : 'False'}}
+    <div v-else-if="data_type === 'boolean'" class="text-center">
+      <i v-if="value === 0" class="fas fa-minus text-secondary"></i>
+      <i v-if="value === 1" class="fas fa-check text-success"></i>
+      <i v-else-if="value === 2" class="fas fa-times text-danger"></i>
     </div>
-    <div v-else-if="data_type === 'check'" >
+    <div v-else-if="data_type === 'check'" class="text-center">
       <i v-if="value * 1 === 0" class="fa fa-close text-danger" aria-hidden="true"></i>
       <i v-else class="fa fa-check text-success" aria-hidden="true"></i>
     </div>

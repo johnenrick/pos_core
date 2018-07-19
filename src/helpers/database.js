@@ -1,4 +1,5 @@
 import quickHelper from './quick_helper.js'
+import numberHelper from './number_helper.js'
 import Vue from 'vue'
 import global from './global'
 import config from '../config'
@@ -14,16 +15,35 @@ Vue.mixin({
       })
     },
     formatDBDate: (dbDate, format) => {
+      if(dbDate === null){
+        return null
+      }
       switch(format){
         case 'yyyy/mm/dd':
           let dateObject = new Date(dbDate)
+          return dateObject.getFullYear() + '/' + numberHelper.padNumber(dateObject.getMonth() + 1, 2) + '/' + numberHelper.padNumber(dateObject.getDate(), 2)
+        case 'MM/dd/yyyy':
+          dateObject = new Date(dbDate)
+          return numberHelper.padNumber(dateObject.getMonth() + 1, 2) + '/' + numberHelper.padNumber(dateObject.getDate(), 2) + '/' + dateObject.getFullYear()
+      }
+    },
+    DBDateFormat: (date, currentFormat) => {
+      if(date === null){
+        return null
+      }
+      switch(currentFormat){
+        default: // 2018-07-16 00:46:38
+          let dateObject = new Date(date)
+          return dateObject.getFullYear() + '-' + numberHelper.padNumber(dateObject.getMonth() + 1) + '-' + numberHelper.padNumber(dateObject.getDate()) + ' ' + numberHelper.padNumber(dateObject.getHours()) + ':' + numberHelper.padNumber(dateObject.getMinutes()) + ':' + numberHelper.padNumber(dateObject.getSeconds())
 
-          return dateObject.getFullYear() + '/' + quickHelper.padNumber(dateObject.getMonth() + 1, 2) + '/' + quickHelper.padNumber(dateObject.getDate(), 2)
       }
     }
   },
   filters: {
     getFormDataFilter(formData, dbName, defaultValue){
+      if(dbName === null){
+        return null
+      }
       let explodedDBName = dbName.split('.')
       if(explodedDBName.length === 1){
         return formData[dbName] ? formData[dbName] : defaultValue

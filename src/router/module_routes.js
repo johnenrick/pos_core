@@ -1,44 +1,7 @@
-import AUTH from 'services/auth'
+import Router from 'vue-router'
 let CONFIG = require('config.js')
-let hasAccess = (to) => {
-  if(AUTH.user.type === 1){ // admin
-    if([1, 2, 3].includes(to.meta.module_id)){
-      return true
-    }
-  }else if(AUTH.user.type === 2){
-    if([3].includes(to.meta.module_id)){
-      return true
-    }
-  }else if(AUTH.user.type === 3){
-    if([4].includes(to.meta.module_id)){
-      return true
-    }
-  }
-  return false
-}
 let beforeEnter = (to, from, next) => {
-  // TODO Redirect if no token when token is required in meta.tokenRequired
-  AUTH.checkAuthentication(() => {
-    AUTH.currentPath = to.path
-    let isTokenRequired = typeof to.meta.tokenRequired === 'undefined' ? true : to.meta.tokenRequired
-    if(AUTH.user.userID || isTokenRequired === false){
-      if(isTokenRequired === false){
-        next()
-      }else if(hasAccess(to)){
-        next()
-      }else{
-        next({
-          path: '/login'
-        })
-      }
-    }else{
-      if(!AUTH.tokenData.verifyingToken){
-        next({
-          path: '/login'
-        })
-      }
-    }
-  })
+  next()
 }
 var devRoutes = []
 let plenos = require('./dev_routes/plenos.js')
@@ -50,41 +13,27 @@ let routes = [
   {
     path: '/',
     name: 'root',
-    component: resolve => require(['modules/home/Home.vue'], resolve),
-    beforeEnter: (to, from, next) => {
-      AUTH.checkAuthentication(() => {
-        if(AUTH.user.type === 1){
-          next({
-            path: '/admin'
-          })
-        }else if(AUTH.user.type === 2){
-          next({
-            path: '/cashier'
-          })
-        }else if(AUTH.user.type === 3){
-          next({
-            path: '/server'
-          })
-        }else{
-          next({
-            path: '/login'
-          })
-        }
-      })
-    }
+    component: resolve => require(['modules/home/LogIn.vue'], resolve)
+  },
+  {
+    path: '/home',
+    name: 'home',
+    component: resolve => require(['modules/home/Home.vue'], resolve)
   },
   {
     path: '/login',
     name: 'login',
     component: resolve => require(['modules/home/LogIn.vue'], resolve),
-    beforeEnter: (to, from, next) => {
-      if(AUTH.user.userID){
-        next({
-          path: '/'
-        })
-      }else{
-        next()
-      }
+    meta: {
+      auth: false
+    }
+  },
+  {
+    path: '/404',
+    name: '404',
+    component: resolve => require(['modules/home/NotFound.vue'], resolve),
+    meta: {
+      auth: false
     }
 
   }

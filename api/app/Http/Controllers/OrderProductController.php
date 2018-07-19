@@ -19,12 +19,8 @@ class OrderProductController extends APIController
       'total_sale_price' => 'sum(sale_price)',
       'total_quantity' => 'sum(quantity)'
     ];
-    $this->model = $this->model::groupBy('product_id');
-    $this->model = $this->model->addSelect('product_id');
-    //$this->model = $this->model->addSelect(DB::raw(' as ``'))->orderBy(DB::raw('sum(sale_price)'), 'ASC');
-    $this->rawRequest = $request;
-    // $this->response['debug'][] = $request->all();
-    // $this->response['data'] = $this->model->get()->toArray();
+    $this->groupByColumn = array('product_id');
+    $this->select = array('product_id');
     return $this->output($this->retrieveEntry($request->all()));
   }
 }

@@ -1,0 +1,15 @@
+@import "./global/index.scss";
+
+@font-face {
+  font-family: 'Theme Font';
+  src: url('../../webfonts/Cairo-Regular.ttf')
+};
+
+$font-family-sans-serif:      'Theme Font';
+$font-family-monospace:       $font-family-sans-serif;
+$body-bg: #f8f9fa;
+$primary: #1781c2;
+$warning: #f2a11d;
+$info: #63cce9;
+@import "node_modules/bootstrap/scss/mixins/box-shadow";
+@import "node_modules/bootstrap/scss/bootstrap";

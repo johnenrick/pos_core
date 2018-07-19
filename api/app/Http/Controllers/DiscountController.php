@@ -9,6 +9,5 @@ class DiscountController extends APIController
 {
   function __construct(){
     $this->model = new DBItem();
-    $this->APIControllerConstructor();
   }
 }

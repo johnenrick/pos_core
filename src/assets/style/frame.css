@@ -1,0 +1,16 @@
+.content-padding{
+  padding: 16px 15px 0px 15px;
+}
+.bg-whitesmoke{
+  background-color: whitesmoke
+}
+html{
+  font-family: FontAwesome;
+  src: url(../webfonts/Slabo27px-Regular.ttf);
+}
+.no-line-height{
+  line-height: 0px!important;
+}
+.no-padding{
+  padding: 0!important
+}

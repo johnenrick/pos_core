@@ -16,8 +16,8 @@
       </div>
     </div>
     <div v-bind:style="{height: menu_height + 'px'}" style="overflow-y:scroll">
-      <div v-for="(product, index) in productList" class="w-50 float-left pb-2" v-bind:class="(index%2 === 0) ? 'pr-2' : ''" >
-        <div class="row no-gutters rounded-right h-100 " >
+      <div v-for="(product, index) in productList" class="w-50 float-left pb-2 " v-bind:class="(index%2 === 0) ? 'pr-2' : ''" >
+        <div class="row no-gutters rounded-right h-100 shadow-sm" >
           <div @click="$emit('addOrder', product['id'], 1, product['description'], product['short_name'], product['price'])"  class="col-10 p-2 productMenu" >
             <div class="" style="height:42px; overflow: hidden">
               <small class="font-weight-bold text-uppercase" >{{product['description']}}</small><br>

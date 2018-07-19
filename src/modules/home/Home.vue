@@ -1,12 +1,11 @@
 <template>
-<div class="section ">
-  THIS IS THE LANDING PAGE OF ABACUS POS
-</div>
+  <div class="section ">
+    asdasdasd
+  </div>
 </template>
 <script>
 export default {
   mounted() {
-    this.initDummy()
   },
   data() {
     return {
@@ -14,14 +13,8 @@ export default {
     }
   },
   methods: {
-    initDummy() {
-
-    }
   }
 }
 </script>
 <style scoped>
-.table-large td {
-  padding: 5px
-}
 </style>

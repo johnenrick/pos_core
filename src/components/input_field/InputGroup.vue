@@ -1,10 +1,17 @@
 <template>
   <div>
+
     <div class="row">
       <template v-for="input in inputList">
         <div v-if="input['input_type'] === 'group'" v-bind:class="'col-sm-' + input['col']" >
+          <template v-if="input['title']">
+            <h4>{{input['title']}}</h4>
+          </template>
           <input-group-recursive
+            ref="inputGroup"
             :inputs="input['inputs']"
+            :title="input['title']"
+            :header="input['header']"
             :form_data="form_data"
             :form_data_updated="form_data_updated"
             :form_status="form_status"
@@ -14,8 +21,8 @@
           </input-group-recursive>
         </div>
         <div v-else v-bind:class="[input['input_type'] === 'hidden' ? 'hidden' : '', 'col-sm-' + input['col']]" >
-
           <input-cell
+            ref="inputCell"
             :input_name="input['input_name']"
             :field_name="input['field_name']"
             :db_name="input['db_name']"
@@ -68,6 +75,8 @@
       }
     },
     props: {
+      title: String,
+      header: Number,
       inputs: Object,
       form_data: {
         type: Object,
@@ -100,17 +109,15 @@
       formGroupDataChanged(fieldname, value){
         this.$emit('form_data_changed', fieldname, value)
       },
-      valueChanged(e, customName){ // custom name is useful for dummies
-        let dbName = typeof customName !== 'undefined' ? customName : $(e.target).attr('name')
-        let fieldName = $(e.target).attr('field_name')
+      valueChanged(fieldName, value){ // custom name is useful for dummies
         if(typeof this.valueFunctionList[fieldName] !== 'undefined'){
-          this.formDataChanged(fieldName, $(e.target).val())
+          this.formDataChanged(fieldName, value)
           let newFormData = this.valueFunctionList[fieldName](this.form_data)
           for(let formKey in newFormData){
             this.formDataChanged(formKey, newFormData[formKey])
           }
         }else{
-          this.formDataChanged(fieldName, $(e.target).val())
+          this.formDataChanged(fieldName, value)
         }
       },
       formDataChanged(fieldName, value){
@@ -121,7 +128,6 @@
         let dbName = ''
         for(let key in this.inputs){
           Vue.set(this.inputList, key, this.inputs[key])
-
           Vue.set(this.inputList[key], 'field_name', key)
           typeof this.inputList[key]['db_name'] === 'undefined' ? Vue.set(this.inputList[key], 'db_name', key) : ''
           typeof this.inputList[key]['input_name'] === 'undefined' ? Vue.set(this.inputList[key], 'input_name', this.StringUnderscoreToPhrase((key).replace('.', '_'))) : ''
@@ -165,6 +171,10 @@
           default:
             return finalValue
         }
+      },
+      notifyChildDataChange(field, name){
+        this.refNotifyChildDataChange(this.$refs.inputGroup, field, name)
+        this.refNotifyChildDataChange(this.$refs.inputCell, field, name)
       }
     }
 

@@ -1,20 +1,27 @@
 import Vue from 'vue'
-import AUTH from '../services/auth'
-Vue.mixin({
-  methods: {
-    profileSetting(){
-    },
-    logOut(){
-      AUTH.deaunthenticate()
-      this.$router.push({
-        path: '/'
-      })
-    },
-    logoClicked(){
+import Router from '../router'
+let methods = {
+  profileSetting(){
+  },
+  logOut(){
+    if(typeof this.$auth !== 'undefined'){
+      this.$auth.logout()
       this.$router.push('/')
-    },
-    modal(ref, action){
-      $(ref).modal(action)
+    }else{ // calling log out even if the $auth is not ready yet
+      localStorage.removeItem('default_auth_token')
+      Router.push('/')
     }
+
+  },
+  logoClicked(){
+    this.$router.push('/')
+  },
+  modal(ref, action){
+    $(ref).modal(action)
   }
+}
+Vue.mixin({
+  methods: methods
 })
+
+export default methods

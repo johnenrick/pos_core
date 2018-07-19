@@ -22,8 +22,8 @@ class ProductAudit extends Migration
         $table->double('inventory_value');
         $table->double('product_sales');
         $table->string('remarks');
-        $table->timestamp('audit_started');
-        $table->timestamp('audit_ended');
+        $table->timestamp('audit_started')->nullable();
+        $table->timestamp('audit_ended')->nullable();
         $table->timestamps();
         $table->softDeletes();
       });

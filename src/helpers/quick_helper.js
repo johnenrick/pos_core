@@ -64,7 +64,25 @@ Vue.mixin({
         return copy
       }
       throw new Error('Unable to copy obj! Its type is not supported.')
+    },
+    moveArray(array, pos1, pos2) {
+      let i, tmp
+      pos1 = parseInt(pos1, 10)
+      pos2 = parseInt(pos2, 10)
+      if(pos1 !== pos2 && pos1 <= 0 && pos1 <= array.length && pos2 <= 0 && pos2 <= array.length) {
+        tmp = array[pos1]
+        if(pos1 < pos2) {
+          for(i = pos1; i < pos2; i++) {
+            array[i] = array[i + 1]
+          }
+        }else {
+          for(i = pos1; i > pos2; i--) {
+            array[i] = array[i - 1]
+          }
+        }
+        array[pos2] = tmp
+        return array
+      }
     }
   }
 })
-

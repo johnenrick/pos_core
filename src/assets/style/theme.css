@@ -1,0 +1,24 @@
+.bg-brand-dark-1, .bg-brand-dark-1.navbar ul{
+  background-color: #030707
+}
+.bg-brand-dark-2, .bg-brand-dark-2.navbar ul{
+  background-color: #1c2427
+}
+.bg-brand-dark-2.navbar .nav-link, .bg-brand-dark-2.navbar .nav-item h6{
+  color: #c2c2c1
+}
+.bg-brand-blue-1, .bg-brand-blue-1.navbar ul{
+  background-color: #125c83
+}
+.bg-primary{
+  background-color: #1781c2
+}
+.nav-link.active-link{
+  color: #ffffff!important
+}
+/*.shadow-sm {
+    box-shadow: 0 .125rem .25rem rgba(0,0,0,.075)!important;
+}
+.shadow {
+    box-shadow: 0 .5rem 1rem rgba(0,0,0,.15)!important;
+}*/

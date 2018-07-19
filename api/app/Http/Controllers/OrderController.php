@@ -22,11 +22,9 @@ class OrderController extends APIController
       'total_price' => 'sum(total_price)',
       'date' => 'CAST(created_at AS DATE)'
     ];
-    $this->model = $this->model->groupBy(DB::raw('CAST(created_at AS DATE)'));
+    $this->groupByColumn = array('CAST(created_at AS DATE)');
     //$this->model = $this->model->addSelect(DB::raw(' as ``'))->orderBy(DB::raw('sum(sale_price)'), 'ASC');
     $this->rawRequest = $request;
-    $this->retrieveEntry($request->all());
-    // $this->response['data'] = $this->model->get()->toArray();
-    return $this->output();
+    return $this->retrieveEntry($request->all());
   }
 }

@@ -1,4 +1,4 @@
-/v  <template>
+<template>
   <div>
     <table class="table table-responsive-md">
       <thead>
@@ -8,6 +8,7 @@
             v-bind:colspan="column['sub_columns'] ? column['sub_column_count']  : 1"
           >
             {{column['name']}}
+            <i v-if="column['tool_tip']" class="fas fa-question-circle" data-toggle="tooltip" data-placement="top" v-bind:title="column['tool_tip']"></i>
             <!--<span class="pull-right">
               <i v-if="column['sort'] === 0" class="fa fa-sort" aria-hidden="true"></i>
               <i v-else-if="column['sort'] === 1" class="fa fa-sort-asc" aria-hidden="true"></i>
@@ -22,6 +23,7 @@
             v-bind:colspan="column['sub_columns'] ? column['sub_column_count']  : 1"
           >
             {{column['name']}}
+
             <!---<span class="pull-right">
               <i v-if="column['sort'] === 0" class="fa fa-sort" aria-hidden="true"></i>
               <i v-else-if="column['sort'] === 1" class="fa fa-sort-asc" aria-hidden="true"></i>
@@ -30,32 +32,58 @@
           </th>
         </tr>
       </thead>
-      <tbody>
+      <tbody ref="tableBody">
         <tr v-for="(tableEntry, index) in tableEntries"
           @click="$emit('row_clicked', index, tableEntry['id'])"
         >
           <input type="hidden" v-bind:name="db_name + '[' + index + '][id]'" v-bind:value="tableEntry['id']">
-          <td v-for="columnSetting in linearColumnSetting">
-            <select v-if="columnSetting['input_type'] === 'select'"
-              v-bind:value="(tableEntry[columnSetting['db_name']] || columnSetting['default_value'])"
-              class="form-control"
-              v-bind:name="db_name + '[' + index + '][' + columnSetting['db_name'] + ']'"
-            >
-              <option v-for="option in columnSetting['input_setting']['options']" v-bind:value="option['value']" v-bind:selected="(tableEntry[columnSetting['db_name']] || columnSetting['default_value'])  === option['value'] ? 'selected' : false">{{option['label']}}</option>
-            </select>
-            <input v-else
-              class="form-control"
-              v-model="tableEntry[columnSetting['db_name']]"
-              v-bind:name="db_name + '[' + index + '][' + columnSetting['db_name'] + ']'"
-            >
+          <td v-for="(columnSetting, columnIndex) in linearColumnSetting">
+            <template v-if="form_status !== 'view'">
+              <select v-if="columnSetting['input_type'] === 'select'"
+                v-bind:value="(tableEntry[columnSetting['db_name']] || columnSetting['default_value'])"
+                class="form-control"
+                v-bind:class="error_list[db_name + '.' + index + '.' + columnSetting['db_name']] ? 'is-invalid' : ''"
+
+                v-bind:name="db_name + '[' + index + '][' + columnSetting['db_name'] + ']'"
+              >
+                <option v-for="option in columnSetting['input_setting']['options']" v-bind:value="option['value']" v-bind:selected="(tableEntry[columnSetting['db_name']] || columnSetting['default_value'])  === option['value'] ? 'selected' : false">{{option['label']}}</option>
+              </select>
+              <input v-else-if="columnSetting['input_type'] === 'number'"
+                class="form-control text-right"
+                v-bind:class="error_list[db_name + '.' + index + '.' + columnSetting['db_name']] ? 'is-invalid' : ''"
+                v-model="tableEntry[columnSetting['db_name']]"
+                v-bind:name="db_name + '[' + index + '][' + columnSetting['db_name'] + ']'"
+              >
+              <input v-else
+                class="form-control"
+                v-bind:class="error_list[db_name + '.' + index + '.' + columnSetting['db_name']] ? 'is-invalid' : ''"
+
+                v-model="tableEntry[columnSetting['db_name']]"
+                v-bind:name="db_name + '[' + index + '][' + columnSetting['db_name'] + ']'"
+              >
+
+              <div class="invalid-feedback">{{db_name + '.' + columnIndex + '.' + columnSetting['db_name']}}
+                {{(error_list[db_name + '.' + columnIndex + '.' + columnSetting['db_name']]) ? error_list[db_name + '.' + columnIndex + '.' + columnSetting['db_name']] : ''}}
+              </div>
+            </template>
+            <span v-else class="form-control" v-bind:class="columnSetting['input_type'] === 'number' ? 'text-right': ''">
+              {{tableEntry[columnSetting['db_name']]}}
+            </span>
           </td>
-          <td v-if="action['remove_entry']"><button @click="removeEntry(index, tableEntry['id'])" class="btn btn-sm btn-danger" type="button"><i class="fa fa-remove" aria-hidden="true"></i></button></td>
+          <td v-if=" hasAction && form_status !== 'view'">
+            <div class="btn-group" role="group" aria-label="Basic example">
+              <button v-if="action['sortable']" @click="move(index, tableEntry['id'], 'up')" class="btn btn-sm btn-link" type="button"><i class="fas fa-arrow-up" aria-hidden="true"></i></button>
+              <button v-if="action['sortable']" @click="move(index, tableEntry['id'], 'down')" class="btn btn-sm btn-link" type="button"><i class="fas fa-arrow-down" aria-hidden="true"></i></button>
+              <button v-if="action['remove_entry']" @click="removeEntry(index, tableEntry['id'])" class="btn btn-sm btn-danger" type="button"><i class="fas fa-trash" aria-hidden="true"></i></button>
+            </div>
+
+          </td>
         </tr>
       </tbody>
       <tfoot>
-        <tr v-if="action['add_entry']">
+        <tr >
           <td v-bind:colspan="columnCount +( action['add_entry'] ? 1 : 0)">
-            <button @click="addEntry" type="button" class="btn btn-sm btn-primary pull-right"><i class="fa fa-plus" aria-hidden="true"></i> Add</button>
+            <button v-if="form_status !== 'view'" @click="addEntry" type="button" class="btn btn-sm btn-primary pull-right"><i class="fas fa-plus" aria-hidden="true"></i> Add</button>
           </td>
         </tr>
       </tfoot>
@@ -63,6 +91,7 @@
     <input v-for="(id, index) in deletedForeignTable"
       v-bind:value="id"
       v-bind:name="'deleted_foreign_table['+db_name+']['+index+']'"
+      type="hidden"
     >
   </div>
 </template>
@@ -76,6 +105,7 @@
     mounted(){
       this.initConfig()
       this.initColumnSetting()
+
     },
     data(){
       return {
@@ -86,9 +116,11 @@
         linearColumnSetting: [],
         tableEntries: [],
         currentSort: null,
+        hasAction: true,
         action: {
           add_entry: true,
-          remove_entry: true
+          remove_entry: true,
+          sortable: false
         },
         columnCount: 0,
         deletedForeignTable: []
@@ -101,12 +133,25 @@
       db_name: String,
       form_data: Object,
       form_status: String,
-      placeholder: String
+      placeholder: String,
+      error_list: Object,
+      read_only: Boolean
     },
     watch: {
       form_data_updated(value){
         this.tableEntries = this.form_data[this.db_name] ? this.form_data[this.db_name] : []
         this.deletedForeignTable = []
+      },
+      form_status(newValue){
+        console.log(newValue)
+        if(newValue !== 'view'){
+          // $(this.$refs.tableBody).sortable({
+          //   appendTo: 'parent',
+          //   helper: 'clone'
+          // }).disableSelection()
+        }else{
+          // $(this.$refs.tableBody).sortable('disable')
+        }
       }
     },
     methods: {
@@ -125,6 +170,7 @@
           this.columnCount++
           let column = columnSetting[dbName]
           Vue.set(column, 'db_name', typeof column['db_name'] !== 'undefined' ? column['db_name'] : dbName)
+          Vue.set(column, 'tool_tip', typeof column['tool_tip'] !== 'undefined' ? column['tool_tip'] : null)
           this.initColumn(column)
           this.columnSetting[0].push(column)
           if(!column['sub_columns']){
@@ -145,8 +191,9 @@
       },
       initConfig(){
         if(typeof this.input_setting['action'] !== 'undefined'){
-          for(let x = 0; x < this.input_setting['action'].length; x++){
-            this.action[this.input_setting['action'][x]] = true
+          this.hasAction = true
+          for(let action in this.input_setting['action']){
+            this.action[action] = this.input_setting['action']
           }
         }
       },
@@ -174,10 +221,25 @@
         typeof column['sub_columns'] === 'undefined' ? Vue.set(column, 'sub_columns', null) : null
       },
       removeEntry(rowIndex, entryID){
-        console.log(this.tableEntries.splice(rowIndex, 1))
         if(entryID){
           this.deletedForeignTable.push(entryID)
+          console.log(this.tableEntries)
+          this.tableEntries.splice(rowIndex, 1)
+          console.log(this.tableEntries)
         }
+      },
+      move(index, id, direction){
+        if(direction === 'up' && index > 0){
+          this.tableEntries.splice(index - 1, 0, this.tableEntries.splice(index, 1)[0])
+        }else if(direction === 'down' && index < this.tableEntries.length - 1){
+          this.tableEntries.splice(index + 1, 0, this.tableEntries.splice(index, 1)[0])
+          // this.tableEntries = this.moveArray(this.tableEntries, index, index + 1)
+        }
+        let newArray = this.tableEntries.slice()
+        while(this.tableEntries.length > 0) this.tableEntries.pop()
+        for(let x = 0; x < newArray.length; x++) this.tableEntries.push(newArray[x])
+        // console.log(this.tableEntries)
+
       }
     }
 

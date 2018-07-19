@@ -1,18 +1,28 @@
 <template>
-<chart :options="options" style="width:100%" :auto-resize="true"></chart>
+  <div>
+    <chart ref="chart" :options="options" style="width:100%;height:400px" :auto-resize="true"></chart>
+  </div>
 </template>
 <script>
 import ECharts from 'vue-echarts/components/ECharts'
 import 'echarts/lib/chart/line'
 import 'echarts/lib/component/tooltip'
 import 'echarts/lib/component/polar'
+import 'echarts/lib/component/legend'
+
+import Vue from 'vue'
 export default {
   name: 'linearChart',
   components: {
     'chart': ECharts
   },
   props: {
-    data_set: Array
+    data_set: Array,
+    chart_type: {
+      type: String,
+      default: 'normal' // normal, multiple
+    },
+    name: String
   },
   data: function () {
     return {
@@ -23,7 +33,9 @@ export default {
         },
         grid: {
           show: true,
-          borderWidth: 3
+          borderWidth: 3,
+          containLabel: true,
+          bottom: '3%'
         },
         tooltip: {
           trigger: 'axis',
@@ -31,8 +43,10 @@ export default {
             type: 'cross'
           }
         },
+        legend: {
+        },
         xAxis: {
-          name: 'TOTAL SALE',
+          name: 'Date',
           nameLocation: 'center',
           nameTextStyle: {
             fontStyle: 'bold'
@@ -41,7 +55,7 @@ export default {
           type: 'time'
         },
         yAxis: {
-          name: 'DATE',
+          name: this.name,
           nameLocation: 'middle',
           nameTextStyle: {
             fontStyle: 'bold'
@@ -52,16 +66,44 @@ export default {
           },
           type: 'value'
         },
-        series: [{
-          data: this.data_set,
+        series: []
+      }
+    }
+  },
+  mounted(){
+    setTimeout(() => {
+      $(this.$refs.chart).resize()
+    }, 1500)
+  },
+  watch: {
+    data_set(newValue){
+      let seriesData = []
+      if(this.chart_type === 'normal'){
+        let dataSet = {
           type: 'line',
           lineStyle: {
             width: 4
+          },
+          data: this.data_set
+        }
+        seriesData.push(dataSet)
+      }else if(this.chart_type === 'stacked'){
+        let legends = []
+        for(let x = 0; x < this.data_set.length; x++){
+          let dataSet = this.data_set[x]
+          dataSet['type'] = 'line'
+          dataSet['lineStyle'] = {
+            width: 4
           }
-        }]
+          seriesData.push(dataSet)
+          legends.push(this.data_set[x]['name'])
+        }
+        // Vue.set(this.options, 'legend', legends)
       }
+      Vue.set(this.options, 'series', seriesData)
     }
   }
+
 }
 </script>
 <style>

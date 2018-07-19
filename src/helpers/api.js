@@ -1,15 +1,18 @@
 import CONFIG from '../config'
 import Vue from 'vue'
-import AUTH from '../services/auth'
 import ROUTER from '../router'
 Vue.mixin({
   mounted(){
 
   },
   methods: {
+    getURLParameter(){
+      let tokenStringParam = (localStorage.getItem('default_auth_token')) ? '?token=' + localStorage.getItem('default_auth_token') + '&selected_company_id=' + 1 + '&selected_company_branch_id=' + 1 : ''
+      return tokenStringParam
+    },
     APIRequest(link, parameter, callback, errorCallback){
-      let tokenStringParam = (AUTH.tokenData.token) ? '?token=' + AUTH.tokenData.token + '&selected_company_id=' + AUTH.user.company_id + '&selected_company_branch_id=' + AUTH.user.company_branch_id : ''
-      let request = jQuery.post(CONFIG.API_URL + link + tokenStringParam, parameter, (response) => {
+
+      let request = jQuery.post(CONFIG.API_URL + link + this.getURLParameter(), parameter, (response) => {
         this.APISuccessRequestHandler(response, callback)
       }).fail((jqXHR) => {
         this.APIFailRequestHandler(link, jqXHR, errorCallback)
@@ -17,8 +20,7 @@ Vue.mixin({
       return request
     },
     APIGetRequest(link, parameter, callback, errorCallback){
-      let tokenStringParam = (AUTH.tokenData.token) ? '?token=' + AUTH.tokenData.token + '&selected_company_id=' + AUTH.user.company_id + '&selected_company_branch_id=' + AUTH.user.company_branch_id : ''
-      let request = jQuery.get(link + tokenStringParam, parameter, (response) => {
+      let request = jQuery.get(link + this.getURLParameter(), parameter, (response) => {
         this.APISuccessRequestHandler(response, callback)
       }).fail((jqXHR) => {
         this.APIFailRequestHandler(link, jqXHR, errorCallback)
@@ -26,10 +28,9 @@ Vue.mixin({
       return request
     },
     APIFormRequest(link, formRef, callback, errorCallback){
-      let tokenStringParam = (AUTH.tokenData.token) ? '?token=' + AUTH.tokenData.token + '&selected_company_id=' + AUTH.user.company_id + '&selected_company_branch_id=' + AUTH.user.company_branch_id : ''
       let formData = new FormData($(formRef)[0])
       $.ajax({
-        url: CONFIG.API_URL + link + tokenStringParam,
+        url: CONFIG.API_URL + link + this.getURLParameter(),
         type: 'POST',
         data: formData,
         success: (response) => {
@@ -52,17 +53,20 @@ Vue.mixin({
       switch(jqXHR.status){
         case 401: // Unauthorized
           if(link === 'authenticate' || 'authenticate/user'){ // if error occured during authentication request
+            console.log('Failed Request', new Date())
             console.log('link: ' + link + ' date: ' + localStorage.getItem('last_token_update') + ' ---- ' + (new Date()))
+            console.log(JSON.parse(localStorage.getItem('token_history')))
             if(errorCallback){
               alert(link)
               errorCallback(jqXHR.responseJSON, jqXHR.status * 1)
             }
           }else{
-            alert('unauthorized request')
+            alert('unauthorized request: ' + link)
             ROUTER.push('login')
           }
           break
         default:
+          alert('There is an error')
           if(errorCallback){
             errorCallback(jqXHR.responseJSON, jqXHR.status * 1)
           }

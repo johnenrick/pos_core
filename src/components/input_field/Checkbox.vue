@@ -40,8 +40,8 @@
     },
     methods: {
       valueChanged(e){
-        $(e.target).val($(e.target).is(':checked'))
-        this.$emit('change', e, this.db_name)
+        $(e.target).val()
+        this.$emit('change', this.field_name, $(e.target).is(':checked'))
       }
     }
 

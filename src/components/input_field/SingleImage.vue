@@ -22,7 +22,8 @@
       return {
         imgStyle: {},
         defaultImageSrc: require('../../assets/img/no_image.png'),
-        imageSrc: null
+        imageSrc: null,
+        apiFileFolder: ''
       }
     },
     props: {
@@ -38,7 +39,7 @@
       form_data_updated(value){
         let fileName = (this.db_name).replace('_file', '')
         if(this.form_data[fileName]){
-          this.imageSrc = CONFIG.IMAGE_URL + 'department_logo/' + this.form_data[fileName]
+          this.imageSrc = CONFIG.IMAGE_URL + this.apiFileFolder + this.form_data[fileName]
         }else{
           this.imageSrc = this.defaultImageSrc
         }
@@ -49,6 +50,7 @@
         if(typeof this.input_setting !== 'undefined'){
           this.imgStyle = (typeof this.input_setting['image_style'] !== 'undefined') ? this.input_setting['image_style'] : {width: '100%'}
           this.defaultValue = this.default_value ? this.default_value : null
+          this.apiFileFolder = (typeof this.input_setting['api_file_folder'] !== 'undefined') ? this.input_setting['api_file_folder'] + '/' : ''
         }else{
           this.imgStyle = {width: '100%'}
         }

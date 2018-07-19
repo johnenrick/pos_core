@@ -1,14 +1,17 @@
-<template>
+  <template>
   <div class="form-group row" v-bind:class="[feedbackStatus ? 'has-feedback' :'', feedbackStatusClass]">
+
     <input v-if="inputType === 'hidden'" type="text"
     v-bind:name="inputName"
     v-on:change="valueChanged"
     v-bind:value="form_data|getFormDataFilter(db_name, default_value)"
     >
     <template v-else>
+
       <label v-if="labelColspan" class="col-form-label" v-bind:class="'col-sm-' + labelColspan">{{labelText}}:</label>
       <div v-bind:class="'col-sm-' + (12 - (labelColspan !== 12 ? labelColspan : 0))">
         <radio-button
+          ref="radioButton"
           v-if="inputType === 'radio'"
           :input_setting="input_setting"
           :db_name="dbName"
@@ -19,6 +22,7 @@
           >
         </radio-button>
         <check-list
+          ref="checkList"
           v-else-if="inputType === 'checklist'"
           :input_setting="input_setting"
           :db_name="dbName"
@@ -29,12 +33,14 @@
           >
         </check-list>
         <select-input
+          ref="selectInput"
           v-else-if="inputType === 'select'"
           :input_setting="input_setting"
           :db_name="dbName"
           :input_name="inputName"
           :field_name="field_name"
           :form_data="form_data"
+          :form_data_updated="form_data_updated"
           :form_status="form_status"
           :default_value="default_value"
           v-on:change="valueChanged"
@@ -43,6 +49,7 @@
           >
         </select-input>
         <select2
+          ref="select2"
           v-else-if="inputType === 'select2'"
           :input_setting="input_setting"
           :db_name="dbName"
@@ -57,6 +64,7 @@
           >
         </select2>
         <date-picker
+          ref="datePicker"
           v-else-if="inputType === 'date'"
           :input_setting="input_setting"
           :db_name="dbName"
@@ -71,6 +79,7 @@
           >
         </date-picker>
         <single-image
+          ref="singleImage"
           v-else-if="inputType === 'single_image'"
           :input_setting="input_setting"
           :db_name="dbName"
@@ -84,6 +93,7 @@
           >
         </single-image>
         <textarea-input
+          ref="textareaInput"
           v-else-if="inputType === 'textarea'"
           :input_setting="input_setting"
           :db_name="dbName"
@@ -99,6 +109,7 @@
           >
         </textarea-input>
         <check-box
+          ref="checkBox"
           v-else-if="inputType === 'checkbox'"
           :input_setting="input_setting"
           :db_name="dbName"
@@ -112,6 +123,7 @@
           >
         </check-box>
         <select2
+          ref="select2"
           v-else-if="inputType === 'select2'"
           :input_setting="input_setting"
           :db_name="dbName"
@@ -126,7 +138,8 @@
           >
         </select2>
         <table-input
-          v-else-if="inputType === 'table-input'"
+          ref="tableInput"
+          v-else-if="inputType === 'table_input'"
           :input_setting="input_setting"
           :db_name="dbName"
           :input_name="inputName"
@@ -136,6 +149,8 @@
           :default_value="default_value"
           :placeholder="placeholder"
           :form_data_updated="form_data_updated"
+          :error_list="error_list"
+          :read_only="read_only"
           v-on:change="valueChanged"
           >
         </table-input>
@@ -144,19 +159,39 @@
         >
           {{form_data[db_name]}}
         </template>
-        <template v-else>
-          <input
-            v-if="form_status !== 'view' && !read_only"
-            v-bind:name="inputName"
-            v-bind:placeholder="inputPlaceholder"
-            v-bind:type="inputType"
-            class="form-control"
-            v-bind:class="feedbackStatusClass"
-            v-on:change="valueChanged"
-            v-bind:value="form_data|getFormDataFilter(db_name, default_value)"
-            >
-          <span v-else class="form-control">{{form_data|getFormDataFilter(db_name, default_value)}}&nbsp;</span>
-        </template>
+        <input-number
+          v-else-if="inputType === 'number'"
+          ref="selectInput"
+          :input_setting="input_setting"
+          :db_name="dbName"
+          :input_name="inputName"
+          :field_name="field_name"
+          :form_data="form_data"
+          :form_data_updated="form_data_updated"
+          :form_status="form_status"
+          :default_value="default_value"
+          v-on:change="valueChanged"
+          :feedback_status_class="feedbackStatusClass"
+          :placeholder="placeholder"
+          :read_only="read_only"
+          >
+        </input-number>
+        <input-text v-else
+          ref="selectInput"
+          :input_setting="input_setting"
+          :db_name="dbName"
+          :input_name="inputName"
+          :field_name="field_name"
+          :form_data="form_data"
+          :form_data_updated="form_data_updated"
+          :form_status="form_status"
+          :default_value="default_value"
+          v-on:change="valueChanged"
+          :feedback_status_class="feedbackStatusClass"
+          :placeholder="placeholder"
+          :read_only="read_only"
+          >
+        </input-text>
         <input class="form-control" v-bind:class="feedbackStatusClass" type="hidden">
         <div v-if="feedbackMessage" class="invalid-feedback">{{feedbackMessage}}</div>
         <small v-if="muted_text" class="form-text text-muted">{{muted_text}}</small>
@@ -177,7 +212,9 @@
       'textarea-input': require('./Textarea.vue'),
       'single-image': require('./SingleImage.vue'),
       'table-input': require('./TableInput.vue'),
-      'date-picker': require('./DatePicker.vue')
+      'date-picker': require('./DatePicker.vue'),
+      'input-text': require('./InputText.vue'),
+      'input-number': require('./InputNumber.vue')
     },
     create(){
 
@@ -262,7 +299,7 @@
       initSetting(){
         this.dbName = this.db_name
         this.inputName = this.inputName ? this.input_name : this.dbName
-        this.labelText = this.label ? this.label : this.input_name
+        this.labelText = this.capitalizeFirstLetter((this.label ? this.label : this.input_name).replace(/\./g, ' ')).replace('Id', 'ID')
         this.labelStyle = this.label_style
         this.labelColspan = typeof this.label_colspan !== 'undefined' ? this.label_colspan : 4
         this.inputType = this.input_type ? this.input_type : 'text'
@@ -279,11 +316,26 @@
       },
       formDataUpdated(){
       },
-      valueChanged(e, customName){
+      notifyChildDataChange(field, name){
+        this.refNotifyChildDataChange(this.$refs.radioButton, field, name)
+        this.refNotifyChildDataChange(this.$refs.checkList, field, name)
+        this.refNotifyChildDataChange(this.$refs.selectInput, field, name)
+        this.refNotifyChildDataChange(this.$refs.select2, field, name)
+        this.refNotifyChildDataChange(this.$refs.datePicker, field, name)
+        this.refNotifyChildDataChange(this.$refs.singleImage, field, name)
+        this.refNotifyChildDataChange(this.$refs.textareaInput, field, name)
+        this.refNotifyChildDataChange(this.$refs.checkBox, field, name)
+        this.refNotifyChildDataChange(this.$refs.select2, field, name)
+        this.refNotifyChildDataChange(this.$refs.tableInput, field, name)
+        this.refNotifyChildDataChange(this.$refs.input, field, name)
+        if(this.input_setting['on_form_data_changed']){
+          this.input_setting['on_form_data_changed'](this)
+        }
+      },
+      valueChanged(fieldName, value){
         this.feedbackStatus = 0
         this.feedbackMessage = ''
-        $(e.target).attr('field_name', this.field_name)
-        this.$emit('value_changed', e, customName)
+        this.$emit('value_changed', fieldName, value)
       }
     }
 

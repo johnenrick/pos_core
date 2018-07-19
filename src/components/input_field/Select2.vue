@@ -70,7 +70,7 @@
         })
         .on('change', function(event){
           vm.value = this.value
-          vm.$emit('change', event)
+          vm.$emit('change', this.field_name, this.value)
         })
       }
     }

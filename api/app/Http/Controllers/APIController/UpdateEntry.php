@@ -27,13 +27,15 @@ class UpdateEntry extends ControllerHelper
 
 
 
-  function __construct($model, $response, $validation, $tableColumns, $notRequired, $editableForeignTable){
+  function __construct($model, $response, $validation, $tableColumns, $notRequired, $editableForeignTable, $rawRequest){
     $this->response = $response;
     $this->responseType = $response['response_type'];
     $this->tableColumns = $tableColumns;
     $this->model = $model;
     $this->notRequired = $notRequired;
     $this->editableForeignTable = $editableForeignTable;
+    $this->validation = $validation;
+    $this->rawRequest = $rawRequest;
   }
 
   public function updateEntry($request){
@@ -69,19 +71,24 @@ class UpdateEntry extends ControllerHelper
       }
     }
     if($result && $this->editableForeignTable){
+
       $childID = array();
       foreach($this->editableForeignTable as $childTable => $childTableValue){
+
         if(is_string($childTableValue)){
           $childTable = $childTableValue;
         }
         if(isset($request[$childTable]) && $request[$childTable]){
           $child = $request[$childTable];
           if(count(array_filter(array_keys($child), 'is_string')) > 0){//associative
+            $this->response['debug'][] = 'test1';
             if(!isset($childID[$childTable])){
               $childID[$childTable] = array();
             }
+            $this->response['debug'][] = $child["id"];
             $result = false;
             if(isset($child["id"]) && $child["id"]*1) { // update
+              $this->response['debug'][] = 'test2';
               $pk = $child["id"];
               unset($child["id"]);
               $result = $this->model->find($this->model->id)->$childTable()->where('id', $pk)->where(str_singular($this->model->getTable()).'_id', $request["id"])->update($child);

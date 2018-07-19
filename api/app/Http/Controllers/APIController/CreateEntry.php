@@ -19,27 +19,31 @@ use App\Http\Controllers\Controller;
 class CreateEntry extends ControllerHelper
 {
   protected $test = 'hello';
-  protected $response = null;
+  // protected $response = null;
   protected $responseType = null;
   protected $controllerHelper;
   protected $tableColumns = null;
-  protected $model = null;
   protected $notRequired = null;
   protected $singleImageFileUpload = array();
   protected $editableForeignTable = array();
 
 
 
-  function __construct($model, $response, $validation, $tableColumns, $notRequired, $editableForeignTable){
+
+  function __construct($model, $response, $validation, $tableColumns, $notRequired, $editableForeignTable, $singleImageFileUpload, $rawRequest){
     $this->response = $response;
     $this->responseType = $response['response_type'];
     $this->tableColumns = $tableColumns;
     $this->model = $model;
     $this->notRequired = $notRequired;
     $this->editableForeignTable = $editableForeignTable;
+    $this->validation = $validation;
+    $this->singleImageFileUpload = $singleImageFileUpload;
+    $this->rawRequest = $rawRequest;
   }
 
   public function createEntry($request){
+    $model = clone $this->model;
     $tableColumns = $this->tableColumns;
     $request = $this->filterRequest($request);
 
@@ -49,24 +53,24 @@ class CreateEntry extends ControllerHelper
     unset($tableColumns[0]);
     foreach($tableColumns as $columnName){
       if(isset($request[$columnName])){
-        $this->model->$columnName = $request[$columnName];
+        $model->$columnName = $request[$columnName];
       }else if(isset($this->defaultValue[$columnName])){
-        $this->model->$columnName = $this->defaultValue[$columnName];
+        $model->$columnName = $this->defaultValue[$columnName];
       }
     }
-    $this->model->save();
+    $model->save();
     $childID = array();
-    if($this->model->id && count($this->singleImageFileUpload)){
+    if($model->id && count($this->singleImageFileUpload)){
       for($x = 0; $x < count($this->singleImageFileUpload); $x++){
         $this->uploadSingleImageFile(
-          $this->model->id,
+          $model->id,
           $this->singleImageFileUpload[$x]['name'],
           $this->singleImageFileUpload[$x]['path'],
           $this->singleImageFileUpload[$x]['column']
         );
       }
     }
-    if($this->model->id && $this->editableForeignTable){
+    if($model->id && $this->editableForeignTable){
       foreach($this->editableForeignTable as $childTable){
         if(isset($request[$childTable]) && $request[$childTable]){
           $child = $request[$childTable];
@@ -74,40 +78,40 @@ class CreateEntry extends ControllerHelper
             if(!isset($childID[$childTable])){
               $childID[$childTable] = array();
             }
-            $child[str_singular($this->model->getTable()).'_id'] = $this->model->id;
-            $foreignTable = $this->model->newModel($childTable, $child);
+            $child[str_singular($model->getTable()).'_id'] = $model->id;
+            $foreignTable = $model->newModel($childTable, $child);
             foreach($child as $childKey => $childValue){
               $foreignTable->$childKey = $childValue;
             }
-            $result = $this->model->find($this->model->id)->$childTable()->save($foreignTable);
+            $result = $model->find($model->id)->$childTable()->save($foreignTable);
             $childID[$childTable][] = $result["id"];
           }else{ // list
             foreach($child as $childValue){
               if(!isset($childID[$childTable])){
                 $childID[$childTable] = array();
               }
-              $childValue[str_singular($this->model->getTable()).'_id'] = $this->model->id;
-              $foreignTable = $this->model->newModel($childTable, $childValue);
+              $childValue[str_singular($model->getTable()).'_id'] = $model->id;
+              $foreignTable = $model->newModel($childTable, $childValue);
               foreach($childValue as $childValueKey => $childValueValue){
                 if($childValueValue == null || $childValueValue == "" || empty($childValueValue)){
                   $foreignTable->$childValueKey = $childValueValue;
                 }
               }
-              $result = $this->model->find($this->model->id)->$childTable()->save($foreignTable);
+              $result = $model->find($model->id)->$childTable()->save($foreignTable);
               $childID[$childTable][] = $result["id"];
             }
           }
         }
       }
-      $response = $this->model->id;
+      $response = $model->id;
       if(count($childID)){
-        $childID["id"] = $this->model->id;;
+        $childID["id"] = $model->id;;
         $response = $childID;
       }
       $this->response["data"] = $response;
     }else{
-      if($this->model->id){
-        $this->response["data"] = $this->model->id;
+      if($model->id){
+        $this->response["data"] = $model->id;
       }else{
         $this->response["error"]["status"] = 1;
         $this->response["error"]["message"] = "Failed to create entry in database";

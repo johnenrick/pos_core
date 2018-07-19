@@ -23,12 +23,23 @@ $apiResources = [
   'product_ingredient',
   'production_count',
   'quantity_adjustment_type',
-  'product_quantity_adjustment'
+  'product_quantity_adjustment',
+  'bus',
+  'bus_type',
+  'route',
+  'route_stop',
+  'bus_trip',
+  'bus_trip_ticket',
+  'void_bus_trip_ticket'
 ];
 api_resource($apiResources);
 $customAPIResources = [
   'order_product/productSalesSummary',
-  'order/dailySalesReport'
+  'order/dailySalesReport',
+  'bus_trip_ticket/dailySalesReport',
+  'bus_trip/routeSalesSummary',
+  'bus_trip/busColectionSummary',
+  'bus_trip/routeDailySales',
 ];
 custom_api($customAPIResources)
 ?>

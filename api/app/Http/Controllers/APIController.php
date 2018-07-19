@@ -26,19 +26,24 @@ class APIController extends ControllerHelper
     protected $validation = array();
     protected $test = null;
     protected $userSession = null;
-    protected $response = array(
-      "data" => null,
-      "error" => array(),// {status, message}
-      "debug" => null,
-      "response_type" => 'json',
-      "request_timestamp" => 0
-    );
+
     protected $responseType = 'json';
-    protected $rawRequest = null;
+    // protected $rawRequest = null;
 
     protected $notRequired = array();
     protected $defaultValue = array();
     protected $requiredForeignTable = array();//children that are always retrieve, singular
+    protected $rawRequest = null;
+    /***
+      Array of aliased table
+      e.g. [
+        table_alias: {
+          condition
+        }
+      ]
+    **/
+    protected $aliasedTable = [
+    ];
     /***
       Array of columns that are aliased for derived/computed. The key is the alias and the value is the actual or formula of the column
       e,g.
@@ -48,6 +53,8 @@ class APIController extends ControllerHelper
       }
     **/
     protected $aliased = array();
+    protected $leftJoinChildTable = null;
+    protected $groupByColumn = array();
     /**
       Array for single fileupload input.
       [{
@@ -75,17 +82,36 @@ class APIController extends ControllerHelper
     protected $editableForeignTable = array();
     protected $foreignTable = array();
     protected $useUserCompanyID = true;
-    /*Hooks*/
+    /***
+      Replace the data with the data from session such as user id or company id
+      The key is the field name and the value is the session data: user_id, user_company_id
+    **/
+    protected $replaceSessionData = array();
+    protected $select = null;
     /*Controller Global*/
     protected $tableColumns = null;
     protected $tableName = null;
-
+    protected $ownerColumn = null;
     public function test(){
       $user = $this->getUserCompanyID();
       // $this->printR($this->userSession);
       // echo response()->json($user);
     }
+    public function replaceSessionData($request){
+      foreach($this->replaceSessionData as $key => $value){
+        switch($value){
+          case 'user_id':
+            $request[$key] = $this->getUserID();
+            break;
+          case 'user_company_id':
+            $request[$key] = $this->getUserCompanyID();
+            break;
+        }
+      }
+      return $request;
+    }
     public function APIControllerConstructor(){
+      $this->getAuthenticatedUser();
       $this->tableColumns = $this->model->getTableColumns();
       $this->tableName = $this->model->getTable();
       $response['response_type'] = isset($request['response_type']) ? $request['response_type'] : 'json';
@@ -93,37 +119,54 @@ class APIController extends ControllerHelper
 
     public function create(Request $request){
       $this->rawRequest = $request;
+      $this->response['debug'][] = $this->ownerColumn;
+
       return $this->createEntry($request->all());
     }
     public function retrieve(Request $request){
       $this->rawRequest = $request;
-      return $this->retrieveEntry($request->all());
+      $requestArray = $request->all();
+      return $this->retrieveEntry($requestArray);
     }
     public function update(Request $request){
       $this->rawRequest = $request;
       if ($request->hasFile('image_file')){
       }
-      else{
-      }
-
       return $this->updateEntry($request->all());
     }
     public function delete(Request $request){
+      if($this->ownerColumn){
+        $this->rawRequest[$this->ownerColumn] = $this->getUserID();
+      }
       return $this->deleteEntry($request->all());
     }
 
     public function createEntry($request){
+      $this->APIControllerConstructor();
+      if($this->ownerColumn){
+        $request[$this->ownerColumn] = $this->getUserID();
+      }
       $createModule = new CreateEntry(
         $this->model,
         $this->response,
         $this->validation,
         $this->tableColumns,
         $this->notRequired,
-        $this->editableForeignTable
+        $this->editableForeignTable,
+        $this->singleImageFileUpload,
+        $this->rawRequest
       );
-      return $createModule->createEntry($request);
+      return $createModule->createEntry($this->replaceSessionData($request));
     }
     public function retrieveEntry($request){
+      $this->APIControllerConstructor();
+      !isset($request['condition']) ? $request['condition'] = array() : NULL;
+      if($this->ownerColumn){
+        $request['condition'][] = array(
+          'column' => $this->ownerColumn,
+          'value' => $this->getUserID()
+        );
+      }
       $retrieveModule = new RetrieveEntry(
         $this->model,
         $this->response,
@@ -133,23 +176,35 @@ class APIController extends ControllerHelper
         $this->foreignTable,
         $this->editableForeignTable,
         $this->requiredForeignTable,
-        $this->aliased
+        $this->aliased,
+        $this->groupByColumn,
+        $this->select,
+        $this->leftJoinChildTable
       );
-      $this->response['debug'][] = 'test';
       return $retrieveModule->retrieveEntry($request);
     }
     public function updateEntry($request, $noFile = false){
+      if($this->ownerColumn){
+        $request[$this->ownerColumn] = $this->getUserID();
+      }
+      $this->APIControllerConstructor();
       $updateModule = new UpdateEntry(
         $this->model,
         $this->response,
         $this->validation,
         $this->tableColumns,
         $this->notRequired,
-        $this->editableForeignTable
+        $this->editableForeignTable,
+        $this->singleImageFileUpload,
+        $this->rawRequest
       );
-      return $updateModule->updateEntry($request);
+      return $updateModule->updateEntry($this->replaceSessionData($request));
     }
     public function deleteEntry($request){
+      $this->APIControllerConstructor();
+      if($this->ownerColumn){
+        $request[$this->ownerColumn] = $this->getUserID();
+      }
       $deleteEntry = new DeleteEntry($this->model, $this->response);
       return $deleteEntry->deleteEntry($request);
     }
