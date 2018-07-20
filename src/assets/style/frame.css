@@ -4,10 +4,6 @@
 .bg-whitesmoke{
   background-color: whitesmoke
 }
-html{
-  font-family: FontAwesome;
-  src: url(../webfonts/Slabo27px-Regular.ttf);
-}
 .no-line-height{
   line-height: 0px!important;
 }

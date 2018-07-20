@@ -10,8 +10,10 @@ global.$ = global.jQuery
 // import 'bootstrap/dist/css/bootstrap.min.css'
 import 'bootstrap/dist/js/bootstrap.min.js'
 // require('assets/style/_main.scss')
-require('assets/style/fontawesome.min.css')
-require('assets/style/fontawesome-all.min.css')
+require('@fortawesome/fontawesome-free/sprites/solid.svg')
+require('@fortawesome/fontawesome-free/css/all.css')
+require('@fortawesome/fontawesome-free/js/all.js')
+
 // THEME
 require('assets/style/sb-admin.min.css')
 require('assets/js/min/sb-admin.min.js')

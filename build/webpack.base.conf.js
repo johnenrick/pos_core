@@ -73,14 +73,15 @@ module.exports = {
         loader: 'url-loader',
         query: {
           limit: 10000,
-          name: utils.assetsPath('fonts/[name].[hash:7].[ext]')
+          name: utils.assetsPath('fonts/[name].[hash:7].[ext]'),
+          resolve: false
         }
       },
       {
-        test: /\.(scss)$/,
+        test: /\.(scss|sass)$/,
         // loaders: ['style-loader', 'css-loader', 'resolve-url-loader', 'sass-loader?sourceMap'],
         // include: [resolve('node_modules/bootstrap/scss/bootstrap')],
-        use: ['style-loader', 'css-loader', 'sass-loader']
+        use: ['style-loader', 'css-loader', 'sass-loader?sourceMap']
         // {
         //   loader: 'postcss-loader', // Run post css actions
         //   options: {

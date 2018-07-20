@@ -5,19 +5,7 @@ import App from './App'
 import Helpers from './helpers'
 import router from './router'
 import JWTAUTH from 'services/jwt-auth'
-import './assets/style/scss/index.scss'
-
-// import { library } from '@fortawesome/fontawesome-svg-core'
-// import { fab } from '@fortawesome/free-brands-svg-icons'
-// import { far } from '@fortawesome/free-regular-svg-icons'
-// import { fas } from '@fortawesome/free-solid-svg-icons'
-// import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-//
-// library.add(fab)
-// library.add(far)
-// library.add(fas)
-//
-// Vue.component('fa', FontAwesomeIcon)
+import 'assets/style/scss/index.scss'
 
 /* eslint-disable no-new */
 new Vue({
