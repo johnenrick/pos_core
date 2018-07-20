@@ -42,14 +42,25 @@
                     <i class="fas fa-sign-in-alt"></i>
                   {{isLoading ? 'Signing in...' : 'Sign In'}}
                 </button>
+
             </div>
           </form>
 
         </div>
+
       </div>
     </div>
     <div v-else>
-      Token Exist
+      Checking Authentication...
+      <button
+          @click="refreshToken"
+          v-bind:disabled="isLoading"
+          type="button"
+          class="btn btn-outline-primary"
+          >
+          <i class="fas fa-refresh"></i>
+        {{isLoading ? 'Signing in...' : 'Refresh Token'}}
+      </button>
     </div>
   </div>
 </template>
@@ -57,7 +68,6 @@
 export default {
   name: 'LogIn',
   mounted(){
-    console.log(this.$auth.token())
     if(this.$auth.token()){
       this.redirectUser(this.$auth.user().account_type_id)
     }
@@ -67,7 +77,8 @@ export default {
       username: 'admin',
       password: 'admin',
       isLoading: false,
-      errorMessage: ''
+      errorMessage: '',
+      token: this.$auth.token()
     }
   },
   methods: {
@@ -94,6 +105,11 @@ export default {
           path: '/server'
         })
       }
+    },
+    refreshToken(){
+      this.APIRequest('authentication/refresh', {}, (response) => {
+        console.log(response)
+      })
     }
   }
 }

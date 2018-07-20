@@ -130,7 +130,7 @@
                 }else{
                   this.messageList.push({
                     label: label,
-                    message: response['error'][0]['message'][field][0]
+                    message: this.StringUnderscoreToPhrase((response['error'][0]['message'][field][0]).replace('.', '_'))
                   })
                 }
               }

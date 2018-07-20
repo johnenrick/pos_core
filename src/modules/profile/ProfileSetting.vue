@@ -27,6 +27,11 @@
           with_foreign_table: ['account_information', 'account_type']
         },
         inputSetting: {
+          profile_picture: {
+            col: 4,
+            label: null,
+            input_type: 'single_image'
+          },
           basic_information: {
             title: 'Basic Information',
             input_type: 'group',

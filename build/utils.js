@@ -16,7 +16,8 @@ exports.cssLoaders = function (options) {
     loader: 'css-loader',
     options: {
       minimize: process.env.NODE_ENV === 'production',
-      sourceMap: options.sourceMap
+      sourceMap: options.sourceMap,
+      publicPath: "../../"
     }
   }
   /***
@@ -26,31 +27,31 @@ exports.cssLoaders = function (options) {
     // Absolute Path
     return path.resolve(__dirname, '../src/assets/scss/' + fileName)
   }
-  function generateSassResourceLoader() {
-    var loaders = [
-      cssLoader,
-      {
-        loader: 'sass-loader',
-        options: {
-          loader: 'sass-resources-loader',
-          options: {
-            resources: [
-              // resolveResouce('mixins/index.scss'),
-              // resolveResouce('vars/index.scss')
-            ]
-          }
-        }
-      }
-    ]
-    if(options.extract) {
-      return ExtractTextPlugin.extract({
-        use: loaders,
-        fallback: 'vue-style-loader'
-      })
-    } else {
-      return ['vue-style-loader'].concat(loaders)
-    }
-  }
+  // function generateSassResourceLoader() {
+  //   var loaders = [
+  //     cssLoader,
+  //     {
+  //       loader: 'sass-loader',
+  //       options: {
+  //         loader: 'sass-resources-loader',
+  //         options: {
+  //           resources: [
+  //             // resolveResouce('mixins/index.scss'),
+  //             // resolveResouce('vars/index.scss')
+  //           ]
+  //         }
+  //       }
+  //     }
+  //   ]
+  //   if(options.extract) {
+  //     return ExtractTextPlugin.extract({
+  //       use: loaders,
+  //       fallback: 'vue-style-loader'
+  //     })
+  //   } else {
+  //     return ['vue-style-loader'].concat(loaders)
+  //   }
+  // }
   // generate loader string to be used with extract text plugin
   function generateLoaders (loader, loaderOptions) {
     var loaders = [cssLoader]
@@ -80,8 +81,8 @@ exports.cssLoaders = function (options) {
     css: generateLoaders(),
     postcss: generateLoaders(),
     less: generateLoaders('less'),
-    sass: generateLoaders('sass'),
-    scss: generateLoaders('sass'),
+    // sass: generateLoaders('sass'),
+    // scss: generateLoaders('sass'),
     stylus: generateLoaders('stylus'),
     styl: generateLoaders('stylus')
   }

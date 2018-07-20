@@ -19,7 +19,7 @@ module.exports = {
       : config.dev.assetsPublicPath
   },
   resolve: {
-    extensions: ['.js', '.vue', '.json', '.scss', '.sass', '.css'],
+    extensions: ['.js', '.vue', '.scss', '.sass', '.css', '.ttf'],
     modules: [
       resolve('src'),
       resolve('node_modules')
@@ -29,7 +29,8 @@ module.exports = {
       'src': resolve('src'),
       'assets': resolve('src/assets'),
       'components': resolve('src/components'),
-      'node_modules': resolve('node_modules')
+      'node_modules': resolve('node_modules'),
+      'FONTS': path.join(__dirname, 'src/assesssts/webfonts')
     }
   },
   module: {
@@ -75,27 +76,23 @@ module.exports = {
           name: utils.assetsPath('fonts/[name].[hash:7].[ext]')
         }
       },
-      // {
-      //   test: /\.(scss)$/,
-      //   include: [resolve('node_modules/bootstrap/scss/bootstrap')],
-      //   use: [{
-      //     loader: 'style-loader', // inject CSS to page
-      //   }, {
-      //     loader: 'css-loader', // translates CSS into CommonJS modules
-      //   }, {
-      //     loader: 'sass-loader', // compiles Sass to CSS
-      //   }, {
-      //     loader: 'postcss-loader', // Run post css actions
-      //     options: {
-      //       plugins: function () { // post css plugins, can be exported to postcss.config.js
-      //         return [
-      //           require('precss'),
-      //           require('autoprefixer')
-      //         ];
-      //       }
-      //     }
-      //   }]
-      // }
+      {
+        test: /\.(scss)$/,
+        // loaders: ['style-loader', 'css-loader', 'resolve-url-loader', 'sass-loader?sourceMap'],
+        // include: [resolve('node_modules/bootstrap/scss/bootstrap')],
+        use: ['style-loader', 'css-loader', 'sass-loader']
+        // {
+        //   loader: 'postcss-loader', // Run post css actions
+        //   options: {
+        //     plugins: function () { // post css plugins, can be exported to postcss.config.js
+        //       return [
+        //         require('precss'),
+        //         require('autoprefixer')
+        //       ];
+        //     }
+        //   }
+        // }
+      }
     ]
   }
 }

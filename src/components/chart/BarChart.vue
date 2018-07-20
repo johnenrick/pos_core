@@ -29,7 +29,6 @@ export default {
     }
   },
   data: function () {
-    console.log(this.get_theme_color_palette_list())
     return {
       options: {
         grid: {
