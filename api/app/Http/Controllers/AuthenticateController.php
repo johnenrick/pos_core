@@ -42,6 +42,7 @@ class AuthenticateController extends Controller
   public function authenticate(Request $request)
   {
       $credentials = $request->only('username', 'password');
+      $credentials['deleted_at'] = NULL;
       try {
         // verify the credentials and create a token for the user
         if (! $token = JWTAuth::attempt($credentials)) {
@@ -80,8 +81,12 @@ class AuthenticateController extends Controller
       // $accountInformationModel  = new AccountInformation();
       // $accountInformation = $accountInformationModel->where('account_id', $user['id'])->get()->toArray();
 
-      $user['account_type_id'] = $account[0]['account_type_id'];
-      // the token is valid and we have found the user via the sub claim
-      return response()->json(['data' => $user, 'error' => []]);
+
+      if(count($account)){
+        $user['account_type_id'] = $account[0]['account_type_id'];
+        return response()->json(['data' => $user, 'error' => []]);
+      }else{
+        return response()->json(['error' => 'invalid_credentials', 'user_id' => $user['id']], 401);
+      }
   }
 }

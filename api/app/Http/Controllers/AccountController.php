@@ -57,5 +57,15 @@ class AccountController extends APIController
       }
       return $this->updateEntry($requestArray);
     }
-
+    public function retrieve(Request $request){
+      $requestArray = $request->all();
+      if(isset($requestArray['with_foreign_table']) && in_array('account_information', $requestArray['with_foreign_table'])){
+        $this->leftJoinChildTable = ['account_informations' => ''];
+        $this->aliased = [
+          'full_name' => 'CONCAT(COALESCE(account_informations.first_name, ""), " ", COALESCE(account_informations.middle_name,""), " ", COALESCE(account_informations.last_name, ""))'
+        ];
+        $this->select = ['accounts.*'];
+      }
+      return $this->retrieveEntry($requestArray);
+    }
 }

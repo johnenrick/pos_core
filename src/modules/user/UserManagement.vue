@@ -17,21 +17,25 @@
     },
     data(){
       let filterSetting = {
-        parent_id: {
-          label_colspan: 5
-        },
-        description: {
+        full_name: {
           label_colspan: 5,
           clause: 'like'
+        },
+        account_type_id: {
+          label_colspan: 5,
+          label: 'Account Type',
+          input_type: 'select',
+          input_setting: {
+            api: 'account_type/retrieve',
+            api_option_text_column: 'description',
+            default_text: 'Any'
+          }
         }
       }
       let columnSetting = {
         username: {
         },
         full_name: {
-          value_function: (entry) => {
-            return (entry['account_information']) ? entry['account_information']['first_name'] + ' ' + entry['account_information']['last_name'] : 'None'
-          }
         },
         'account_type.description': {
           name: 'Account Type'
@@ -79,6 +83,7 @@
           status: {
             input_type: 'select',
             input_setting: {
+              default_text: 'Select',
               options: [
                 {id: '1', text: 'Active'},
                 {id: '0', text: 'In Active'}

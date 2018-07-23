@@ -12,7 +12,7 @@ import 'bootstrap/dist/js/bootstrap.min.js'
 // require('assets/style/_main.scss')
 require('@fortawesome/fontawesome-free/sprites/solid.svg')
 require('@fortawesome/fontawesome-free/css/all.css')
-require('@fortawesome/fontawesome-free/js/all.js')
+// require('@fortawesome/fontawesome-free/js/all.js')
 
 // THEME
 require('assets/style/sb-admin.min.css')

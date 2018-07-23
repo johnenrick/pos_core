@@ -140,6 +140,11 @@ class RetrieveEntry extends ControllerHelper
     if(count($this->requiredForeignTable)){
         $this->model = $this->model->with($this->requiredForeignTable);
     }
+    if($this->aliased){
+      foreach($this->aliased as $column => $formula){
+        $this->model = $this->model->addSelect(DB::raw("$formula as $column"));
+      }
+    }
     if(count($condition['main_table'])){
 
       $this->addCondition($condition['main_table']);
@@ -173,11 +178,7 @@ class RetrieveEntry extends ControllerHelper
     if($this->select){
       $this->model = $this->model->addSelect($this->select);
     }
-    if(count($this->aliased)){
-      foreach($this->aliased as $column => $formula){
-        $this->model = $this->model->addSelect(DB::raw("$formula as $column"));
-      }
-    }
+
     if(isset($request['with_soft_delete'])){
       $this->model = $this->model->withTrashed();
     }
@@ -215,7 +216,12 @@ class RetrieveEntry extends ControllerHelper
           }
           $initializedCondition['foreign_table'][$columnExploded[0]][] = $condition[$x];
         }else{
-          $condition[$x]['column'] = $this->tableName.'.'.$condition[$x]['column'];
+          if($this->aliased && isset($this->aliased[$condition[$x]['column']])){
+            $condition[$x]['column'] = DB::raw($this->aliased[$condition[$x]['column']]);
+          }else{
+            $condition[$x]['column'] = $this->tableName.'.'.$condition[$x]['column'];
+          }
+
           $initializedCondition['main_table'][] = $condition[$x];
         }
 

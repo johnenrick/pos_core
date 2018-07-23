@@ -90,6 +90,12 @@ export default {
         success: (response) => {
           this.isLoading = false
           this.redirectUser(this.$auth.user().account_type_id)
+        },
+        error: (response) => {
+          if(response.status === 401){
+            this.errorMessage = 'Invalid credentials'
+          }
+          this.isLoading = false
         }
       })
     },

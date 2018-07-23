@@ -18,7 +18,8 @@
     data(){
       let filterSetting = {
         description: {
-          label_colspan: 5
+          label_colspan: 5,
+          clause: 'like'
         }
       }
       let columnSetting = {
