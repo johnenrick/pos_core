@@ -9,9 +9,10 @@ global.jQuery = require('jquery')
 global.$ = global.jQuery
 // import 'bootstrap/dist/css/bootstrap.min.css'
 import 'bootstrap/dist/js/bootstrap.min.js'
+import '@fortawesome/fontawesome-free/css/all.css'
 // require('assets/style/_main.scss')
 require('@fortawesome/fontawesome-free/sprites/solid.svg')
-require('@fortawesome/fontawesome-free/css/all.css')
+
 // require('@fortawesome/fontawesome-free/js/all.js')
 
 // THEME

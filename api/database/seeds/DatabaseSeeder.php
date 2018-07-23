@@ -25,9 +25,6 @@ class DatabaseSeeder extends Seeder
         //$this->call(QueueFormFieldsTableSeeder::class);
         // $this->call(UserTypesSeeder::class);
         Model::unguard();
-
-
-
         Model::reguard();
 
     }

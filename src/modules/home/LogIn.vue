@@ -84,6 +84,7 @@ export default {
   methods: {
     signIn(){
       this.isLoading = true
+      this.errorMessage = ''
       this.$auth.login({
         params: {username: this.username, password: this.password},
         rememberMe: false,

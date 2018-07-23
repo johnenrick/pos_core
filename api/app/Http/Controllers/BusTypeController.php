@@ -9,6 +9,10 @@ class BusTypeController extends APIController
 {
   function __construct(){
     $this->model = new DBItem();
-    $this->APIControllerConstructor();
+    $this->validation = array(
+      "description" => "string|max:150",
+      "base_price" => "numeric",
+      "price_per_distance" => "numeric"
+    );
   }
 }
