@@ -27,7 +27,7 @@ class UpdateEntry extends ControllerHelper
 
 
 
-  function __construct($model, $response, $validation, $tableColumns, $notRequired, $editableForeignTable, $rawRequest){
+  function __construct($model, $response, $validation, $tableColumns, $notRequired, $editableForeignTable, $singleImageFileUpload, $rawRequest){
     $this->response = $response;
     $this->responseType = $response['response_type'];
     $this->tableColumns = $tableColumns;
@@ -35,6 +35,7 @@ class UpdateEntry extends ControllerHelper
     $this->notRequired = $notRequired;
     $this->editableForeignTable = $editableForeignTable;
     $this->validation = $validation;
+    $this->singleImageFileUpload = $singleImageFileUpload;
     $this->rawRequest = $rawRequest;
   }
 
@@ -58,10 +59,10 @@ class UpdateEntry extends ControllerHelper
 
     }
     $result = $this->model->save();
-    if($result && count($this->singleImageFileUpload) && !$noFile){
+    if($result && count($this->singleImageFileUpload)){
       $id = $this->model->id;
       for($x = 0; $x < count($this->singleImageFileUpload); $x++){
-        $this->uploadSingleImageFile(
+        $this->response['debug'][] = $this->uploadSingleImageFile(
           $id,
           $this->singleImageFileUpload[$x]['name'],
           $this->singleImageFileUpload[$x]['path'],
@@ -69,6 +70,8 @@ class UpdateEntry extends ControllerHelper
           $this->singleImageFileUpload[$x]['replace']
         );
       }
+    }else{
+      // echo "bullshit $result $noFile". "''".count($this->singleImageFileUpload);
     }
     if($result && $this->editableForeignTable){
 

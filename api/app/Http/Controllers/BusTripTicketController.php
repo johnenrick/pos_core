@@ -24,7 +24,7 @@ class BusTripTicketController extends APIController
     $requestArray = $request->all();
     $this->response['debug'][] = $requestArray;
     $this->response['debug'][] = $this->rawRequest->hasFile('discount_image_proof');
-    if(isset($requestArray['discount_id']) && $requestArray['discount_id'] == 2){
+    if(isset($requestArray['discount_id']) && ($requestArray['discount_id'] == 2 || $requestArray['discount_id'] == 1)){
       $this->singleImageFileUpload = [
         [
           'name' => 'discount_image_proof',
@@ -36,12 +36,12 @@ class BusTripTicketController extends APIController
     }else{
       $this->notRequired[] = 'discount_image_proof';
     }
-    return $this->createEntry($requestArray);
+    return $this->createEntry($requestArray, true);
   }
   function update(Request $request){
     $this->rawRequest = $request;
     $requestArray = $request->all();
-    if(isset($requestArray['discount_id']) && $requestArray['discount_id'] == 2){
+    if(isset($requestArray['discount_id']) && ($requestArray['discount_id'] == 2 || $requestArray['discount_id'] == 1)){
       $this->singleImageFileUpload = [
         [
           'name' => 'discount_image_proof',
@@ -50,7 +50,8 @@ class BusTripTicketController extends APIController
           'replace' => true
         ]
       ];
-    }else{
+    } else{
+
       $this->notRequired[] = 'discount_image_proof';
     }
     return $this->updateEntry($requestArray);

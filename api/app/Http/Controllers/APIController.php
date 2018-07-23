@@ -182,7 +182,7 @@ class APIController extends ControllerHelper
       );
       return $retrieveModule->retrieveEntry($request);
     }
-    public function updateEntry($request, $noFile = false){
+    public function updateEntry($request, $noFile = true){
       if($this->ownerColumn){
         $request[$this->ownerColumn] = $this->getUserID();
       }

@@ -130,6 +130,7 @@ class ControllerHelper extends Controller
           The file being sent is saved in app
         **/
         $imagePath = $this->rawRequest[$inputName]->store($path);
+        // echo "imagepath: $imagePath, path: $path  ||";
         if($replace){
           $modelTemp = clone $this->model;
           $entry = $this->model->where('id', $id)->get()->toArray();
@@ -141,6 +142,7 @@ class ControllerHelper extends Controller
         // $responseTemp = $this->response;
         $modelTemp = (new $this->model)->find($id);
         $modelTemp->$dbColumn = str_replace($path.'/', '', $imagePath);
+        $modelTemp->save();
         // echo 'idddd'.$id;
         // $this->printR($modelTemp->find($id)->get()->toArray());
         // $modelTemp->updateEntry(array(
@@ -149,6 +151,8 @@ class ControllerHelper extends Controller
         // ), true);
         // $this->response = $responseTemp;
         return true;
+      }else{
+        echo 'shit no file';
       }
     }
     return false;
