@@ -1,7 +1,7 @@
 @import "./global/index.scss";
 @font-face {
   font-family: FontAwesome;
-  src: url('fonts/fontawesome-webfont.woff');
+  src: url('../../webfonts/fontawesome-webfont.woff');
 }
 // @font-face{
 //   font-family:'FontAwesome';
@@ -14,7 +14,7 @@
 
 @font-face {
   font-family: 'Theme Font';
-  src: url('fonts/Cairo-Regular.ttf')
+  src: url('../../webfonts/Cairo-Regular.ttf')
 };
 
 $font-family-sans-serif:      'Theme Font';
