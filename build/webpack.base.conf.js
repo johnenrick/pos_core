@@ -74,7 +74,8 @@ module.exports = {
         query: {
           limit: 10000,
           name: utils.assetsPath('fonts/[name].[hash:7].[ext]'),
-          resolve: false
+          resolve: false,
+          publicPath: process.env.NODE_ENV === 'production' ? '../../' : '/'
         }
       },
       {
