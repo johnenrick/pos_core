@@ -29,8 +29,7 @@ module.exports = {
       'src': resolve('src'),
       'assets': resolve('src/assets'),
       'components': resolve('src/components'),
-      'node_modules': resolve('node_modules'),
-      'fonts': resolve('src/assets/fonts')
+      'node_modules': resolve('node_modules')
     }
   },
   module: {
@@ -73,7 +72,7 @@ module.exports = {
         loader: 'url-loader',
         query: {
           limit: 10000,
-          name: utils.assetsPath('fonts/[name].[hash:7].[ext]'),
+          name: utils.assetsPath('/fonts/[name].[hash:7].[ext]'),
           publicPath: process.env.NODE_ENV === 'production' ? '../../' : '/'
         }
       },
