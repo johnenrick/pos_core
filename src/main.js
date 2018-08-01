@@ -6,6 +6,7 @@ import Helpers from './helpers'
 import router from './router'
 import JWTAUTH from 'services/jwt-auth'
 import 'assets/style/scss/index.scss'
+require('vue2-animate/dist/vue2-animate.min.css')
 
 /* eslint-disable no-new */
 new Vue({

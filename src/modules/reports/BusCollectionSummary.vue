@@ -1,10 +1,14 @@
 <template>
   <div>
-    <module :module_name="'Bus Collection Summary'" :api="api" :api_setting="api_setting" :table_setting="table_setting" :form_setting="form_setting">
+    <module ref="moduleComponent" v-on:table_filter="tableFilter" :module_name="'Route Sales Summary'" :api="api" :api_setting="api_setting" :table_setting="table_setting" :form_setting="form_setting" :no_create="true">
+      <div slot="beforeTable">
+        <horizontal-bar-chart :name="'Route Sales Summary'" :data_set="dataSet"></horizontal-bar-chart>
+      </div>
     </module>
   </div>
 </template>
 <script>
+  import Vue from 'vue'
   export default{
     name: '',
     components: {
@@ -15,26 +19,21 @@
 
     },
     mounted(){
-
+      this.addDiscountColumn()
     },
     data(){
       let filterSetting = {
-        description: {
-          db_name: 'bus.description',
+        bus_description: {
           col: 4,
           label_colspan: 5,
-          clause: 'like',
-          input_type: 'select',
-          input_setting: {
-            api: 'bus/retrieve',
-            default_text: 'All'
-          }
+          clause: 'like'
         },
         start_date_filter: {
           db_name: 'bus_trip_ticket.created_at',
           input_type: 'date',
           clause: '>=',
           label: 'Start Date',
+          default_value: new Date((new Date().getTime() - 2592000000)).toString(),
           input_setting: {
             with_time: true
           }
@@ -42,27 +41,43 @@
         end_date_filter: {
           db_name: 'bus_trip_ticket.created_at',
           input_type: 'date',
-          clause: '<',
+          clause: '<=',
           label: 'End Date',
           input_setting: {
-            time_setting: {
-              default_time: '23:59:59'
-            }
+            time: '23:59:59'
           }
         }
       }
       let columnSetting = {
-        description: {
-          name: 'Bus',
-          db_name: 'bus.description'
+        bus_description: {
+          name: 'Bus'
         },
-        total_amount: {
+        total_total_amount: {
+          name: 'Total Amount',
           data_type: 'decimal'
+        },
+        total_payment_adjustment: {
+          name: 'Payment Adjustment',
+          data_type: 'decimal',
+          footer: {
+            total_total_payment_adjustment: {}
+          }
+        },
+        total_discount_amount: {
+          name: 'Discount Amount',
+          data_type: 'decimal',
+          footer: {
+            total_total_discount_amount: {}
+          }
         }
       }
       let tableSetting = {
         filterSetting: filterSetting,
         columnSetting: columnSetting,
+        retrieveParameter: {
+          group_by: 'bus'
+        },
+        noClick: true,
         entryPerPage: 0
       }
       let formSetting = {
@@ -78,15 +93,45 @@
       return {
         api: 'bus_trip',
         api_setting: {
-          retrieve: 'bus_trip/busColectionSummary'
+          retrieve: 'bus_trip/saleSummary'
         },
         table_setting: tableSetting,
-        form_setting: formSetting
+        form_setting: formSetting,
+        dataSet: [[]]
       }
     },
     props: {
     },
     methods: {
+      addDiscountColumn(){
+        this.APIRequest('discount/retrieve', {}, (response) => {
+          if(response['data']){
+            for(let x = 0; x < response['data'].length; x++){
+              Vue.set(this.table_setting.columnSetting, 'total_' + this.StringPhraseToUnderscoreCase(response['data'][x]['description']) + '_discount_amount', {
+                name: response['data'][x]['description'],
+                data_type: 'decimal'
+              })
+            }
+            this.$refs.moduleComponent.redrawTable()
+          }
+        })
+      },
+      tableFilter: function(requestOption, trigger, filterResponse){
+        while(this.dataSet.length > 0) { this.dataSet.pop() }
+        if(filterResponse){
+          let tableEntries = filterResponse
+          let amountSet = []
+          let passengerCountSet = []
+          for(let x = 0; x < tableEntries.length; x++){
+            let description = tableEntries[x]['bus_description'] ? tableEntries[x]['bus_description'] : 'Others'
+            description = (description.replace('via', '\nvia')).replace('Via', '\n via')
+            amountSet.push([tableEntries[x]['total_total_amount'], description])
+            passengerCountSet.push([tableEntries[x]['total_passenger_quantity'], description])
+          }
+          this.dataSet.push(amountSet)
+          this.dataSet.push(passengerCountSet)
+        }
+      }
     }
 
   }

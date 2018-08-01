@@ -8,15 +8,21 @@
           <button v-if="!no_create" @click="createEntry" class="btn btn-primary font-weight-bold"><i class="fa fa-plus" aria-hidden="true"></i> Create New</button>
         </div>
       </div>
-      <api-table ref="apiTable" v-on:table_filter="tableFilter" v-on:row_clicked="rowClicked" :api="api" :api_setting="api_setting" :filter_setting="table_setting.filterSetting" :column_setting="table_setting.columnSetting" :retrieve_parameter="table_setting.retrieveParameter" :entry_per_page="table_setting.entryPerPage"></api-table>
+      <api-table ref="apiTable" v-on:table_filter="tableFilter" v-on:row_clicked="rowClicked" :api="api" :api_setting="api_setting" :filter_setting="table_setting.filterSetting" :column_setting="table_setting.columnSetting" :no_click="table_setting.noClick" :retrieve_parameter="table_setting.retrieveParameter" :entry_per_page="table_setting.entryPerPage"></api-table>
+      <transition
+        name="bounceInRight"
+        enter-active-class="bounceDown"
+        leave-active-class="none"
+      >
       <modal :modal_size="modalSize" ref="modal" >
         <div slot="header">
           {{modalTitle}}
         </div>
         <div slot="body">
-          <common-form ref="commonForm" :api="api" :inputs="form_setting.inputs" v-on:form_close="formClose" v-on:form_deleted="formDeleted" v-on:form_updated="formUpdated" :retrieve_parameter="form_setting.retrieveParameter"></common-form>
+          <common-form ref="commonForm" :api="api" :inputs="form_setting.inputs" v-on:form_close="formClose" v-on:form_deleted="formDeleted" v-on:form_updated="formUpdated" :retrieve_parameter="form_setting.retrieveParameter" :no_edit="no_edit" :no_delete="no_delete"></common-form>
         </div>
       </modal>
+      </transition>
     </div>
   </div>
 </template>
@@ -50,7 +56,9 @@
         type: String,
         default: null
       },
-      no_create: Boolean
+      no_create: Boolean,
+      no_edit: Boolean,
+      no_delete: Boolean
     },
     methods: {
       initializeSettings(){
@@ -81,8 +89,14 @@
         this.$refs.commonForm.viewForm(id)
         this.$refs.modal.showModal()
       },
-      tableFilter(requestOption){
-        this.$emit('table_filter', requestOption)
+      $discountList(requestOption, trigger){
+        this.$emit('table_filter', requestOption, trigger)
+      },
+      redrawTable(){
+        this.$refs.apiTable.initColumnSetting()
+      },
+      tableFilter(requestOption, trigger, response){
+        this.$emit('table_filter', requestOption, trigger, response)
       }
     }
 

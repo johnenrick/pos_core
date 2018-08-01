@@ -6,19 +6,21 @@
         {{message['message']}}
       </div>
     </div>
-    <form ref="form" slot="body" enctype="multipart/form-data" role="form" method="POST">
-      <input type='hidden' name="id" v-bind:value='entryID' >
-      <input-group
-        ref="inputGroup"
-        :inputs="inputs"
-        :form_data="formData"
-        :form_data_updated="formDataUpdated"
-        :form_status="formStatus"
-        :error_list="errorList"
-        v-on:form_data_changed="valueChanged"
-      >
-      </input-group>
-    </form>
+
+      <form ref="form" slot="body" enctype="multipart/form-data" role="form" method="POST">
+        <input type='hidden' name="id" v-bind:value='entryID' >
+        <input-group
+          ref="inputGroup"
+          :inputs="inputs"
+          :form_data="formData"
+          :form_data_updated="formDataUpdated"
+          :form_status="formStatus"
+          :error_list="errorList"
+          v-on:form_data_changed="valueChanged"
+        >
+        </input-group>
+      </form>
+
     <div class="row">
       <div class="col-sm-12 text-right">
         <template v-if="formStatus === 'delete_confirmation'">
@@ -31,7 +33,7 @@
         <label v-else-if="formRequestStatus === 'loading'" class="text-primary"><i class="fa fa-hourglass-half" aria-hidden="true"></i> Please wait...</label>
         <template v-if="formRequestStatus !== 'loading'">
           <template v-if="formStatus === 'view'">
-            <button v-if="formData['id'] !== 0" @click="formStatus = 'editing'" v-bind:disabled="formStatus === 'loading'? true : false" type="button" class="btn btn-outline-primary"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Edit</button>
+            <button v-if="formData['id'] !== 0 && !no_edit" @click="formStatus = 'editing'" v-bind:disabled="formStatus === 'loading'? true : false" type="button" class="btn btn-outline-primary"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Edit</button>
             <button @click="$emit('form_close')" type="button"  v-bind:disabled="formStatus === 'loading'? true : false" class="btn btn-secondary">Close</button>
           </template>
           <template v-else-if="formStatus === 'editing'">
@@ -101,6 +103,10 @@
         required: true
       },
       no_create: Boolean,
+      no_edit: {
+        type: Boolean,
+        default: false
+      },
       no_delete: Boolean,
       read_only: Boolean,
       inputs: {

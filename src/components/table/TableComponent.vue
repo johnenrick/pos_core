@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="">
     <div v-if="table_export_setting" class="row">
       <div  class="col-sm-12 text-right">
         <table-excel-export ref="tableExcelExport"
@@ -9,71 +9,74 @@
         ></table-excel-export>
       </div>
     </div>
-    <table-filter v-if="filter_setting" v-on:filter="retrieveData('filter', true)" :filter_setting="filter_setting" ref="tableFilter" class="mb-2"></table-filter>
-    <table class="table table-bordered table-condensed table-hover table-responsive-sm" >
-      <thead>
-        <tr>
-          <th v-for="(column, index) in columnSetting[0]" style="position:relative"
-            v-bind:rowspan="(column['sub_columns']) ? 1:2"
-            v-bind:colspan="column['sub_columns'] ? column['sub_column_count']  : 1"
-            v-on:click="changeSort(0, index)"
+    <table-filter v-if="filter_setting" ref="tableFilter" v-on:filter="retrieveData('filter', true)" :filter_setting="filter_setting"  class="mb-2"></table-filter>
+    <div class="table-responsive">
+      <table class="table table-bordered table-condensed table-hover table-responsive-sm" >
+        <thead>
+          <tr>
+            <th v-for="(column, index) in columnSetting[0]" style="position:relative; padding-right: 20px"
+              v-bind:rowspan="(column['sub_columns']) ? 1:2"
+              v-bind:colspan="column['sub_columns'] ? column['sub_column_count']  : 1"
+              v-on:click="changeSort(0, index)"
+            >
+              {{column['name']}}
+              <span class="pull-right" style="position:absolute; right: 5px; top: 25%">
+                <i v-if="column['sort'] === 0" class="fas fa-sort" aria-hidden="true"></i>
+                <i v-else-if="column['sort'] === 1" class="fas fa-sort-up" aria-hidden="true"></i>
+                <i v-else-if="column['sort'] === 2" class="fas fa-sort-down" aria-hidden="true"></i>
+              </span>
+            </th>
+          </tr>
+          <tr>
+            <th v-for="(column, index) in columnSetting[1]"
+              v-bind:rowspan="(column['sub_columns']) ? 1:2"
+              v-bind:colspan="column['sub_columns'] ? column['sub_column_count']  : 1"
+              v-on:click="changeSort(1, index)"
+            >
+              {{(column['name']).toUppercase()}}
+              <span v-if="column['sort'] !== false" class="pull-right">
+                <i v-if="column['sort'] === 0" class="fa fa-sort" aria-hidden="true"></i>
+                <i v-else-if="column['sort'] === 1" class="fa fa-sort-asc" aria-hidden="true"></i>
+                <i v-else-if="column['sort'] === 2" class="fa fa-sort-desc" aria-hidden="true"></i>
+              </span>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="(tableEntry, index) in tableEntries"
+            @click="!no_click ? $emit('row_clicked', index, tableEntry['id']) : null"
+            transition="fadeLeft"
           >
-            {{column['name']}}
-            <span class="pull-right" style="position:absolute; right: 5px;">
-              <i v-if="column['sort'] === 0" class="fas fa-sort" aria-hidden="true"></i>
-              <i v-else-if="column['sort'] === 1" class="fas fa-sort-up" aria-hidden="true"></i>
-              <i v-else-if="column['sort'] === 2" class="fas fa-sort-down" aria-hidden="true"></i>
-            </span>
-          </th>
-        </tr>
-        <tr>
-          <th v-for="(column, index) in columnSetting[1]"
-            v-bind:rowspan="(column['sub_columns']) ? 1:2"
-            v-bind:colspan="column['sub_columns'] ? column['sub_column_count']  : 1"
-            v-on:click="changeSort(1, index)"
-          >
-            {{(column['name']).toUppercase()}}
-            <span v-if="column['sort'] !== false" class="pull-right">
-              <i v-if="column['sort'] === 0" class="fa fa-sort" aria-hidden="true"></i>
-              <i v-else-if="column['sort'] === 1" class="fa fa-sort-asc" aria-hidden="true"></i>
-              <i v-else-if="column['sort'] === 2" class="fa fa-sort-desc" aria-hidden="true"></i>
-            </span>
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="(tableEntry, index) in tableEntries"
-          @click="$emit('row_clicked', index, tableEntry['id'])"
-        >
-          <td v-for="columnSetting in linearColumnSetting">
-            <table-cell
-              :data_type="columnSetting['data_type']"
-              :value="columnSetting['value_function'](tableEntry, columnSetting['db_name'])"
-              :setting="columnSetting['setting']"
-              :row_data="tableEntry"
-              :row_index="index"
-              :if_condition="columnSetting['if_condition']"
-              >
-            </table-cell>
-          </td>
-        </tr>
-      </tbody>
-      <tfoot v-if="hasFooter">
-        <tr class="font-weight-bold">
-          <td v-for="(footer, index) in footerSetting">
-            <table-cell
-              :data_type="footer['data_type']"
-              :value="footer['label'] ? footer['label'] : footerData[footer['formula_name']]"
-              :row_data="footerData"
-              :row_index="index"
-              >
-            </table-cell>
+            <td v-for="columnSetting in linearColumnSetting">
+              <table-cell
+                :data_type="columnSetting['data_type']"
+                :value="columnSetting['value_function'](tableEntry, columnSetting['db_name'])"
+                :setting="columnSetting['setting']"
+                :row_data="tableEntry"
+                :row_index="index"
+                :if_condition="columnSetting['if_condition']"
+                >
+              </table-cell>
+            </td>
+          </tr>
+        </tbody>
+        <tfoot v-if="hasFooter">
+          <tr class="font-weight-bold">
+            <td v-for="(footer, index) in footerSetting">
+              <table-cell
+                :data_type="footer['data_type']"
+                :value="footer['label'] ? footer['label'] : footerData[footer['formula_name']]"
+                :row_data="footerData"
+                :row_index="index"
+                >
+              </table-cell>
 
-            <!-- {{ : []}} -->
-          </td>
-        </tr>
-      </tfoot>
-    </table>
+              <!-- {{ : []}} -->
+            </td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
     <div class="row">
       <div class="col-sm-6  mb-2">
         <strong>Results: {{totalResult}}</strong>
@@ -126,11 +129,14 @@
         this.api = this.api
       }
       this.initColumnSetting()
-      if(this.$refs.tableFilter){
-        this.$refs.tableFilter.filterForm()
-      }else{
-        this.retrieveData('filter')
-      }
+      this.$nextTick(function () { // wait for the filter component to completely render
+        if(typeof this.$refs.tableFilter !== 'undefined'){
+          this.$refs.tableFilter.filterForm()
+        }else{
+          this.retrieveData('filter')
+        }
+      })
+
     },
     data(){
       return {
@@ -169,6 +175,10 @@
       entry_per_page: {
         default: 5,
         type: Number
+      },
+      no_click: {
+        type: Boolean,
+        default: false
       }
     },
     watch: {
@@ -188,7 +198,7 @@
         this.columnSetting[rowIndex][columnIndex]['sort'] = (this.columnSetting[rowIndex][columnIndex]['sort'] < 2)
           ? this.columnSetting[rowIndex][columnIndex]['sort'] + 1 : 0
         this.currentSort = this.columnSetting[rowIndex][columnIndex]
-        this.retrieveData(this.prevRetrieveType)
+        this.retrieveData(this.prevRetrieveType, false, 'sort')
       },
       exportExcel(){
         this.isLoadingData = true
@@ -223,7 +233,7 @@
         $.merge(requestOption.condition, this.$refs.tableFilter.getFilter())
         return requestOption
       },
-      retrieveData(retrieveType, resetPage){
+      retrieveData(retrieveType, resetPage, trigger){ // trigger is the cost of retrieveData
         this.isLoadingData = true
         let requestOption = {} // this.retrieve_parameter
         let retrieveParameter = this.cloneObject(this.retrieve_parameter)
@@ -245,7 +255,7 @@
         if(resetPage){
           this.currentPage = 1
         }
-        if(retrieveType === 'filter' && this.$refs.tableFilter){
+        if(retrieveType === 'filter' && typeof this.$refs.tableFilter !== 'undefined'){ // Merge the condition from the filter form
           typeof requestOption.condition === 'undefined' ? requestOption.condition = [] : null
           $.merge(requestOption.condition, this.$refs.tableFilter.getFilter())
         }
@@ -255,7 +265,7 @@
         }
         this.prevRetrieveType = retrieveType
         let apiLink = (typeof this.api_setting === 'undefined' || typeof this.api_setting.retrieve === 'undefined') ? this.api + '/retrieve' : this.api_setting.retrieve
-        this.$emit('table_filter', requestOption)
+
         this.APIRequest(apiLink, requestOption, (response) => {
           this.tableEntries = []
           if(response['data']){
@@ -263,7 +273,7 @@
           }else if(!response['data'] && response['total_entries'] > 0){
             this.currentPage--
           }
-
+          this.$emit('table_filter', requestOption, trigger, response['data'])
           if(this.entry_per_page){
             this.totalResult = response['total_entries']
             this.totalPage = Math.ceil(response['total_entries'] / this.entry_per_page)
@@ -299,6 +309,12 @@
         this.tableEntries.splice(rowIndex, 1)
       },
       initColumnSetting(){
+        this.columnSetting = [
+          [],
+          []
+        ]
+        this.linearColumnSetting = []
+        this.footerSetting = []
         for(let dbName in this.column_setting){
           let column = this.column_setting[dbName]
           Vue.set(column, 'db_name', typeof this.column_setting[dbName]['db_name'] === 'undefined' ? dbName : this.column_setting[dbName]['db_name'])

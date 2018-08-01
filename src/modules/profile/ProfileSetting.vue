@@ -27,13 +27,13 @@
           with_foreign_table: ['account_information', 'account_type']
         },
         inputSetting: {
-          profile_picture: {
-            col: 4,
-            label: null,
-            input_type: 'single_image'
-          },
+          // profile_picture: {
+          //   col: 4,
+          //   label: null,
+          //   input_type: 'single_image'
+          // },
           basic_information: {
-            title: 'Basic Information',
+            title: '<i class="fas fa-user" ></i> Basic Information',
             input_type: 'group',
             inputs: {
               username: {
@@ -54,15 +54,15 @@
             }
           },
           password_section: {
-            title: 'Security',
+            title: '<i class="fas fa-lock" ></i> Security',
             input_type: 'group',
             inputs: {
               password: {
                 input_type: 'secret'
-              },
-              verify_password: {
-                input_type: 'secret'
               }
+              // verify_password: {
+              //   input_type: 'secret'
+              // }
             }
           }
         }

@@ -73,7 +73,7 @@
           email: {},
           account_type_id: {
             label: 'Type',
-            input_type: 'text',
+            input_type: 'select',
             input_setting: {
               api: 'account_type/retrieve',
               api_option_text_column: 'description'

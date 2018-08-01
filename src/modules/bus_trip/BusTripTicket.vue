@@ -1,6 +1,6 @@
 <template>
   <div>
-    <module :api="api" :table_setting="table_setting" :form_setting="form_setting"></module>
+    <module :api="api" :table_setting="table_setting" :form_setting="form_setting" :no_edit="true" :no_create="true" :no_delete="true"></module>
   </div>
 </template>
 <script>
@@ -53,7 +53,7 @@
         filterSetting: filterSetting,
         columnSetting: columnSetting,
         retrieveParameter: {
-          with_foreign_table: ['bus_trip', 'conductor'],
+          with_foreign_table: ['bus_trip', 'conductor', 'void_bus_trip_tickets'],
           sort: {
             created_at: 'DESC'
           }

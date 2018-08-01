@@ -27,12 +27,12 @@ class AuthenticateController extends Controller
   }
   public function refreshToken(){
     // config/jwt.php ttl to change token life
-    if ($token = JWTAuth::parseToken()->refresh()){
-      return response()->json(['error' => 'failed_parse', 'token' => JWTAuth::getToken()], 401);
-    }
-    // $current_token  = JWTAuth::getToken();
-    // $token          = JWTAuth::refresh($current_token);
-    return response()->json(compact('token'))->header('Authorization', 'Bearer ' . $token);;
+    // if ($token = JWTAuth::parseToken()->refresh()){
+    //   return response()->json(['error' => 'failed_parse', 'token' => JWTAuth::getToken()], 401);
+    // }
+    // // $current_token  = JWTAuth::getToken();
+    // // $token          = JWTAuth::refresh($current_token);
+    // return response()->json(compact('token'))->header('Authorization', 'Bearer ' . $token);;
   }
   public function refresh(){
     return response([

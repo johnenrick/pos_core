@@ -19,15 +19,15 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 Route::get('/', function () {
-    echo 'This is the api';
+    echo 'This is the api <br> Server Time: '. date("Y-m-d H:i:s", time());
 });
 /* Authentication Router */
 Route::resource('authenticate', 'AuthenticateController', ['only' => ['index']]);
 Route::post('authentication/create', 'AuthenticateController@authenticate');
 Route::post('authentication/user', 'AuthenticateController@getAuthenticatedUser');
-// Route::group(['middleware' => 'jwt.refresh'], function(){
+Route::group(['middleware' => 'jwt.refresh'], function(){
   Route::post('authentication/refresh', 'AuthenticateController@refresh');
-// });
+});
 Route::post('authentication/destroy', 'AuthenticateController@deauthenticate');
 /*Queue Card*/
 Route::get("getAverageQueueTime", "QueueCardController@getAverageQueueTime");

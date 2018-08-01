@@ -143,7 +143,6 @@
         this.deletedForeignTable = []
       },
       form_status(newValue){
-        console.log(newValue)
         if(newValue !== 'view'){
           // $(this.$refs.tableBody).sortable({
           //   appendTo: 'parent',
@@ -223,10 +222,8 @@
       removeEntry(rowIndex, entryID){
         if(entryID){
           this.deletedForeignTable.push(entryID)
-          console.log(this.tableEntries)
-          this.tableEntries.splice(rowIndex, 1)
-          console.log(this.tableEntries)
         }
+        this.tableEntries.splice(rowIndex, 1)
       },
       move(index, id, direction){
         if(direction === 'up' && index > 0){
@@ -238,7 +235,6 @@
         let newArray = this.tableEntries.slice()
         while(this.tableEntries.length > 0) this.tableEntries.pop()
         for(let x = 0; x < newArray.length; x++) this.tableEntries.push(newArray[x])
-        // console.log(this.tableEntries)
 
       }
     }

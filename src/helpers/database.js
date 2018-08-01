@@ -25,6 +25,9 @@ Vue.mixin({
         case 'MM/dd/yyyy':
           dateObject = new Date(dbDate)
           return numberHelper.padNumber(dateObject.getMonth() + 1, 2) + '/' + numberHelper.padNumber(dateObject.getDate(), 2) + '/' + dateObject.getFullYear()
+        default: // 'MM/dd/yyyy H:i:s'
+          dateObject = new Date(dbDate)
+          return numberHelper.padNumber(dateObject.getMonth() + 1, 2) + '/' + numberHelper.padNumber(dateObject.getDate(), 2) + '/' + dateObject.getFullYear() + ' ' + numberHelper.padNumber(dateObject.getHours()) + ':' + numberHelper.padNumber(dateObject.getMinutes()) + ':' + numberHelper.padNumber(dateObject.getSeconds())
       }
     },
     DBDateFormat: (date, currentFormat) => {

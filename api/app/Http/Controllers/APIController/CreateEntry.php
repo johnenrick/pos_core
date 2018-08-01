@@ -26,13 +26,10 @@ class CreateEntry extends ControllerHelper
   protected $notRequired = null;
   protected $singleImageFileUpload = array();
   protected $editableForeignTable = array();
-
-
-
-
-  function __construct($model, $response, $validation, $tableColumns, $notRequired, $editableForeignTable, $singleImageFileUpload, $rawRequest){
+  protected $defaultValue = array();
+  function __construct($model, $response, $validation, $tableColumns, $notRequired, $editableForeignTable, $singleImageFileUpload, $rawRequest, $defaultValue){
     $this->response = $response;
-    $this->responseType = $response['response_type'];
+    $this->responseType = isset($response['response_type']) ? $response['response_type'] : 'json';
     $this->tableColumns = $tableColumns;
     $this->model = $model;
     $this->notRequired = $notRequired;
@@ -40,6 +37,7 @@ class CreateEntry extends ControllerHelper
     $this->validation = $validation;
     $this->singleImageFileUpload = $singleImageFileUpload;
     $this->rawRequest = $rawRequest;
+    $this->defaultValue = $defaultValue;
   }
 
   public function createEntry($request){

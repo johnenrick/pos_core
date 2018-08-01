@@ -36,9 +36,11 @@ api_resource($apiResources);
 $customAPIResources = [
   'order_product/productSalesSummary',
   'order/dailySalesReport',
-  'bus_trip_ticket/dailySalesReport',
+  'bus_trip/saleSummary',
+  'bus_trip_ticket/batchCreate',
+  'void_bus_trip_ticket/batchCreate',
   'bus_trip/routeSalesSummary',
-  'bus_trip/busColectionSummary',
+  'bus_trip/busCollectionSummary',
   'bus_trip/routeDailySales',
 ];
 custom_api($customAPIResources)

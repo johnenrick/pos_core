@@ -11,9 +11,13 @@ class VoidBusTripTicketController extends APIController
   function __construct(){
     $this->model = new DBItem();
     $this->notRequired = array('account_id', 'is_approved');
-    if($this->getUserAccountType() != 1){
+    $this->defaultValue = array(
+      'is_approved' => 0
+    );
+    
+    // if($this->getUserAccountType() != 1){
       $this->ownerColumn = 'account_id';
-    }
+    // }
   }
   public function create(Request $request){
     $requestArray = $request->all();
@@ -29,5 +33,29 @@ class VoidBusTripTicketController extends APIController
       (new BusTripTicket())->where('id', $requestArray['bus_trip_ticket_id'] )->delete();
     }
     return $this->updateEntry($requestArray);
+  }
+  function batchCreate(Request $requests){
+
+    $requestArray = $requests->all();
+    if(!isset($requestArray['entries'])){
+      $this->response['data'] = false;
+      $this->response['error'][] = array(
+        'status' => 1000,
+        'message' => 'No Entries Sent.'
+      );
+      return $this->output();
+    }
+    $responses = array();
+    foreach($requestArray['entries'] as $request){
+      $this->response = array(
+        "data" => null,
+        "error" => array(),// {status, message}
+        "response_type" => 'json',
+      );
+      $response = $this->createEntry($request);
+      $responses[] = $response;
+    }
+    $this->response['data'] = $responses;
+    return $this->output();
   }
 }

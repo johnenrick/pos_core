@@ -1,6 +1,6 @@
 <template>
   <div>
-    <module :api="api" :table_setting="table_setting" :form_setting="form_setting"></module>
+    <module :api="api" :table_setting="table_setting" :form_setting="form_setting" :no_create="true"></module>
   </div>
 </template>
 <script>
@@ -54,8 +54,21 @@
             return entry['driver'] ? entry['driver']['account_information']['first_name'] + ' ' + entry['driver']['account_information']['last_name'] : 'None'
           }
         },
+        created_at: {
+          name: 'Time Started'
+        },
         'arrival_datetime': {
           name: 'Time Arrived'
+        },
+        travel_time: {
+          data_type: 'html',
+          tool_tip: 'heelo',
+          sort: false,
+          value_function: (row) => {
+            let baseTime = row['arrival_datetime'] ? (new Date(row['arrival_datetime'])).getTime() : (new Date()).getTime()
+            let duration = Math.floor((baseTime - (new Date(row['created_at'])).getTime()) / 1000 / 60) // Subtract current time with create at then convert it to minutes
+            return '<span class="' + ((duration > row['route']['estimated_travel_duration'] * 1) ? 'text-danger' : '') + '">' + duration + ' minutes ' + '</span>'
+          }
         }
       }
       let tableSetting = {

@@ -2,9 +2,15 @@
   <div class="content-padding">
     <h1>Admin Dashboard</h1>
     <div class="row">
+      <transition
+        name="bounce"
+        enter-active-class="bounceInLeft"
+        leave-active-class="none"
+      >
       <div class="col-12 ">
         <summary-report></summary-report>
       </div>
+      </transition>
       <div v-if="false" class="col-12 col-xl-8 mb-3">
         <div class="card border-primary">
           <div class="card-header bg-primary text-white font-weight-bold">Product and Service Performance</div>
@@ -38,10 +44,10 @@
 export default {
   components: {
     'summary-report': require('./admin_home_component/Summary.vue'),
-    'yearly-sales': require('./admin_home_component/YearlySales.vue'),
     'product-performance-quantity': require('./admin_home_component/ProductPerformanceQuantity.vue'),
     'product-performance-sales': require('./admin_home_component/ProductPerformanceSales.vue'),
-    'route-performance': require('./admin_home_component/RoutePerformance.vue')
+    'route-performance': require('./admin_home_component/RoutePerformance.vue'),
+    'yearly-sales': require('./admin_home_component/YearlySale.vue')
   },
   mounted() {
 

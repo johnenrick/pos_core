@@ -5,7 +5,7 @@
       <template v-for="input in inputList">
         <div v-if="input['input_type'] === 'group'" v-bind:class="'col-sm-' + input['col']" >
           <template v-if="input['title']">
-            <h4>{{input['title']}}</h4>
+            <h4 v-html="input['title']"></h4>
           </template>
           <input-group-recursive
             ref="inputGroup"

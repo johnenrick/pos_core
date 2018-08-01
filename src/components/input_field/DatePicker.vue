@@ -46,7 +46,7 @@
     },
     props: {
       input_setting: Object,
-      default_value: [String, Number],
+      default_value: [String, Number, Date],
       db_name: String,
       form_data: Object,
       form_status: String,
@@ -62,7 +62,10 @@
     },
     methods: {
       initInputSetting(){
-        this.defaultValue = this.default_value ? this.default_value : null
+        if(this.default_value){
+          this.defaultValue = this.DBDateFormat(new Date(this.default_value))
+          this.valueChanged(this.defaultValue)
+        }
         // $(this.$refs.datePickerInput).datetimepicker({
         //   format: 'MM/DD/YYYY',
         //   enabledHours: false,
@@ -100,8 +103,18 @@
         }
       },
       valueChanged(date){
-        console.log(date)
-        this.dateValue = this.DBDateFormat(date)
+        let selectedDate = new Date(date)
+        if(typeof this.input_setting !== 'undefined' && typeof this.input_setting['time'] !== 'undefined'){
+          let timeSegment = this.input_setting['time'].split(':')
+          selectedDate.setHours(timeSegment[0])
+          selectedDate.setMinutes(timeSegment[1])
+          selectedDate.setSeconds(timeSegment[2])
+        }else{
+          selectedDate.setHours(0)
+          selectedDate.setMinutes(0)
+          selectedDate.setSeconds(0)
+        }
+        this.dateValue = (selectedDate.getTime()) > 0 ? this.DBDateFormat(selectedDate.toString()) : null
         this.$emit('change', this.field_name, this.dateValue)
       }
     }

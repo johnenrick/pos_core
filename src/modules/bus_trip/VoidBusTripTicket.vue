@@ -18,7 +18,27 @@
     data(){
       let filterSetting = {
         bus_trip_ticket_id: {
-          label_colspan: 5
+          col: 4,
+          label_colspan: 8
+        },
+        is_approved: {
+          col: 6,
+          label_colspan: 5,
+          input_type: 'select',
+          input_setting: {
+            options: [{
+              id: null, text: 'All'
+            }, {
+              id: 0,
+              text: 'Pending'
+            }, {
+              id: 1,
+              text: 'Approved'
+            }, {
+              id: 2,
+              text: 'Disapproved'
+            }]
+          }
         }
       }
       let columnSetting = {

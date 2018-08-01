@@ -49,12 +49,13 @@ class RetrieveEntry extends ControllerHelper
     $tableName = $this->tableName;
     $singularTableName = str_singular($tableName);
     $tableColumns = $this->tableColumns;
+    $model = clone $this->model;
     // if(count($this->requiredForeignTable)){
     //   for($x = 0; $x < count($this->requiredForeignTable); $x++){
     //     $singularForeignTable = str_singular($this->requiredForeignTable[$x]);
     //     $pluralForeignTable = str_plural($this->requiredForeignTable[$x]);
     //     $this->response['debug']['join'] = $pluralForeignTable;
-    //     $this->model = $this->model->leftJoinChildTable($pluralForeignTable, $pluralForeignTable.'.id', '=', $tableName.'.'.$singularForeignTable.'_id');
+    //     $model = $model->leftJoinChildTable($pluralForeignTable, $pluralForeignTable.'.id', '=', $tableName.'.'.$singularForeignTable.'_id');
     //   }
     // }
     if(isset($request['sort'])){
@@ -69,13 +70,14 @@ class RetrieveEntry extends ControllerHelper
           $table = str_plural($sortKeySegment[0]);
           unset($request['sort'][$sortKey]);
           $request['sort'][$table.'.'.$sortKeySegment[1]] = $sortValue;
-
-          if(in_array($sortKeySegment[0], $allowedForeignTable) && ($this->leftJoinChildTable == null || isset($this->leftJoinChildTable[$sortKeySegment[0]]))){
+          // echo $table.'.'.$sortKeySegment[1];
+          // print_r($allowedForeignTable);
+          if(in_array($sortKeySegment[0], $allowedForeignTable) && ($this->leftJoinChildTable == null || !isset($this->leftJoinChildTable[$sortKeySegment[0]]))){
             $singularForeignTable = str_singular($table);
             if(in_array($singularForeignTable.'_id', $tableColumns)){ // the table is child
-              $this->model = $this->model->leftJoin($table, $table.'.id', '=', $tableName.'.'.$singularForeignTable.'_id');
+              $model = $model->leftJoin($table, $table.'.id', '=', $tableName.'.'.$singularForeignTable.'_id');
             }else{ // the table is parent
-              $this->model = $this->model->leftJoin($table, $tableName.'.id', '=', $table.'.'.$singularTableName.'_id');
+              $model = $model->leftJoin($table, $tableName.'.id', '=', $table.'.'.$singularTableName.'_id');
             }
           }
 
@@ -85,14 +87,21 @@ class RetrieveEntry extends ControllerHelper
     if($this->leftJoinChildTable){
       foreach($this->leftJoinChildTable as $table => $queryOption){
         $singularForeignTable = str_singular($table);
-        $this->model = $this->model->leftJoin($table, $tableName.'.id', '=', $table.'.'.$singularTableName.'_id');
+        if(in_array($singularForeignTable.'_id', $tableColumns)){ // the table is child
+          $model = $model->leftJoin($table, $table.'.id', '=', $tableName.'.'.$singularForeignTable.'_id');
+        }else{ // the table is parent
+          $model = $model->leftJoin($table, $tableName.'.id', '=', $table.'.'.$singularTableName.'_id');
+        }
       }
     }
     $condition = isset($request['condition']) ? $this->initCondition($request['condition']) : array('main_table' => array(), 'foreign_table' => array());
     if(isset($request['with_foreign_table'])){
-      foreach($request['with_foreign_table'] as $foreignTable){
-        if(in_array($foreignTable, $allowedForeignTable)){
-          $this->model = $this->model->with($request['with_foreign_table']);
+      foreach($request['with_foreign_table'] as $withGoreignTable){
+        $foreginTableSegment = explode(':', $withGoreignTable);
+        $this->response['debug'][] = $withGoreignTable;
+        $dotSeparator = explode('.', $foreginTableSegment[0]);
+        if(in_array($dotSeparator[0], $allowedForeignTable)){
+          $model = $model->with($withGoreignTable);
         }
       }
     }
@@ -105,7 +114,7 @@ class RetrieveEntry extends ControllerHelper
             $clause = isset($foreignCondition[$x]['clause']) ? $foreignCondition[$x]['clause'] : '=';
             $value = $foreignCondition[$x]['value'];
             if(count($column) <= 2){ // level 1 relation
-              $this->model = $this->model->where(str_plural($foreignTable).'.'.$column[1], $clause, $value);
+              $model = $model->where(str_plural($foreignTable).'.'.$column[1], $clause, $value);
             }else{ // level 2 relation. maybe more
               $column2 = $column[2];
               $q->whereHas($column[1], function($q2) use($column2, $clause, $value){
@@ -117,7 +126,7 @@ class RetrieveEntry extends ControllerHelper
       }else{
         // TODO revise this to a recursive function
         foreach($condition['foreign_table'] as $foreignTable => $foreignCondition){
-          $this->model = $this->model->whereHas($foreignTable, function($q) use($foreignCondition, $foreignTable){
+          $model = $model->whereHas($foreignTable, function($q) use($foreignCondition, $foreignTable){
             $tempForeignTablePlural = str_plural($foreignTable);
             for($x = 0; $x < count($foreignCondition); $x++){ // loop each
               $column = explode('.', $foreignCondition[$x]['column']);
@@ -136,57 +145,57 @@ class RetrieveEntry extends ControllerHelper
         }
       }
     }
-
     if(count($this->requiredForeignTable)){
-        $this->model = $this->model->with($this->requiredForeignTable);
+        $model = $model->with($this->requiredForeignTable);
     }
     if($this->aliased){
       foreach($this->aliased as $column => $formula){
-        $this->model = $this->model->addSelect(DB::raw("$formula as $column"));
+        $model = $model->addSelect(DB::raw("$formula as $column"));
       }
     }
     if(count($condition['main_table'])){
 
-      $this->addCondition($condition['main_table']);
+      $model = $this->addCondition($model, $condition['main_table']);
     }
-
     if(isset($request["id"])){
-       $this->model = $this->model->where($tableName.".id", "=", $request["id"]);
+       $model = $model->where($tableName.".id", "=", $request["id"]);
     }else{
-      isset($request['sort']) ? $this->sort( $request['sort']) : null;
+      isset($request['sort']) ? $model = $this->sort($model, $request['sort']) : null;
       if(isset($request['limit'])){
-        $this->response['total_entries'] = $this->model->count();
+        $this->response['total_entries'] = $model->count();
         if(isset($request['calculated_column'])){
           $this->response['calculated_column'] = array();
           foreach($request['calculated_column'] as $alias => $formula){
-            $tempModel = clone $this->model;
-            // $tempModel = $tempModel->groupBy($tableName.'.id');
+            $tempModel = clone $model;
+            $tempModel = $tempModel->groupBy($tableName.'.id');
             $tempModel = $tempModel->addSelect(DB::raw("$formula as $alias"));
             $tempResult = $tempModel->get([$alias])->toArray();
             $this->response['calculated_column'][$alias] = count($tempResult) ? $tempResult[0][$alias] : NULL;
           }
         }
-        $this->model = $this->model->limit($request['limit']);
+        $model = $model->limit($request['limit']);
       }
-      (isset($request['offset'])) ?  $this->model = $this->model->offset($request['offset'] * 1) : null;
+      (isset($request['offset'])) ?  $model = $model->offset($request['offset'] * 1) : null;
 
     }
     if($this->groupByColumn){
-      foreach($this->groupByColumn as $value)
-      $this->model = $this->model->groupBy(DB::raw($value));
+      foreach($this->groupByColumn as $value){
+        $model = $model->groupBy(DB::raw($value));
+
+      }
     }
     if($this->select){
-      $this->model = $this->model->addSelect($this->select);
+      $model = $model->addSelect($this->select);
     }
 
     if(isset($request['with_soft_delete'])){
-      $this->model = $this->model->withTrashed();
+      $model = $model->withTrashed();
     }
 
     for($x = 0; $x < count($tableColumns); $x++){
       $tableColumns[$x] = $tableName.'.'.$tableColumns[$x];
     }
-    $result = $this->model->get($tableColumns)->toArray();
+    $result = $model->get($tableColumns)->toArray();
     if(count($result)){
 
       if(isset($request["id"])){
@@ -229,7 +238,7 @@ class RetrieveEntry extends ControllerHelper
     }
     return $initializedCondition;
   }
-  public function addCondition($conditions){
+  public function addCondition($model, $conditions){
     /*
       column, clause, value
     */
@@ -242,23 +251,25 @@ class RetrieveEntry extends ControllerHelper
         }
         switch($condition["clause"]){
           default :
-            $this->response['debug'][] = $condition;
-            $this->model = $this->model->where($condition["column"], $condition["clause"], $condition["value"]);
+            // $this->response['debug'][] = $condition;
+            $model = $model->where($condition["column"], $condition["clause"], $condition["value"]);
         }
       }
     }
+    return $model;
   }
   /***
     Convert the column to sort into its real column name or formula since the laravel eloquent cannot sort aliases
     Return transformed sortObject
   **/
-  function sort($sortObject){
+  function sort($model, $sortObject){
     foreach($sortObject as $sortColumn => $sortValue){
       $columName = $sortColumn;
       if(isset($this->aliased[$sortColumn])){
         $columName = $this->aliased[$sortColumn];
       }
-      $this->model = $this->model->orderBy(DB::raw($columName), $sortValue);
+      $model = $model->orderBy(DB::raw($columName), $sortValue);
     }
+    return $model;
   }
 }

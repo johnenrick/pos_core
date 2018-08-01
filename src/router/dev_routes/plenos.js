@@ -294,5 +294,12 @@ export default{
     meta: {
       module_id: 4
     }
+  },
+  {
+    path: '/api_test',
+    component: resolve => require(['modules/test/APITest.vue'], resolve),
+    meta: {
+      module_id: 4
+    }
   }]
 }

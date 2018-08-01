@@ -1,16 +1,16 @@
 <template>
   <div ref="body" class="fixed-nav " id="body">
       <nav id="mainNav" class="navbar navbar-expand-lg navbar-dark bg-brand-dark-1 fixed-top sidebar-image" >
-        <a class="navbar-brand font-weight-bold" href="#" @click="logoClicked"><img src="./assets/img/navbarlogo.png" height="30" alt=""> &nbsp; &nbsp;POINT OF SALE</a>
+        <a class="navbar-brand font-weight-bold" href="#" @click="logoClicked"><img src="./assets/img/navbarlogo.png" height="30" alt=""> &nbsp; &nbsp;COROMINAS</a>
         <button v-if="$auth.user().account_type_id" class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarResponsive">
-          <ul v-if="$auth.user().account_type_id === 1" class="navbar-nav">
+          <!-- <ul v-if="$auth.user().account_type_id === 1" class="navbar-nav">
             <li class="nav-item bg-primary text-center" data-placement="right" title="Cashier"  >
               <router-link class="nav-link" to="cashier" active-class="active-link"><i class="fas fa-laptop"></i> Cashier</router-link>
             </li>
-          </ul>
+          </ul> -->
           <ul v-if="$auth.user().account_type_id === 1" class="navbar-nav navbar-sidenav ">
             <template v-for="menu in sideBarMenu" class="nav-item">
               <side-menu-list :name="menu['name']" :type="menu['type']"  :icon="menu['icon']" :to="menu['to']" :sub_menu="menu['sub_menu']"></side-menu-list>
@@ -51,16 +51,20 @@
             <li class="breadcrumb-item active">Blank Page</li>
           </ol> -->
 
-            <template v-if="$auth.ready()">
-              <div class="content-wrapper" style="padding-top:0px">
-                <transition name="fade">
-                  <router-view ></router-view>
-                </transition>
-              </div>
-            </template>
-            <template v-else>
-              <loading-indicator :is_loading="true" ></loading-indicator>
-            </template>
+        <template v-if="$auth.ready()">
+          <div v-bind:class="$auth.check() ? 'content-wrapper' : ''" style="padding-top:0px" >
+            <transition
+              name="bounce"
+              enter-active-class="bounceInRight"
+              leave-active-class="none"
+            >
+              <router-view ></router-view>
+            </transition>
+          </div>
+        </template>
+        <template v-else>
+          <loading-indicator :is_loading="true" ></loading-indicator>
+        </template>
 
 
         <!-- /.container-fluid-->

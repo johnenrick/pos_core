@@ -1,45 +1,49 @@
 <template>
   <div>
-    <bar-chart :name="'Route Sales Summary'" :data_set="dataSet":chart_type="'multiple'"></bar-chart>
+    <line-chart :data_set="dataSet" :chart_type="'stacked'"></line-chart>
   </div>
 </template>
 <script>
 export default {
   components: {
-    'bar-chart': require('../../../components/chart/BarChart.vue')
+    'line-chart': require('components/chart/LineChart.vue')
   },
   mounted() {
-    this.generateTable()
+    setTimeout(() => {
+      this.initGraph()
+    }, 500)
   },
   data() {
     return {
-      dataSet: [[], []]
+      dataSet: []
     }
   },
-  props: {
-    is_top: Boolean
-  },
   methods: {
-    generateTable: function(){
-      let requestOption = {
-        sort: {
-          total_net_amount: this.is_top ? 'ASC' : 'DESC'
-        },
-        limit: '5'
-      }
+    initGraph() {
       while(this.dataSet.length > 0) { this.dataSet.pop() }
-      this.APIRequest('bus_trip/routeSalesSummary', requestOption, (response) => {
+      let param = {
+        condition: [{
+          column: 'date',
+          clause: '>=',
+          value: this.DBDateFormat(new Date((new Date()).getFullYear(), 0, 1, 0, 0, 0))
+        }]
+      }
+      console.log(param)
+      this.APIRequest('bus_trip/routeDailySales', param, (response) => {
         if(response['data']){
           let tableEntries = response['data']
-          let amountSet = []
-          let passengerCountSet = []
-          for(let x = 0; x < tableEntries.length; x++){
-            let description = tableEntries[x]['route'] ? (tableEntries[x]['route']['description']).replace('via', '\nvia') : 'Others'
-            amountSet.push([description, tableEntries[x]['total_net_amount']])
-            passengerCountSet.push([description, tableEntries[x]['total_passenger_quantity']])
+          for(let x in tableEntries){
+            let routeEntries = []
+            for(let y = 0; y < tableEntries[x].length; y++){
+              routeEntries.push([this.formatDBDate(tableEntries[x][y]['date'], 'yyyy/mm/dd'), tableEntries[x][y]['total_payment']])
+            }
+            let routeDescription = tableEntries[x][0]['description'] ? tableEntries[x][0]['description'] : 'Others'
+            this.dataSet.push({
+              name: routeDescription,
+              stack: routeDescription,
+              data: routeEntries
+            })
           }
-          this.dataSet.push(amountSet)
-          this.dataSet.push(passengerCountSet)
         }
       })
     }

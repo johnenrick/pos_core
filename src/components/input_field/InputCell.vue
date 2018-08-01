@@ -242,7 +242,7 @@
       muted_text: String,
       form_data_updated: Boolean,
       form_status: String,
-      default_value: [String, Number],
+      default_value: [String, Number, Object, Boolean, Date],
       error_list: Object,
       read_only: Boolean
     },

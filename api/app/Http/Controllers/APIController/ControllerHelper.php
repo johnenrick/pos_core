@@ -152,7 +152,6 @@ class ControllerHelper extends Controller
         // $this->response = $responseTemp;
         return true;
       }else{
-        echo 'shit no file';
       }
     }
     return false;

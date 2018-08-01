@@ -26,7 +26,6 @@ class APIController extends ControllerHelper
     protected $validation = array();
     protected $test = null;
     protected $userSession = null;
-
     protected $responseType = 'json';
     // protected $rawRequest = null;
 
@@ -119,7 +118,6 @@ class APIController extends ControllerHelper
 
     public function create(Request $request){
       $this->rawRequest = $request;
-
       return $this->createEntry($request->all());
     }
     public function retrieve(Request $request){
@@ -153,7 +151,8 @@ class APIController extends ControllerHelper
         $this->notRequired,
         $this->editableForeignTable,
         $this->singleImageFileUpload,
-        $this->rawRequest
+        $this->rawRequest,
+        $this->defaultValue
       );
       return $createModule->createEntry($this->replaceSessionData($request));
     }
@@ -207,6 +206,5 @@ class APIController extends ControllerHelper
       $deleteEntry = new DeleteEntry($this->model, $this->response);
       return $deleteEntry->deleteEntry($request);
     }
-
 
 }
