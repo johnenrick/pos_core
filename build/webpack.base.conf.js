@@ -30,7 +30,7 @@ module.exports = {
       'assets': resolve('src/assets'),
       'components': resolve('src/components'),
       'node_modules': resolve('node_modules'),
-      'FONTS': path.join(__dirname, 'src/assesssts/webfonts')
+      'fonts': resolve('src/assets/fonts')
     }
   },
   module: {
