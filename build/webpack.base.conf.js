@@ -2,6 +2,9 @@
 var utils = require('./utils')
 var config = require('../config')
 var vueLoaderConfig = require('./vue-loader.conf')
+// var HardSourceWebpackPlugin = require('hard-source-webpack-plugin')
+
+
 
 function resolve (dir) {
   return path.join(__dirname, '..', dir)
@@ -18,6 +21,9 @@ module.exports = {
       ? config.build.assetsPublicPath
       : config.dev.assetsPublicPath
   },
+  plugins: [
+    // new HardSourceWebpackPlugin()
+  ],
   resolve: {
     extensions: ['.js', '.vue', '.scss', '.sass', '.css', '.ttf'],
     modules: [
@@ -72,8 +78,8 @@ module.exports = {
         loader: 'url-loader',
         query: {
           limit: 10000,
-          name: utils.assetsPath('/fonts/[name].[hash:7].[ext]'),
-          publicPath: process.env.NODE_ENV === 'production' ? '../../' : '/'
+          name: utils.assetsPath('fonts/[name].[hash:7].[ext]'),
+          publicPath:   process.env.NODE_ENV === 'production' ? '' : '/'
         }
       },
       {
