@@ -64,7 +64,9 @@
 
     },
     mounted(){
-      this.initializeInput()
+      this.$nextTick(function () {
+        this.initializeInput()
+      })
     },
     data(){
       return {

@@ -100,6 +100,7 @@
     "speed-measure-webpack-plugin": "^1.2.2",
     "style-loader": "^0.20.3",
     "url-loader": "^0.5.9",
+    "vue-button-spinner": "^2.2.0",
     "vue-echarts": "^3.0.7",
     "vue-json-tree-view": "^2.1.4",
     "vue-loader": "^11.0.0",

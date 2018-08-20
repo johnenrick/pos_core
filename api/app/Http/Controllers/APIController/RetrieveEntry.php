@@ -31,7 +31,8 @@ class RetrieveEntry extends ControllerHelper
   protected $groupByColumn = null;
   protected $select = null;
   protected $leftJoinChildTable = null;
-  function __construct($model, $response, $tableName, $tableColumns, $validation, $foreignTable, $editableForeignTable, $requiredForeignTable, $aliased, $groupByColumn, $select, $leftJoinChildTable){
+  protected $rightJoinChildTable = null;
+  function __construct($model, $response, $tableName, $tableColumns, $validation, $foreignTable, $editableForeignTable, $requiredForeignTable, $aliased, $groupByColumn, $select, $leftJoinChildTable, $rightJoinChildTable){
     $this->response = $response;
     $this->foreignTable = $foreignTable;
     $this->editableForeignTable = $editableForeignTable;
@@ -43,6 +44,7 @@ class RetrieveEntry extends ControllerHelper
     $this->groupByColumn = $groupByColumn;
     $this->select = $select;
     $this->leftJoinChildTable = $leftJoinChildTable;
+    $this->rightJoinChildTable = $rightJoinChildTable;
   }
   public function retrieveEntry($request){
     $allowedForeignTable = array_merge($this->foreignTable, $this->editableForeignTable, $this->requiredForeignTable);
@@ -61,11 +63,6 @@ class RetrieveEntry extends ControllerHelper
     if(isset($request['sort'])){
       foreach($request['sort'] as $sortKey => $sortValue){
         $sortKeySegment = explode('.', $sortKey);
-        // print_r($this->leftJoinChildTable);
-        // print_r($sortKeySegment);
-        // print_r($allowedForeignTable);
-        // print_r($this->foreignTable);
-        // echo 'tae';
         if(count($sortKeySegment) == 2){
           $table = str_plural($sortKeySegment[0]);
           unset($request['sort'][$sortKey]);
@@ -80,6 +77,14 @@ class RetrieveEntry extends ControllerHelper
               $model = $model->leftJoin($table, $tableName.'.id', '=', $table.'.'.$singularTableName.'_id');
             }
           }
+          // if(in_array($sortKeySegment[0], $allowedForeignTable) && ($this->rightJoinChildTable == null || !isset($this->rightJoinChildTable[$sortKeySegment[0]]))){
+          //   $singularForeignTable = str_singular($table);
+          //   if(in_array($singularForeignTable.'_id', $tableColumns)){ // the table is child
+          //     $model = $model->rightJoin($table, $table.'.id', '=', $tableName.'.'.$singularForeignTable.'_id');
+          //   }else{ // the table is parent
+          //     $model = $model-rightJoin($table, $tableName.'.id', '=', $table.'.'.$singularTableName.'_id');
+          //   }
+          // }
 
         }
       }
@@ -91,6 +96,16 @@ class RetrieveEntry extends ControllerHelper
           $model = $model->leftJoin($table, $table.'.id', '=', $tableName.'.'.$singularForeignTable.'_id');
         }else{ // the table is parent
           $model = $model->leftJoin($table, $tableName.'.id', '=', $table.'.'.$singularTableName.'_id');
+        }
+      }
+    }
+    if($this->rightJoinChildTable){
+      foreach($this->rightJoinChildTable as $table => $queryOption){
+        $singularForeignTable = str_singular($table);
+        if(in_array($singularForeignTable.'_id', $tableColumns)){ // the table is child
+          $model = $model->rightJoin($table, $table.'.id', '=', $tableName.'.'.$singularForeignTable.'_id');
+        }else{ // the table is parent
+          $model = $model->rightJoin($table, $tableName.'.id', '=', $table.'.'.$singularTableName.'_id');
         }
       }
     }

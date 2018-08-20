@@ -9,7 +9,7 @@
         ></table-excel-export>
       </div>
     </div>
-    <table-filter v-if="filter_setting" ref="tableFilter" v-on:filter="retrieveData('filter', true)" :filter_setting="filter_setting"  class="mb-2"></table-filter>
+    <table-filter v-if="filter_setting" ref="tableFilter" v-on:filter="retrieveData('filter', true)" :filter_setting="filter_setting" :is_loading="isLoadingData" class="mb-2"></table-filter>
     <div class="table-responsive">
       <table class="table table-bordered table-condensed table-hover table-responsive-sm" >
         <thead>
@@ -265,10 +265,12 @@
         }
         this.prevRetrieveType = retrieveType
         let apiLink = (typeof this.api_setting === 'undefined' || typeof this.api_setting.retrieve === 'undefined') ? this.api + '/retrieve' : this.api_setting.retrieve
-
+        console.log('loading na', this.isLoadingData)
         this.APIRequest(apiLink, requestOption, (response) => {
+          console.log('manag request')
           this.tableEntries = []
           if(response['data']){
+
             this.tableEntries = response['data']
           }else if(!response['data'] && response['total_entries'] > 0){
             this.currentPage--

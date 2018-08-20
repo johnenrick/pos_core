@@ -1,6 +1,11 @@
 <template>
   <div>
-    <line-chart :data_set="dataSet" :chart_type="'stacked'"></line-chart>
+    <div class="card border-primary">
+      <div class="card-header bg-primary text-white font-weight-bold">ROUTE PERFORMANCE <span v-if="isLoading" class="float-right"><i class="fas fa-circle-notch fa-spin"></i> Loading Data...</span> <small v-if="dataSet.length === 0 && !isLoading" class="float-right"><i class="fas fa-exclamation-circle"></i> No Data Retrieved</small></div>
+      <div class="card-body">
+        <line-chart :data_set="dataSet" :chart_type="'stacked'"></line-chart>
+      </div>
+    </div>
   </div>
 </template>
 <script>
@@ -15,11 +20,13 @@ export default {
   },
   data() {
     return {
-      dataSet: []
+      dataSet: [],
+      isLoading: true
     }
   },
   methods: {
     initGraph() {
+      this.isLoading = true
       while(this.dataSet.length > 0) { this.dataSet.pop() }
       let param = {
         condition: [{
@@ -45,6 +52,7 @@ export default {
             })
           }
         }
+        this.isLoading = false
       })
     }
   }

@@ -21,7 +21,7 @@ class BusTripTicket extends Migration
         $table->unsignedInteger('start_route_stop_id');
         $table->unsignedInteger('end_route_stop_id');
         $table->float('total_distance')->comment('In Kilometer');
-        $table->float('total_amount');
+        $table->float('total_amount')->comment('amount + adjustment - discount');
         $table->double('payment_adjustment')->default(0);
         $table->double('cash_tendered')->default(0);
         $table->unsignedInteger('discount_id')->nullable();

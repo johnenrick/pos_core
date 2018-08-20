@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\BusTrip as DBItem;
+use App\BusTripTicket as DBBusTripTicket;
 use App\Discount as DiscountDB;
 
 class BusTripController extends APIController
@@ -18,18 +19,20 @@ class BusTripController extends APIController
     }
   }
   function saleSummary(Request $request){
+    $this->ownerColumn = null;
     $discountList = (new DiscountDB())->select(['id', 'description'])->get()->toArray();
     $requestArray = $request->all();
     $this->aliased = [
       'total_total_amount' => 'sum(bus_trip_tickets.total_amount)',
       'total_payment_adjustment' => 'sum(bus_trip_tickets.payment_adjustment)',
       'total_discount_amount' => 'sum(bus_trip_tickets.discount_amount)',
-      'total_passenger_quantity' => 'sum(bus_trip_tickets.passenger_quantity)'
+      'total_passenger_quantity' => 'sum(bus_trip_tickets.passenger_quantity)',
+      'entry_count' => 'count(bus_trip_tickets.id)'
     ];
     for($x = 0; $x < count($discountList); $x++){
       $this->aliased['total_' . str_replace(' ', '_', strtolower($discountList[$x]['description'])) . '_discount_amount'] = 'sum(CASE WHEN discount_id = ' . $discountList[$x]['id'] . ' THEN discount_amount ELSE 0 END)';
     }
-    $this->leftJoinChildTable = array('bus_trip_tickets' => array());
+    $this->rightJoinChildTable = array('bus_trip_tickets' => array());
     $groupBy = isset($requestArray['group_by']) ? (gettype($requestArray['group_by']) == 'array' ?  $requestArray['group_by'] :  [$requestArray['group_by']]) : []; // make $groupBy an array
     $this->groupByColumn = array();
 
@@ -67,6 +70,7 @@ class BusTripController extends APIController
 
     $this->response = $this->retrieveEntry($requestArray);
     if($this->response['data'] && isset($requestArray['collect_result']) && $requestArray['collect_result'] == 'date_year'){ // collect the result yearly
+      $this->response['debug'][] = "tae";
       $this->response['data'] = collect($this->response['data'])->groupBy('date_year');
     }
     return $this->output($this->response);

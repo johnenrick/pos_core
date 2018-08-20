@@ -12,7 +12,15 @@
           </input-group>
         </div>
         <div class="col-sm-2 text-right">
-          <button @click="filterForm" type="button" class="btn btn-outline-success" ><i class="fa fa-filter" aria-hidden="true"></i> Filter</button>
+          <button ref="filterButton" @click="filterForm" v-bind:disabled="is_loading" type="button" class="btn btn-outline-success" >
+            <template v-if="is_loading">
+              <i class="fas fa-circle-notch fa-spin"></i> Filtering...
+            </template>
+            <template v-else>
+              <i class="fa fa-filter" aria-hidden="true"></i> Filter
+            </template>
+          </button>
+
         </div>
       </div>
     </form>
@@ -35,7 +43,7 @@
     data(){
       return {
         filterList: {},
-        filterInitialized: false,
+        filterInitialized: true,
         formData: {
         },
         dbNameLookUp: {},
@@ -45,7 +53,20 @@
       }
     },
     props: {
+      is_loading: Boolean,
       filter_setting: Object
+    },
+    watch: {
+      is_loading(newData){
+        console.log(newData, this.$refs)
+        if(newData){
+          console.log('loading')
+          $(this.$refs.filterButton).button('loading')
+        }else{
+          $(this.$refs.filterButton).button('reset')
+        }
+        console.log('shit', $(this.$refs.filterButton).button('loading'))
+      }
     },
     methods: {
       initializeFilter(){

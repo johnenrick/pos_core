@@ -1,6 +1,6 @@
 <template>
   <div>
-    <module :api="api" :table_setting="table_setting" :form_setting="form_setting" :no_edit="true" :no_create="true" :no_delete="true"></module>
+    <module :api="api" :table_setting="table_setting" :form_setting="form_setting" :no_edit="true" :no_create="false" :no_delete="false"></module>
   </div>
 </template>
 <script>

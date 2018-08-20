@@ -21,21 +21,10 @@
         </div>
       </div>
       <div class="col-12 mb-3">
-        <div class="card border-primary">
-          <div class="card-header bg-primary text-white font-weight-bold">ROUTE PERFORMANCE</div>
-          <div class="card-body">
-            <route-performance :is_top='false'></route-performance>
-            <!-- <route-performance :is_top='false'></route-performance> -->
-          </div>
-        </div>
+        <route-performance :is_top='false'></route-performance>
       </div>
       <div class="col-12 mb-3">
-        <div class="card border-info">
-          <div class="card-header bg-info text-white  font-weight-bold">YEARLY SALES</div>
-          <div class="card-body">
-            <yearly-sales></yearly-sales>
-          </div>
-        </div>
+        <yearly-sales></yearly-sales>
       </div>
     </div>
 </div>

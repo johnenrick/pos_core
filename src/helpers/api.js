@@ -66,7 +66,8 @@ Vue.mixin({
           }
           break
         default:
-          alert('There is an error')
+          console.log(errorCallback)
+          alert('There is an error: ' + link)
           if(errorCallback){
             errorCallback(jqXHR.responseJSON, jqXHR.status * 1)
           }

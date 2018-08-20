@@ -21,6 +21,7 @@
       <div class="card text-white bg-danger mb-3 text-center h-100" >
         <div class="card-body">
           <i class="fas fa-ban static-left" style="font-size: 48px;"></i>
+          {{voidRequests}}
           <span class="float-right text-right"><p class="h2 summary-text"><animated-number :value="voidRequests" :formatValue="shortCutNumber" :duration="1000" /></p> <small >Void Request</small></span>
         </div>
       </div>
@@ -112,7 +113,7 @@ export default{
       }
       this.APIRequest('void_bus_trip_ticket/retrieve', param, (response) => {
         if(response['data']){
-          this.voidRequests = response['data'].length * 1000
+          this.voidRequests = response['data'].length
         }else{
           this.voidRequests = 0
         }
@@ -132,7 +133,6 @@ export default{
       }
       let finalNumber = (shortNumber % 1 > 0 ? (shortNumber).toFixed(2) : shortNumber)
       return `${finalNumber}` + shortcutSymbol
-      // return finalNumber + shortcutSymbol
     }
   },
   filters: {

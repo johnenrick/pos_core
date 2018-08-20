@@ -29,8 +29,6 @@ Route::group(['middleware' => 'jwt.refresh'], function(){
   Route::post('authentication/refresh', 'AuthenticateController@refresh');
 });
 Route::post('authentication/destroy', 'AuthenticateController@deauthenticate');
-/*Queue Card*/
-Route::get("getAverageQueueTime", "QueueCardController@getAverageQueueTime");
 /*API Router*/
 require_once 'routes_fn.php';
 require_once 'api_routes.php';

@@ -53,6 +53,7 @@ class APIController extends ControllerHelper
     **/
     protected $aliased = array();
     protected $leftJoinChildTable = null;
+    protected $rightJoinChildTable = null;
     protected $groupByColumn = array();
     /**
       Array for single fileupload input.
@@ -177,7 +178,8 @@ class APIController extends ControllerHelper
         $this->aliased,
         $this->groupByColumn,
         $this->select,
-        $this->leftJoinChildTable
+        $this->leftJoinChildTable,
+        $this->rightJoinChildTable
       );
       return $retrieveModule->retrieveEntry($request);
     }

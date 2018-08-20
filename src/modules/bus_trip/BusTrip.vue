@@ -24,7 +24,23 @@
           label_colspan: 5
         },
         'driver_account_id': {
-          label_colspan: 5
+          label_colspan: 5,
+          input_type: 'select',
+          input_setting: {
+            default_text: 'Any',
+            api: 'account/retrieve',
+            api_option_text_function: (data) => {
+              console.log(data)
+              return data['account_information']['first_name'] + ' ' + data['account_information']['last_name']
+            },
+            api_parameter: {
+              with_foreign_table: ['account_information'],
+              condition: [{
+                column: 'account_type_id',
+                value: 3
+              }]
+            }
+          }
         },
         'active': {
           db_name: 'arrival_datetime',
@@ -50,7 +66,9 @@
           name: 'Route'
         },
         'driver_name': {
+          sort: null,
           value_function: (entry) => {
+            console.log(entry['driver'])
             return entry['driver'] ? entry['driver']['account_information']['first_name'] + ' ' + entry['driver']['account_information']['last_name'] : 'None'
           }
         },
