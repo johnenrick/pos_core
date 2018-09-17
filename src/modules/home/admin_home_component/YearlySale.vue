@@ -3,7 +3,7 @@
     <div class="card border-info">
       <div class="card-header bg-info text-white  font-weight-bold">YEARLY SALES <span v-if="isLoading" class="float-right"><i class="fas fa-circle-notch fa-spin"></i> Loading Data...</span></div>
       <div class="card-body">
-        <line-chart :data_set="dataSet" :chart_type="'stacked'"></line-chart>
+        <line-chart :data_set="dataSet" :chart_type="'stacked'" :x_data_type="'category'"></line-chart>
       </div>
     </div>
   </div>
@@ -38,12 +38,13 @@ export default {
         }]
       }
       this.APIRequest('bus_trip/saleSummary', param, (response) => {
+        console.log('yearly summary', response['data'])
         if(response['data']){
           let tableEntries = response['data']
           for(let x in tableEntries){
             let yearlyEntries = []
             for(let y = 0; y < tableEntries[x].length; y++){
-              yearlyEntries.push([tableEntries[x][y]['date_month'], tableEntries[x][y]['total_total_amount'] * 1])
+              yearlyEntries.push([this.monthWord(tableEntries[x][y]['date_month'] - 1, true), tableEntries[x][y]['total_total_amount'] * 1])
             }
 
             this.dataSet.push({
@@ -52,7 +53,6 @@ export default {
               data: yearlyEntries
             })
           }
-          console.log(this.dataSet)
         }
         this.isLoading = false
       })

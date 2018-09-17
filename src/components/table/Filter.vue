@@ -58,14 +58,11 @@
     },
     watch: {
       is_loading(newData){
-        console.log(newData, this.$refs)
         if(newData){
-          console.log('loading')
           $(this.$refs.filterButton).button('loading')
         }else{
           $(this.$refs.filterButton).button('reset')
         }
-        console.log('shit', $(this.$refs.filterButton).button('loading'))
       }
     },
     methods: {

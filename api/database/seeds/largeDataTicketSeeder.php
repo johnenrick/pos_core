@@ -26,8 +26,10 @@ class largeDataTicketSeeder extends Seeder
         Create large amount of transaction for transactions
       **/
       $this->initMaintenables();
+      DB::statement('SET FOREIGN_KEY_CHECKS=0;');
       DB:: table('bus_trips')->truncate();
       DB:: table('bus_trip_tickets')->truncate();
+      DB::statement('SET FOREIGN_KEY_CHECKS=1;');
       $startingYear = 2017;
       $endYear = date("Y") * 1;
       for($year = $startingYear; $year <= $endYear; $year++){

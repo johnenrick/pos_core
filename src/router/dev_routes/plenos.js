@@ -99,6 +99,16 @@ export default{
     }
   },
   {
+    path: '/bus_sales_history',
+    name: 'busSalesHistory',
+    component: resolve => require(['modules/reports/BusSalesHistory.vue'], resolve),
+    meta: {
+      tokenRequired: true,
+      module_id: 2,
+      auth: true
+    }
+  },
+  {
     path: '/bus_trip',
     name: 'BusTrip',
     component: resolve => require(['modules/bus_trip/BusTrip.vue'], resolve),

@@ -28,15 +28,15 @@
         }
       }
       let columnSetting = {
-        'bus_trip.bus.description': {
-          name: 'Bus Description'
-        },
-        'bus_trip.bus.plate_number': {
-          name: 'Plate Number'
-        },
-        'bus_trip.route.description': {
-          name: 'Route'
-        },
+        // 'bus_trip.bus.description': {
+        //   name: 'Bus Description'
+        // },
+        // 'bus_trip.bus.plate_number': {
+        //   name: 'Plate Number'
+        // },
+        // 'bus_trip.route.description': {
+        //   name: 'Route'
+        // },
         total_amount: {
           data_type: 'decimal'
         },
@@ -134,27 +134,27 @@
           //     default_text: 'Select Conductor'
           //   }
           // },
-          start_route_stop_id: {
-            input_name: 'Start Route',
-            input_type: 'select',
-            input_setting: {
-              update_on_data_change: (field, formData) => {
-                return field === 'bus_trip_id'
-              },
-              default_value: null,
-              option_function: routeStopOptionFunction
-            }
-          },
-          end_route_stop_id: {
-            input_name: 'End Route',
-            input_type: 'select',
-            input_setting: {
-              update_on_data_change: (field, formData) => {
-                return field === 'bus_trip_id'
-              },
-              option_function: routeStopOptionFunction
-            }
-          },
+          // start_route_stop_id: {
+          //   input_name: 'Start Route',
+          //   input_type: 'select',
+          //   input_setting: {
+          //     update_on_data_change: (field, formData) => {
+          //       return field === 'bus_trip_id'
+          //     },
+          //     default_value: null,
+          //     option_function: routeStopOptionFunction
+          //   }
+          // },
+          // end_route_stop_id: {
+          //   input_name: 'End Route',
+          //   input_type: 'select',
+          //   input_setting: {
+          //     update_on_data_change: (field, formData) => {
+          //       return field === 'bus_trip_id'
+          //     },
+          //     option_function: routeStopOptionFunction
+          //   }
+          // },
           passenger_quantity: {
             input_type: 'number'
           },

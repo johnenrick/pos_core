@@ -27,18 +27,18 @@ class AccountsTableSeeder extends Seeder
           array("id" => "6", "account_type_id" => 7,  "username" => "Server", "email" => "server@gmail.com", "password" => Hash::make('server'))
         ));
         // mock conductor data
-        for($id = 7; $id <= 16; $id++){
+        for($id = 7; $id <= 57; $id++){
           DB:: table('accounts') -> insert(
             array("id" => $id, "account_type_id" => 4, "username" => "Conductor$id", "email" => "conductor$id@gmail.com", "password" => Hash::make('conductor'))
           );
         }
         // mock driver data
-        for($id = 17; $id <= 23; $id++){
+        for($id = 58; $id <= 108; $id++){
           DB:: table('accounts') -> insert(
             array("id" => $id, "account_type_id" => 3, "username" => "Driver", "email" => "driver@gmail.com", "password" => Hash::make('driver'))
           );
         }
-        
+
         DB:: table('account_informations')->truncate();
         for($accountInformationID = 1; $accountInformationID <= $id; $accountInformationID++){
           DB:: table('account_informations') -> insert(array(

@@ -97,9 +97,10 @@
               </li>
               <li class="page-item ml-1">
                 <!-- <input class="form-control text-right" size="5"> -->
-                <select v-model="currentPage" class="form-control select-rtl">
+                <!-- <select v-model="currentPage" class="form-control select-rtl">
                   <option v-for="x in this.totalPage" >{{x}}</option>
-                </select>
+                </select> -->
+                <input v-bind:value="currentPage" @change="currentPageChange" type="text" class="form-control text-right" v-bind:size="(this.totalPage + '').length">
               </li>
               <li class="page-item"></li>
               <li class="page-item"><label class="col-form-label">&nbsp; of <span style="font-weight:bold">{{totalPage}}&nbsp;&nbsp;</span></label></li>
@@ -190,6 +191,9 @@
       }
     },
     methods: {
+      currentPageChange(value){
+        this.currentPage = $(value.srcElement).val()
+      },
       changeSort(rowIndex, columnIndex){
         if(this.columnSetting[rowIndex][columnIndex]['sort'] === false){
           return false
@@ -265,9 +269,7 @@
         }
         this.prevRetrieveType = retrieveType
         let apiLink = (typeof this.api_setting === 'undefined' || typeof this.api_setting.retrieve === 'undefined') ? this.api + '/retrieve' : this.api_setting.retrieve
-        console.log('loading na', this.isLoadingData)
         this.APIRequest(apiLink, requestOption, (response) => {
-          console.log('manag request')
           this.tableEntries = []
           if(response['data']){
 
@@ -282,10 +284,11 @@
           }else{
             this.totalResult = this.tableEntries.length
           }
-          this.isLoadingData = false
           if(this.isset(response, 'calculated_column')){
             this.footerData = response['calculated_column']
           }
+          this.isLoadingData = false
+
         })
       },
       updateRow(rowIndex, entryID){

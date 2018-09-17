@@ -47,7 +47,6 @@ class RefreshToken extends BaseMiddleware
      }
 
      $response = $next($request); // Token refreshed and continue.
-
      return $this->setAuthenticationHeader($response, $newtoken); // Response with new token on header Authorization.
  }
 }

@@ -22,6 +22,7 @@ export default{
     this.addDiscountColumn()
   },
   data(){
+    console.log(new Date((new Date().getTime() - 2592000000)).toString())
     let filterSetting = {
       start_date_filter: {
         db_name: 'date',

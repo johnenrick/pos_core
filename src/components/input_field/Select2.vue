@@ -1,18 +1,23 @@
 <template>
   <div>
     <div v-bind:class="form_status === 'view' ? 'hide' :''">
-      <select ref="select" style="width:100%"
-
+      <vue-select ref="select" style="width:100%"
+        :onSearch="onSearch"
+        :options='options'
         v-bind:name="db_name"
       >
-      </select>
+    </vue-select>
     </div>
     <span v-if="form_status === 'view'" class="form-control">hey</span>
   </div>
 </template>
 <script>
+  import select2 from 'vue-select'
   export default{
     name: '',
+    components: {
+      'vue-select': select2
+    },
     create(){
 
     },
@@ -22,9 +27,11 @@
     data(){
       return {
         value: null,
-        options: {
-          results: []
-        }
+        options: [],
+        apiUrl: null,
+        apiParameter: {},
+        apiSearchColumn: null,
+        apiSearchClause: '='
       }
     },
     props: {
@@ -37,41 +44,53 @@
     },
     methods: {
       initInput(){
-        let vm = this
-        // let placeholder = (this.placeholder) ? this.placeholder : 'Select ' +
-        $(this.$refs.select).select2({
-          minimumInputLength: 3,
-          placeholder: 'Select',
-          ajax: {
-            method: 'POST',
-            url: this.input_setting['url'],
-            // dataType: 'json',
-            data: (query) => {
-              return {
-                condition: [
-                  {
-                    column: this.input_setting['query_column'],
-                    clause: 'like',
-                    value: '%' + query.term + '%'
-                  }
-                ]
-              }
-            },
-            processResults: (response) => {
-              let results = []
-              if(response['data']){
-                results = this.input_setting['query_callback'](response['data'])
-              }
-              return {
-                results: results
-              }
+        if(typeof this.input_setting === 'undefined'){
+          return false
+        }
+        this.apiUrl = this.setDefaultValue(this.input_setting['api_url'], null)
+        this.apiParameter = this.setDefaultValue(this.input_setting['api_parameter'], { condition: [] })
+        if(this.apiParameter && typeof this.apiParameter['condition'] === 'undefined'){
+          this.apiParameter['condition'] = {}
+        }
+        this.apiSearchColumn = this.setDefaultValue(this.input_setting['api_search_column'], null)
+        this.apiSearchClause = this.setDefaultValue(this.input_setting['api_search_clause'], 'like')
+
+      },
+      onSearch(search, loading){
+
+        if(this.apiUrl){
+          loading(true)
+          console.log(this.apiParameter)
+          let apiParameter = this.cloneObject(this.apiParameter)
+          if(this.apiSearchColumn){
+            if(this.apiSearchClause === 'like'){
+              search = '%' + search + '%'
             }
+            apiParameter.condition.push({
+              column: this.apiSearchColumn,
+              clause: this.apiSearchClause,
+              value: search
+            })
           }
-        })
-        .on('change', function(event){
-          vm.value = this.value
-          vm.$emit('change', this.field_name, this.value)
-        })
+
+          this.APIRequest(this.apiUrl, apiParameter, (response) => {
+            if(response['data']){
+              let options = []
+              let columnKey = this.input_setting['api_option_text_column'] ? this.input_setting['api_option_text_column'] : 'description'
+              for(let x = 0; x < response['data'].length; x++){
+                this.options.push({
+                  id: response['data'][x]['id'],
+                  label: this.input_setting['api_option_text_function'] ? this.input_setting['api_option_text_function'](response['data'][x]) : response['data'][x][columnKey]
+                })
+              }
+              // this.setOption(options)
+            }
+            loading(false)
+          })
+        }else{
+
+        }
+
       }
     }
 

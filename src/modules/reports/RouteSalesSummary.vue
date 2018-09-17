@@ -23,7 +23,7 @@
     },
     data(){
       let filterSetting = {
-        description: {
+        'route.description': {
           db_name: 'route.description',
           col: 4,
           label_colspan: 5,
@@ -31,17 +31,17 @@
         },
         start_date_filter: {
           db_name: 'bus_trip_ticket.created_at',
-          input_type: 'date',
+          input_type: 'datetime',
           clause: '>=',
           label: 'Start Date',
-          default_value: new Date((new Date().getTime() - 2592000000)).toString(),
+          default_value: new Date(this.setDateTime((new Date().getTime() - 2592000000), 0, 0, 0)).toString(),
           input_setting: {
             with_time: true
           }
         },
         end_date_filter: {
           db_name: 'bus_trip_ticket.created_at',
-          input_type: 'date',
+          input_type: 'datetime',
           clause: '<=',
           label: 'End Date',
           input_setting: {

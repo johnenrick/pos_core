@@ -52,19 +52,10 @@
     </div>
     <div v-else>
       Checking Authentication...
-      <button
-          @click="refreshToken"
-          v-bind:disabled="isLoading"
-          type="button"
-          class="btn btn-outline-primary"
-          >
-          <i class="fas fa-refresh"></i>
-        {{isLoading ? 'Signing in...' : 'Refresh Token'}}
-      </button>
 
 
     </div>
-    <div class="form-group row" v-if="false">
+    <div class="form-group row" >
       <label for="inputEmail3" class="col-sm-2 col-form-label font-weight-bold">Token Birth:</label>
       <div class="col-sm-10">
         <span class="form-control-plaintext">{{formatDBDate(tokenBirth, 'MM/dd/yyy H:i:s')}}</span>
@@ -81,11 +72,21 @@
       <div class="col-sm-10">
         <span class="form-control-plaintext">{{this.hasAuth}}</span>
       </div>
+      <div class="col-sm-10">
+        <button
+            @click="refreshToken"
+            v-bind:disabled="isLoading"
+            type="button"
+            class="btn btn-outline-primary"
+            >
+            <i class="fas fa-refresh"></i>
+          {{isLoading ? 'Signing in...' : 'Refresh Token'}}
+        </button>
+      </div>
     </div>
   </div>
 </template>
 <script>
-console.log(require('../../assets/img/banner.jpg'))
 export default {
   name: 'LogIn',
   mounted(){
@@ -146,8 +147,14 @@ export default {
       This code is for debugging the jwt auth section
     **/
     refreshToken(){
-      this.APIRequest('authentication/refresh', {}, (response) => {
-        console.log(response)
+      this.$auth.refresh({
+        params: {},
+        success: function(){
+
+        },
+        error: function(){
+
+        }
       })
     },
     checkTokenAge(){

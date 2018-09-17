@@ -2,7 +2,7 @@
   <div>
     <module ref="moduleComponent" v-on:table_filter="tableFilter" :module_name="'Bus Collection Summary'" :api="api" :api_setting="api_setting" :table_setting="table_setting" :form_setting="form_setting" :no_create="true">
       <div slot="beforeTable">
-        <horizontal-bar-chart :name="'Bus Collection Summary'" :data_set="dataSet"></horizontal-bar-chart>
+        <line-chart :data_set="dataSet" :chart_type="'stacked'"></line-chart>
       </div>
     </module>
   </div>

@@ -78,6 +78,21 @@
 
           >
         </date-picker>
+        <datetime-picker
+          ref="datetimePicker"
+          v-else-if="inputType === 'datetime'"
+          :input_setting="input_setting"
+          :db_name="dbName"
+          :input_name="inputName"
+          :field_name="field_name"
+          :form_data="form_data"
+          :form_status="form_status"
+          :default_value="default_value"
+          v-on:change="valueChanged"
+          :feedback_status_class="feedbackStatusClass"
+
+          >
+        </datetime-picker>
         <single-image
           ref="singleImage"
           v-else-if="inputType === 'single_image'"
@@ -213,6 +228,7 @@
       'single-image': require('./SingleImage.vue'),
       'table-input': require('./TableInput.vue'),
       'date-picker': require('./DatePicker.vue'),
+      'datetime-picker': require('./DatetimePicker.vue'),
       'input-text': require('./InputText.vue'),
       'input-number': require('./InputNumber.vue')
     },
@@ -322,6 +338,7 @@
         this.refNotifyChildDataChange(this.$refs.selectInput, field, name)
         this.refNotifyChildDataChange(this.$refs.select2, field, name)
         this.refNotifyChildDataChange(this.$refs.datePicker, field, name)
+        this.refNotifyChildDataChange(this.$refs.datetimePicker, field, name)
         this.refNotifyChildDataChange(this.$refs.singleImage, field, name)
         this.refNotifyChildDataChange(this.$refs.textareaInput, field, name)
         this.refNotifyChildDataChange(this.$refs.checkBox, field, name)

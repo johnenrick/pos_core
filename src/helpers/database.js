@@ -30,7 +30,7 @@ Vue.mixin({
           return numberHelper.padNumber(dateObject.getMonth() + 1, 2) + '/' + numberHelper.padNumber(dateObject.getDate(), 2) + '/' + dateObject.getFullYear() + ' ' + numberHelper.padNumber(dateObject.getHours()) + ':' + numberHelper.padNumber(dateObject.getMinutes()) + ':' + numberHelper.padNumber(dateObject.getSeconds())
       }
     },
-    DBDateFormat: (date, currentFormat) => {
+    DBDateFormat: (date, currentFormat) => { // convert Display date to DB Date
       if(date === null){
         return null
       }
@@ -43,7 +43,7 @@ Vue.mixin({
     }
   },
   filters: {
-    getFormDataFilter(formData, dbName, defaultValue){
+    getFormDataFilter(formData, dbName, defaultValue){ // get the value in a formData
       if(dbName === null){
         return null
       }
@@ -52,6 +52,7 @@ Vue.mixin({
         return formData[dbName] ? formData[dbName] : defaultValue
       }else{ // nested form data
         let currentForm = formData
+        console.log(formData, explodedDBName)
         for(let dbNameIndex = 0; dbNameIndex < explodedDBName.length; dbNameIndex++){
           if(typeof currentForm[explodedDBName[dbNameIndex]] === 'undefined'){
             return defaultValue

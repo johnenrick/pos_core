@@ -41,6 +41,7 @@ class BusTripController extends APIController
       $this->leftJoinChildTable['routes'] = '';
       $this->select = ['route_id'];
       $this->aliased['route_description'] = 'routes.description';
+      // $this->aliased['date'] = 'CAST(bus_trips.created_at AS DATE)';
     }
     if(in_array('bus', $groupBy)){ // group the sales by routes
       $this->groupByColumn[] = 'bus_id';
@@ -69,9 +70,12 @@ class BusTripController extends APIController
     // $this->select = array('route_id', 'bus_trip_tickets.total_amount', 'bus_trip_tickets.created_at');
 
     $this->response = $this->retrieveEntry($requestArray);
-    if($this->response['data'] && isset($requestArray['collect_result']) && $requestArray['collect_result'] == 'date_year'){ // collect the result yearly
-      $this->response['debug'][] = "tae";
-      $this->response['data'] = collect($this->response['data'])->groupBy('date_year');
+    if($this->response['data'] && isset($requestArray['collect_result']) ){ // collect the result yearly
+      if($requestArray['collect_result'] == 'date_year'){
+        $this->response['data'] = collect($this->response['data'])->groupBy('date_year');
+      }else if($requestArray['collect_result'] == 'route_id'){
+        $this->response['data'] = collect($this->response['data'])->groupBy('route_id');
+      }
     }
     return $this->output($this->response);
   }

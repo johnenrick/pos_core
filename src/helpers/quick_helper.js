@@ -26,7 +26,7 @@ Vue.mixin({
     },
     monthWord(monthIndex, isThreeLetter){
       let month = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
-      return isThreeLetter ? (month[monthIndex]).substring(0, 2) : month[monthIndex]
+      return isThreeLetter ? (month[monthIndex]).substring(0, 3) : month[monthIndex]
     },
     formatTime(datetimeObject){
       var hours = datetimeObject.getHours()
@@ -37,6 +37,14 @@ Vue.mixin({
       minutes = minutes < 10 ? '0' + minutes : minutes
       var strTime = hours + ':' + minutes + ' ' + ampm
       return strTime
+    },
+    setDateTime(date, hour, minute, second){ // set the time of the javascript Date object
+
+      var dateObject = new Date(date)
+      dateObject.setHours(hour)
+      dateObject.setMinutes(minute)
+      dateObject.setSeconds(second)
+      return dateObject
     },
     cloneObject(obj){
       var copy
@@ -64,6 +72,9 @@ Vue.mixin({
         return copy
       }
       throw new Error('Unable to copy obj! Its type is not supported.')
+    },
+    setDefaultValue(defaultValue, ifNoDefaultValue){
+      return typeof defaultValue === 'undefined' ? ifNoDefaultValue : defaultValue
     },
     moveArray(array, pos1, pos2) {
       let i, tmp

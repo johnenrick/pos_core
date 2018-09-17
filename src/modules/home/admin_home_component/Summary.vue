@@ -21,7 +21,6 @@
       <div class="card text-white bg-danger mb-3 text-center h-100" >
         <div class="card-body">
           <i class="fas fa-ban static-left" style="font-size: 48px;"></i>
-          {{voidRequests}}
           <span class="float-right text-right"><p class="h2 summary-text"><animated-number :value="voidRequests" :formatValue="shortCutNumber" :duration="1000" /></p> <small >Void Request</small></span>
         </div>
       </div>
@@ -44,7 +43,7 @@ export default{
   },
   mounted(){
     this.getSummary()
-    setInterval(this.getSummary, 60000)
+    setInterval(this.getSummary, 606000000)
   },
   data(){
     let currentDate = new Date()
@@ -67,26 +66,26 @@ export default{
     },
     getBusTripTicket(){
       let param = {
+        // group_by: ['bus']
         condition: [{
           column: 'created_at',
           clause: '>=',
           value: this.DBDateFormat(this.currentDate)
-        }],
-        calculated_column: {
-          total_passenger: 'SUM(passenger_quantity)'
-        }
+        }]
 
       }
       this.collectedAmount = 0
       this.passengerCount = 0
-      this.APIRequest('bus_trip/busCollectionSummary', param, (response) => {
+      this.APIRequest('bus_trip/saleSummary', param, (response) => {
+        console.log(response)
         if(response['data']){
           for(let x in response['data']){
-            this.passengerCount += (response['data'][x]['total_amount'] + response['data'][x]['total_payment']) * 1
+            this.collectedAmount += response['data'][x]['total_total_amount']
             this.passengerCount += response['data'][x]['total_passenger_quantity'] * 1
           }
         }else{
         }
+        console.log(this.collectedAmount, this.passengerCount)
       })
     },
     getActiveBusTrips(){

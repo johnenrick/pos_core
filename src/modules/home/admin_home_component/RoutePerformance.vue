@@ -29,22 +29,24 @@ export default {
       this.isLoading = true
       while(this.dataSet.length > 0) { this.dataSet.pop() }
       let param = {
+        group_by: ['route', 'date'],
+        collect_result: 'route_id',
         condition: [{
-          column: 'date',
+          column: 'bus_trips.created_at',
           clause: '>=',
           value: this.DBDateFormat(new Date((new Date()).getFullYear(), 0, 1, 0, 0, 0))
         }]
       }
-      console.log(param)
-      this.APIRequest('bus_trip/routeDailySales', param, (response) => {
+      this.APIRequest('bus_trip/saleSummary', param, (response) => {
+        console.log('route_performance', response['data'])
         if(response['data']){
           let tableEntries = response['data']
           for(let x in tableEntries){
             let routeEntries = []
             for(let y = 0; y < tableEntries[x].length; y++){
-              routeEntries.push([this.formatDBDate(tableEntries[x][y]['date'], 'yyyy/mm/dd'), tableEntries[x][y]['total_payment']])
+              routeEntries.push([this.formatDBDate(tableEntries[x][y]['date'], 'yyyy/mm/dd'), tableEntries[x][y]['total_total_amount']])
             }
-            let routeDescription = tableEntries[x][0]['description'] ? tableEntries[x][0]['description'] : 'Others'
+            let routeDescription = tableEntries[x][0]['route_description'] ? tableEntries[x][0]['route_description'] : 'Others'
             this.dataSet.push({
               name: routeDescription,
               stack: routeDescription,

@@ -40,7 +40,7 @@ Vue.use(require('@websanova/vue-auth'), {
   refreshData: {
     url: 'authentication/refresh',
     method: 'POST',
-    interval: 30
+    interval: 0.25
   },
   fetchData: {
     url: 'authentication/user',

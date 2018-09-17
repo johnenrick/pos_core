@@ -22,6 +22,10 @@ export default {
       type: String,
       default: 'normal' // normal, multiple
     },
+    x_data_type: {
+      type: String,
+      default: 'time'
+    },
     name: String
   },
   data: function () {
@@ -52,7 +56,7 @@ export default {
             fontStyle: 'bold'
           },
           nameGap: 40,
-          type: 'time'
+          type: this.x_data_type
         },
         yAxis: {
           name: this.name,
