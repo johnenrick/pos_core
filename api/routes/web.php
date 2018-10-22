@@ -14,6 +14,9 @@
 Route::get('/', function () {
     return "Ola Mundo! You are not allowed here";//view('welcome');
 });
+Route::get('test', function () {
+    return "Ola Mundo! You are not allowed here";//view('welcome');
+});
 /*
   Accessing uploaded files
 */

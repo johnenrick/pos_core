@@ -38,6 +38,12 @@ class AccountsTableSeeder extends Seeder
             array("id" => $id, "account_type_id" => 3, "username" => "Driver", "email" => "driver@gmail.com", "password" => Hash::make('driver'))
           );
         }
+        // mock inspector data
+        for($id = 109; $id <= 130; $id++){
+          DB:: table('accounts') -> insert(
+            array("id" => $id, "account_type_id" => 8, "username" => "Inspector".$faker->firstName, "email" => $faker->email, "password" => Hash::make('inspector'))
+          );
+        }
 
         DB:: table('account_informations')->truncate();
         for($accountInformationID = 1; $accountInformationID <= $id; $accountInformationID++){

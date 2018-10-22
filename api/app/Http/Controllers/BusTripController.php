@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\BusTrip as DBItem;
 use App\BusTripTicket as DBBusTripTicket;
 use App\Discount as DiscountDB;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 
 class BusTripController extends APIController
 {
@@ -110,5 +112,69 @@ class BusTripController extends APIController
     $this->select = array('bus_id');
     // $this->select = array('route_id', 'bus_trip_tickets.total_amount', 'bus_trip_tickets.created_at');
     return $this->output($this->retrieveEntry($requestArray));
+  }
+
+  function createBusTripWithTicket(Request $request){
+    $data = $request->all();
+    $validationRules = [
+      "bus_trip_code" => "required",
+      "bus_id" => "required",
+      "route_id" => "required",
+      "driver_account_id" => "required",
+      "conductor_account_id" => "required",
+      "arrival_datetime" => "required",
+      "remarks" => "required",
+      "created_at" => "required",
+      "bus_trip_tickets.*.passenger_count" => "required",
+      "bus_trip_tickets.*.start_route_stop_id" => "required",
+      "bus_trip_tickets.*.end_route_stop_id" => "required",
+      "bus_trip_tickets.*.total_distance" => "required",
+      "bus_trip_tickets.*.total_amount" => "required",
+      "bus_trip_tickets.*.cash_tendered" => "required",
+      "bus_trip_tickets.*.payment_adjustment" => "required",
+      "bus_trip_tickets.*.remarks" => "required",
+      "bus_trip_tickets.*.created_at" => "required"
+    ];
+    $validator = Validation::make($data, $validationRules);
+    if($validator->fails()){
+      $this->response["error"][] = array(
+        'status' => 100,
+        'message' => $validator->errors()->toArray()
+      );
+    }else{
+      $this->response["data"] = [
+        "id" => false,
+        "bus_trip_tickets" => []
+      ]
+      $this->model->bus_id = $data["bus_id"];
+      $this->model->route_id = $data["route_id"];
+      $this->model->driver_account_id = $data["driver_account_id"];
+      $this->model->conductor_account_id = $data["conductor_account_id"];
+      $this->model->arrival_datetime = $data["arrival_datetime"];
+      $this->model->remarks = $data["remarks"];
+      $this->model->created_at = $data["created_at"];
+      if($model->save()){
+        $this->response["data"]["id"] = $model->id;
+
+      }
+    }
+    return $this->output();
+  }
+  public function createBusTripTicket($busTripID, $conductorID, $ticketData){
+    $model = new DBBusTripTicket();
+    $this->model->passenger_count = $data["passenger_count"];
+    $this->model->start_route_stop_id = $data["start_route_stop_id"];
+    $this->model->end_route_stop_id = $data["end_route_stop_id"];
+    $this->model->total_distance = $data["total_distance"];
+    $this->model->total_amount = $data["total_amount"];
+    $this->model->cash_tendered = $data["cash_tendered"];
+    $this->model->payment_adjustment = $data["payment_adjustment"];
+    $this->model->remarks = $data["remarks"];
+    $this->model->created_at = $data["created_at"];
+    if($model->save()){
+      return $model->id;
+    }else{
+      return false;
+    }
   }
 }

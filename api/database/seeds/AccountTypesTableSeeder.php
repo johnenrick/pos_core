@@ -19,7 +19,8 @@ class AccountTypesTableSeeder extends Seeder
           array("id" => "4","description" => "Conductor"),
           array("id" => "5","description" => "Cashier"),
           array("id" => "6","description" => "Cook"),
-          array("id" => "7","description" => "Server")
+          array("id" => "7","description" => "Server"),
+          array("id" => "8","description" => "Inspector")
         ));
     }
 }

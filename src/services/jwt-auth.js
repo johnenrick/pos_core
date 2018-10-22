@@ -12,16 +12,22 @@ Vue.router = Router
 axios.interceptors.response.use((response) => {
   return response
 }, function(error){
+  console.log(error)
   // Do something with response error
-  switch(error.response.status){
-    case 401:
-      SystemFrame.logOut()
-      break
-    case 400:
-      SystemFrame.logOut()
-      break
+  if(typeof error.response !== 'undefined'){
+    switch(error.response.status){
+      case 401:
+        SystemFrame.logOut()
+        break
+      case 400:
+        SystemFrame.logOut()
+        break
+    }
+
+    return Promise.reject(error.response)
+  }else{
+    return Promise.reject(error)
   }
-  return Promise.reject(error.response)
 })
 
 Vue.use(VueAxios, axios)

@@ -1,5 +1,4 @@
 <?php
-
 function api_resource($apiReource){
   $apiResources = (is_array($apiReource))? $apiReource : [$apiReource];
   foreach($apiResources as $apiResourceValue){
