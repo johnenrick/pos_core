@@ -4,7 +4,7 @@
       {{value*1}}
     </div>
     <div v-else-if="data_type === 'decimal'" class="number">
-      {{formatNumber((value*1).toFixed(2))}}
+      {{typeof value !== "undefined" ? formatNumber((value * 1).toFixed(2)) : '0.00'}}
     </div>
     <div v-else-if="data_type === 'html'" v-html="value">
     </div>

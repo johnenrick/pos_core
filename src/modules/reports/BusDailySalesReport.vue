@@ -22,7 +22,6 @@ export default{
     this.addDiscountColumn()
   },
   data(){
-    console.log(new Date((new Date().getTime() - 2592000000)).toString())
     let filterSetting = {
       start_date_filter: {
         db_name: 'date',
@@ -47,28 +46,34 @@ export default{
     let columnSetting = {
       date: {
         footer: {
-          value: 'TOTAL'
+          label: 'TOTAL'
         }
       },
       total_total_amount: {
         name: 'Total Amount',
         data_type: 'decimal',
         footer: {
-          total_total_total_amount: {}
+          formula: {
+            total_total_total_amount: 'sum(total_amount)'
+          }
         }
       },
       total_payment_adjustment: {
         name: 'Payment Adjustment',
         data_type: 'decimal',
         footer: {
-          total_total_payment_adjustment: {}
+          formula: {
+            total_total_payment_adjustment: 'sum(payment_adjustment)'
+          }
         }
       },
       total_discount_amount: {
         name: 'Discount Amount',
         data_type: 'decimal',
         footer: {
-          total_total_discount_amount: {}
+          formula: {
+            total_total_discount_amount: 'sum(discount_amount)'
+          }
         }
       }
     }
@@ -76,9 +81,6 @@ export default{
       filterSetting: filterSetting,
       columnSetting: columnSetting,
       retrieveParameter: {
-        calculated_column: {
-          total_total_total_amount: 'sum(total_amount)'
-        },
         group_by: 'date'
       },
       entryPerPage: null,
@@ -113,10 +115,17 @@ export default{
         if(response['data']){
           for(let x = 0; x < response['data'].length; x++){
             // console.log('total_' + this.StringPhraseToUnderscoreCase(response['data'][x]['description']) + '_discount_amount')
-            Vue.set(this.table_setting.columnSetting, 'total_' + this.StringPhraseToUnderscoreCase(response['data'][x]['description']) + '_discount_amount', {
+            var columnn = {
               name: response['data'][x]['description'],
-              data_type: 'decimal'
-            })
+              data_type: 'decimal',
+              footer: {
+                formula: {
+                }
+              }
+            }
+            // columnn['footer']['formula']['total_' + this.StringPhraseToUnderscoreCase(response['data'][x]['description']) + '_discount'] = 'sum(total_' + this.StringPhraseToUnderscoreCase(response['data'][x]['description']) + '_discount_amount' + ')'
+            columnn['footer']['formula']['total_' + this.StringPhraseToUnderscoreCase(response['data'][x]['description']) + '_discount'] = 'sum(CASE WHEN discount_id = ' + response['data'][x]['id'] + ' THEN discount_amount ELSE 0 END)'
+            Vue.set(this.table_setting.columnSetting, 'total_' + this.StringPhraseToUnderscoreCase(response['data'][x]['description']) + '_discount_amount', columnn)
           }
           this.$refs.moduleComponent.redrawTable()
         }

@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Account extends APIModel
 {
-    // protected $hidden = array('password');
+    protected $hidden = array('password');
     protected $fillable = ['email', 'username', 'password','company_id'];
 
     public function account_information(){

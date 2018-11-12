@@ -13,10 +13,10 @@ return [
     */
 
     'supportsCredentials' => false,
-    'allowedOrigins' => [],
+    'allowedOrigins' => ['*'],
     'allowedOriginsPatterns' => [],
     'allowedHeaders' => ['Origin', 'X-Requested-With', 'Content-Type', 'Accept', 'Authorization', 'authorization', 'Token', 'token'],
-    'allowedMethods' => ['POST', 'GET', 'OPTIONS', 'DELETE', 'PUT'],
+    'allowedMethods' => ['POST', 'GET', 'OPTIONS', 'options', 'DELETE', 'PUT'],
     'exposedHeaders' => ['Token', 'token', 'Authorization', 'authorization'],
     'maxAge' => 0,
 

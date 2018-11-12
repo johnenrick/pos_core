@@ -200,10 +200,36 @@
             name: 'Void Bus Trip Ticket'
           }]
         }, {
+          to: 'inspector_report',
+          name: 'Inspector\'s Report',
+          icon: 'fas fa-user-secret'
+        }, {
           type: 'multi_level',
           name: 'Reports',
           icon: 'fa fa-file-alt',
           sub_menu: [{
+            type: 'divider',
+            name: 'Summary Reports'
+          }, {
+            to: 'bus_daily_sales_report',
+            name: 'Daily Sales Report',
+            icon: 'fas fa-chart-line'
+          }, {
+            to: 'route_sales_summary',
+            icon: 'fas fa-chart-bar'
+          }, {
+            to: 'bus_collection_summary',
+            icon: 'fas fa-chart-line'
+          }, {
+            name: 'Bus Fuel Consumption',
+            to: 'bus_trip_fuel_consumption',
+            icon: 'fas fa-gas-pump'
+          }]
+        // }, {
+          // type: 'multi_level',
+          // name: 'Reports',
+          // icon: 'fa fa-file-alt',
+          // sub_menu: [{
           //   type: 'divider',
           //   name: 'Basic Report'
           // }, {
@@ -215,22 +241,12 @@
           //   name: 'Z - Reading',
           //   icon: 'fas fa-clipboard-list'
           // }, {
-            type: 'divider',
-            name: 'Other Reports'
-          }, {
+          //   type: 'divider',
+          //   name: 'Other Reports'
+          // }, {
           //   to: 'daily_sales_report',
           //   icon: 'fas fa-chart-line'
-          // }, {
-            to: 'bus_daily_sales_report',
-            name: 'Daily Sales Report',
-            icon: 'fas fa-chart-line'
-          }, {
-            to: 'route_sales_summary',
-            icon: 'fas fa-chart-bar'
-          }, {
-            to: 'bus_collection_summary',
-            icon: 'fas fa-chart-line'
-          }]
+          // }]
         }]
       }
     },

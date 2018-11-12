@@ -14,18 +14,14 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         // $this->call(ModulesTableSeeder::class);
-
-        $this->call(AccountTypesTableSeeder::class);
-        $this->call(ModulesTableSeeder::class);
-        $this->call(AccountTypeModulesTableSeeder::class);
-        $this->call(AccountsTableSeeder::class);
-        $this->call(DiscountSeeder::class);
-        // $this->call(CompanyBranchesTableSeeder::class);
-        // $this->call(CompanyBranchEmployeesTableSeeder::class);
-        // $this->call(QueueFormsTableSeeder::class);
-        //$this->call(QueueFormFieldsTableSeeder::class);
-        // $this->call(UserTypesSeeder::class);
         Model::unguard();
+        $this->call(AccountTypesTableSeeder::class);
+        // $this->call(ModulesTableSeeder::class);
+        // $this->call(AccountTypeModulesTableSeeder::class);
+        // $this->call(AccountsTableSeeder::class);
+        $this->call(DiscountSeeder::class);
+        $this->call(BusTripExpenseItemSeeder::class);
+        $this->call(VoidRequestReasonSeeder::class);
         Model::reguard();
 
     }

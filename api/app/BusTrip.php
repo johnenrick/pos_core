@@ -12,6 +12,9 @@ class BusTrip extends APIModel
     public function route(){
       return $this->belongsTo('App\Route')->with('route_stops');
     }
+    public function route_only(){
+      return $this->belongsTo('App\Route', 'route_id');
+    }
     public function driver(){
       return $this->belongsTo('App\Account', 'driver_account_id')->with('account_information');
     }

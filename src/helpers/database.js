@@ -52,7 +52,6 @@ Vue.mixin({
         return formData[dbName] ? formData[dbName] : defaultValue
       }else{ // nested form data
         let currentForm = formData
-        console.log(formData, explodedDBName)
         for(let dbNameIndex = 0; dbNameIndex < explodedDBName.length; dbNameIndex++){
           if(typeof currentForm[explodedDBName[dbNameIndex]] === 'undefined'){
             return defaultValue

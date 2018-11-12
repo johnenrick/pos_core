@@ -23,7 +23,12 @@ $apiResources = [
   'route_stop',
   'bus_trip',
   'bus_trip_ticket',
-  'void_bus_trip_ticket'
+  'void_bus_trip_ticket',
+  'bus_trip_expense',
+  'void_request_reason',
+  'bus_trip_expense_item',
+  'bus_trip_fuel_consumption',
+  'inspector_report'
 ];
 api_resource($apiResources);
 $customAPIResources = [
@@ -35,6 +40,7 @@ $customAPIResources = [
   'bus_trip/routeSalesSummary',
   'bus_trip/busCollectionSummary',
   'bus_trip/routeDailySales',
+  'bus_trip/busTripSync'
 ];
 custom_api($customAPIResources)
 ?>

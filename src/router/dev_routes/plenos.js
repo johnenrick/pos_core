@@ -29,6 +29,16 @@ export default{
     }
   },
   {
+    path: '/inspector_report',
+    name: 'inspectorReport',
+    component: resolve => require(['modules/inspector/InspectorReport.vue'], resolve),
+    meta: {
+      tokenRequired: true,
+      module_id: 2,
+      auth: true
+    }
+  },
+  {
     path: '/user_management',
     name: 'userManagement',
     component: resolve => require(['modules/user/UserManagement.vue'], resolve),
@@ -92,6 +102,16 @@ export default{
     path: '/bus_collection_summary',
     name: 'busCollectionSummary',
     component: resolve => require(['modules/reports/BusCollectionSummary.vue'], resolve),
+    meta: {
+      tokenRequired: true,
+      module_id: 2,
+      auth: true
+    }
+  },
+  {
+    path: '/bus_trip_fuel_consumption',
+    name: 'busTripFuelConsumption',
+    component: resolve => require(['modules/reports/BusTripFuelConsumption.vue'], resolve),
     meta: {
       tokenRequired: true,
       module_id: 2,

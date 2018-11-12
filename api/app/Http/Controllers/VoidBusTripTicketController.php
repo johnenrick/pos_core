@@ -10,11 +10,13 @@ class VoidBusTripTicketController extends APIController
 {
   function __construct(){
     $this->model = new DBItem();
-    $this->notRequired = array('account_id', 'is_approved');
+    $this->notRequired = array('account_id', 'is_approved', "batch_code");
     $this->defaultValue = array(
       'is_approved' => 0
     );
-    
+    $this->foreignTable = array(
+      "void_request_reason"
+    );
     // if($this->getUserAccountType() != 1){
       $this->ownerColumn = 'account_id';
     // }

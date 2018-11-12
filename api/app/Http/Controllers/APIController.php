@@ -121,6 +121,7 @@ class APIController extends ControllerHelper
       $this->rawRequest = $request;
       return $this->createEntry($request->all());
     }
+    
     public function retrieve(Request $request){
       $this->rawRequest = $request;
       $requestArray = $request->all();
@@ -208,5 +209,22 @@ class APIController extends ControllerHelper
       $deleteEntry = new DeleteEntry($this->model, $this->response);
       return $deleteEntry->deleteEntry($request);
     }
-
+    public function batchCreateEntry($request){
+      $this->APIControllerConstructor();
+      if($this->ownerColumn){
+        $request[$this->ownerColumn] = $this->getUserID();
+      }
+      $createModule = new CreateEntry(
+        $this->model,
+        $this->response,
+        $this->validation,
+        $this->tableColumns,
+        $this->notRequired,
+        $this->editableForeignTable,
+        $this->singleImageFileUpload,
+        $this->rawRequest,
+        $this->defaultValue
+      );
+      return $createModule->createEntry($this->replaceSessionData($request));
+    }
 }
