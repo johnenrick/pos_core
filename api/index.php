@@ -1,8 +1,8 @@
 <?php
 // header('Access-Control-Allow-Origin: *');
-header('Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept, Authorization, authorization, Token, token');
-header('Access-Control-Expose-Headers: Token, token, Authorization, authorization');
-header('Access-Control-Allow-Methods: HEAD, GET, POST, PUT, DELETE, PATCH');
+// header('Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept, Authorization, authorization, Token, token');
+// header('Access-Control-Expose-Headers: Token, token, Authorization, authorization');
+// header('Access-Control-Allow-Methods: HEAD, GET, POST, PUT, DELETE, PATCH');
 
 /**
  * Laravel - A PHP Framework For Web Artisans

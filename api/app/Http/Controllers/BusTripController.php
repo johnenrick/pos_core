@@ -126,7 +126,7 @@ class BusTripController extends APIController
       "driver_account_id" => "required",
       "conductor_account_id" => "required",
       "arrival_datetime" => "required",
-      "remarks" => "required",
+      // "remarks" => "required",
       "created_at" => "required|date_format:Y-m-d H:i:s",
       "fuel_consumption" => "required|array",
       "fuel_consumption.start_reading" => "required",
@@ -149,7 +149,7 @@ class BusTripController extends APIController
       "bus_trip_tickets.*.total_amount" => "required",
       "bus_trip_tickets.*.cash_tendered" => "required",
       "bus_trip_tickets.*.payment_adjustment" => "required",
-      "bus_trip_tickets.*.remarks" => "required",
+      // "bus_trip_tickets.*.remarks" => "required",
       "bus_trip_tickets.*.created_at" => "required"
     ];
     $validator = Validator::make($data, $validationRules);
@@ -169,7 +169,7 @@ class BusTripController extends APIController
       $this->model->driver_account_id = $data["driver_account_id"];
       $this->model->conductor_account_id = $data["conductor_account_id"];
       $this->model->arrival_datetime = $data["arrival_datetime"];
-      $this->model->remarks = $data["remarks"];
+      $this->model->remarks = isset($data["remarks"]) ? $data["remarks"] : "";
       $this->model->created_at = $data["created_at"];
       if($this->model->save()){
         $this->response["data"]["id"] = $this->model->id;
