@@ -13,6 +13,7 @@ class BusMockData extends Seeder
     public function run()
     {
       $faker = Faker::create();
+      DB::statement('SET FOREIGN_KEY_CHECKS=0;');
       DB:: table('buses')->truncate();
       for($id = 1; $id <= 20; $id++){
         DB:: table('buses') -> insert(
@@ -27,5 +28,7 @@ class BusMockData extends Seeder
           )
         );
       }
+      DB::statement('SET FOREIGN_KEY_CHECKS=1;');
+
     }
 }

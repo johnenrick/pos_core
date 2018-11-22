@@ -24,7 +24,7 @@ class BusTripTicket extends Migration
         $table->float('total_amount')->comment('amount + adjustment - discount');
         $table->double('payment_adjustment')->default(0);
         $table->double('cash_tendered')->default(0);
-        $table->unsignedInteger('discount_id')->nullable();
+        $table->unsignedInteger('discount_id')->default(NULL)->nullable();
         $table->unsignedInteger('discount_amount')->nullable();
         $table->string('discount_image_proof')->nullable();
         $table->tinyInteger('status')->default(1)->comment('1 - success, 2 - voided');

@@ -143,6 +143,7 @@ class BusTripController extends APIController
       "bus_trip_expenses.*.created_at" => "required|date_format:Y-m-d H:i:s",
       "bus_trip_tickets" => "required|array",
       "bus_trip_tickets.*.passenger_quantity" => "required",
+      "bus_trip_tickets.*.code" => "required",
       "bus_trip_tickets.*.start_route_stop_id" => "required",
       "bus_trip_tickets.*.end_route_stop_id" => "required",
       "bus_trip_tickets.*.total_distance" => "required",
@@ -165,6 +166,7 @@ class BusTripController extends APIController
         "bus_trip_tickets" => []
       ];
       $this->model->bus_id = $data["bus_id"];
+      $this->model->code = $data["bus_trip_code"];
       $this->model->route_id = $data["route_id"];
       $this->model->driver_account_id = $data["driver_account_id"];
       $this->model->conductor_account_id = $data["conductor_account_id"];
@@ -253,6 +255,7 @@ class BusTripController extends APIController
     $model = new DBBusTripTicket();
     $model->bus_trip_id = $busTripID;
     $model->conductor_account_id = $conductorID;
+    $model->code = $ticketData["code"];
     $model->passenger_quantity = $ticketData["passenger_quantity"];
     $model->start_route_stop_id = $ticketData["start_route_stop_id"];
     $model->end_route_stop_id = $ticketData["end_route_stop_id"];
