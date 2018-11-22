@@ -31,6 +31,7 @@ class BusTripTicket extends Migration
         $table->string('remarks')->nullable();
         $table->timestamps();
         $table->softDeletes();
+        $table->foreign('discount_id')->references('id')->on('discounts');
       });
     }
 

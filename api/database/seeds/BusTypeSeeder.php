@@ -11,7 +11,9 @@ class BusTypeSeeder extends Seeder
      */
     public function run()
     {
+        DB::statement('SET FOREIGN_KEY_CHECKS=0;');
         DB:: table('bus_types')->truncate();
+        DB::statement('SET FOREIGN_KEY_CHECKS=1;');
         DB:: table('bus_types') -> insert([
           [
             "description" => "Ordinary",
@@ -24,6 +26,6 @@ class BusTypeSeeder extends Seeder
             "price_per_distance" => 10
           ]
         ]);
-        
+
     }
 }

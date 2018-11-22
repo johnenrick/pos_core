@@ -11,6 +11,7 @@ class VoidRequestReasonSeeder extends Seeder
      */
     public function run()
     {
+      DB::statement('SET FOREIGN_KEY_CHECKS=0;');
       DB:: table('void_request_reasons')->truncate();
       DB:: table('void_request_reasons') -> insert([
         ["id" => 1, "description" => "Others"],
@@ -18,6 +19,6 @@ class VoidRequestReasonSeeder extends Seeder
         ["id" => 3, "description" => "Bus Transfer due to Bus Failure"],
         ["id" => 4, "description" => "Ticket Refund"]
       ]);
-
+      DB::statement('SET FOREIGN_KEY_CHECKS=1;');
     }
 }

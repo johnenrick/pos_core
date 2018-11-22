@@ -11,6 +11,7 @@ class AccountTypesTableSeeder extends Seeder
      */
     public function run()
     {
+        DB::statement('SET FOREIGN_KEY_CHECKS=0;');
         DB:: table('account_types')->truncate();
         DB:: table('account_types') -> insert(array(
           array("id" => "1","description" => "Admin"),
@@ -22,5 +23,6 @@ class AccountTypesTableSeeder extends Seeder
           array("id" => "7","description" => "Server"),
           array("id" => "8","description" => "Inspector")
         ));
+        DB::statement('SET FOREIGN_KEY_CHECKS=1;');
     }
 }
