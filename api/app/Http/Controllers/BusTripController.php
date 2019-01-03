@@ -120,7 +120,7 @@ class BusTripController extends APIController
   function busTripSync(Request $request){
     $data = $request->all();
     $validationRules = [
-      "bus_trip_code" => "required",
+      "code" => "required",
       "bus_id" => "required",
       "route_id" => "required",
       "driver_account_id" => "required",
@@ -151,7 +151,7 @@ class BusTripController extends APIController
       "bus_trip_tickets.*.cash_tendered" => "required",
       "bus_trip_tickets.*.payment_adjustment" => "required",
       // "bus_trip_tickets.*.remarks" => "required",
-      "bus_trip_tickets.*.created_at" => "required"
+      "bus_trip_tickets.*.created_at" => "required|date_format:Y-m-d H:i:s"
     ];
     $validator = Validator::make($data, $validationRules);
     if($validator->fails()){
@@ -166,7 +166,7 @@ class BusTripController extends APIController
         "bus_trip_tickets" => []
       ];
       $this->model->bus_id = $data["bus_id"];
-      $this->model->code = $data["bus_trip_code"];
+      $this->model->code = $data["code"];
       $this->model->route_id = $data["route_id"];
       $this->model->driver_account_id = $data["driver_account_id"];
       $this->model->conductor_account_id = $data["conductor_account_id"];

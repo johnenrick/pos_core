@@ -143,6 +143,13 @@
           }, {
             to: 'discount_list',
             icon: 'fas fa-percent'
+          }, {
+            type: 'divider',
+            name: 'Bus Trip'
+          }, {
+            to: 'bus_trip_expense_item'
+          }, {
+            to: 'void_request_reason'
           }]
         }, {
           type: 'multi_level',

@@ -4,9 +4,9 @@ import Vue from 'vue'
 import App from './App'
 import Helpers from './helpers'
 import router from './router'
-import JWTAUTH from 'services/jwt-auth'
+// import JWTAUTH from './services/auth/jwt-auth'
 import 'assets/style/scss/index.scss'
-
+require('services/jwt-auth')
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
@@ -16,5 +16,3 @@ new Vue({
     App
   }
 })
-
-require('services/jwt-auth')

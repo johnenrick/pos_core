@@ -69,6 +69,26 @@ export default{
     }
   },
   {
+    path: '/bus_trip_expense_item',
+    name: 'busTripExpenseItem',
+    component: resolve => require(['modules/master_list/BusTripExpenseItem.vue'], resolve),
+    meta: {
+      tokenRequired: true,
+      module_id: 2,
+      auth: true
+    }
+  },
+  {
+    path: '/void_request_reason',
+    name: 'voidRequestReason',
+    component: resolve => require(['modules/master_list/VoidRequestReason.vue'], resolve),
+    meta: {
+      tokenRequired: true,
+      module_id: 2,
+      auth: true
+    }
+  },
+  {
     path: '/bus_type',
     name: 'busType',
     component: resolve => require(['modules/bus/BusType.vue'], resolve),
